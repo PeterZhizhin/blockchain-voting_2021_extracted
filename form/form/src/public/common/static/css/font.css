@@ -1,0 +1,34 @@
+
+@font-face {
+    font-family: 'MCW XX';
+    src: url('fonts/MCWXXLight.woff2') format('woff2'),
+    url('fonts/MCWXXLight.woff') format('woff');
+    font-display: swap;
+    font-weight: 300;
+}
+@font-face {
+    font-family: 'MCW XX';
+    src: url('fonts/MCWXXRegular.woff2') format('woff2'),
+    url("fonts//MCWXXRegular.woff") format("woff");
+    font-display: swap;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'MCW XX';
+    src: url('fonts/MCWXXMedium.woff2') format('woff2'),
+    url('fonts/MCWXXMedium.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'MCW XX';
+    src: url('fonts/MCWXXBold.woff2') format('woff2'),
+    url('fonts/MCWXXBold.woff') format('woff');
+    font-display: swap;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: ALSRubl;
+    src: url(fonts/rouble.woff2), url(fonts/rouble.woff);
+} 

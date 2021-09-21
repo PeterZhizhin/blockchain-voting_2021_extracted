@@ -1,0 +1,1 @@
+if (typeof(window.onCookieLoad)!=='undefined')window.onCookieLoad();

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package votings_service;
+
+enum VotingState {
+  Registration = 0;
+  InProcess = 1;
+  Stopped = 2;
+  Finished = 3;
+}
+
+enum InvalidReason {
+  WrongDistrict = 0;
+  DecryptionError = 1;
+}

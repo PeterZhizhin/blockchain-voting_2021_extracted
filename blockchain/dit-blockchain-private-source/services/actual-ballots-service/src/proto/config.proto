@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package actual_ballots_service;
+
+message ServiceConfig {
+  repeated string api_public_keys = 1;
+}

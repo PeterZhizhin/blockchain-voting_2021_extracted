@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Golos Text';
+  src: url('fonts/Golos_Text_Regular.eot');
+  src: url('fonts/Golos_Text_Regular.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Golos_Text_Regular.woff') format('woff'),
+  url('fonts/Golos_Text_Regular.woff2') format('woff2'),
+  url('fonts/Golos_Text_Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('fonts/Golos_Text_Medium.eot');
+  src: url('fonts/Golos_Text_Medium.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Golos_Text_Medium.woff') format('woff'),
+  url('fonts/Golos_Text_Medium.woff2') format('woff2'),
+  url('fonts/Golos_Text_Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('fonts/Golos_Text_DemiBold.eot');
+  src: url('fonts/Golos_Text_DemiBold.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Golos_Text_DemiBold.woff') format('woff'),
+  url('fonts/Golos_Text_DemiBold.woff2') format('woff2'),
+  url('fonts/Golos_Text_DemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-14 { font-size: 14px; }
+.font-15 { font-size: 15px; }
+.font-16 { font-size: 16px; }
+.font-17 { font-size: 17px; }
+.font-18 { font-size: 18px; }

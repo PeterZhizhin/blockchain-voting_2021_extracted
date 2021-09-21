@@ -1,0 +1,334 @@
+
+.prototype {
+    display: none;
+    padding: 10px 0 20px;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ef3824;
+}
+
+.btn-disabled,
+.btn-disabled[disabled] {
+  opacity: .4;
+  cursor: default !important;
+}
+
+.btn {
+    max-width: 100%;
+}
+
+.form-step-block {
+    border-left: 1px dashed #d6dade;
+    margin-left: 10px;
+    position: relative;
+}
+
+.form-step-block .form-step:before {
+    border: 0px !important;
+}
+
+
+.info-block.info-block-line.form-additional {
+    display: none;
+}
+
+.person-document:before {
+    display: none !important;
+}
+
+.person-document .doc-type-select-label label {
+    display: none;
+}
+
+
+.person-document .mb-6 {
+    margin-bottom: 1rem !important;
+}
+
+.fias_custom .element-control.form-horizoontal {
+    margin-bottom: 1rem;
+}
+#fias_flag {
+    margin-bottom: 1.2rem;
+}
+
+
+.remote-voting {
+    width: 100%;
+}
+
+.form-draft {
+    display: none;
+}
+
+.elections {
+    width: 95%;
+}
+
+.logo {
+    flex: 0 0 35.6666666667%;
+    max-width: 35.6666666667%;
+}
+
+.electform {
+flex: 0 0 64.3333333333%;
+max-width: 64.3333333333%;
+}
+
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 480px)
+and (-webkit-min-device-pixel-ratio: 2) {
+
+    .electform {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+/*    .confirm-controls {
+        flex-direction: column;
+    }*/
+}
+
+
+.landing .poster {
+    margin-bottom: 10px;
+    padding: 20px 25px 20px;
+    background-color: #fff;
+}
+
+.landing .poster__title {
+    margin-bottom: 25px;
+}
+
+.landing .poster__text {
+    margin-bottom: 20px;
+    font-size: 17px;
+    line-height: 28px;
+    font-weight: normal;
+}
+
+.landing .poster__list {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    font-size: 17px;
+    line-height: 28px;
+    font-weight: normal;
+}
+
+.landing .poster__btn {
+    max-width: 100%;
+    padding: 15px 80px;
+    border: none;
+    border-radius: 0;
+    background-color: #4f94fc;
+}
+
+@media (max-width: 576px) {
+    .landing .poster__btn {
+        padding: 15px 20px;
+    }
+}
+
+.landing .landing__title {
+    margin: 40px 0 30px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d6dade;
+    font-size: 25px;
+}
+
+.landing .dept__box {
+    height: 100%;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border: 1px solid #d6dade;
+}
+
+.landing .dept__title {
+    margin: 25px 0 25px;
+    font-size: 18px;
+}
+
+.landing .dept__list {
+    padding-left: 0;
+    line-height: 21px;
+    list-style: none;
+}
+
+.landing .dept__list li {
+    margin-bottom: 12px;
+}
+
+.landing .dept__list a {
+    font-size: 16px;
+}
+
+.landing .dept__list a.active {
+    color: #008aff;
+}
+
+.landing .dept__depts {
+    padding: 0;
+    list-style: none;
+}
+
+.landing .dept__item {
+    display: block;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #d6dade;
+}
+
+.landing .dept__photo {
+    display: block;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto 15px;
+}
+
+.landing .dept__logo {
+    display: block;
+    max-width: 70px;
+    max-height: 100px;
+    margin: 0 auto 15px;
+}
+
+.landing .dept__university {
+    margin-bottom: 15px;
+    line-height: 20px;
+}
+
+.landing .dept__last-name {
+    font-size: 27px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.landing .dept__full-name {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.landing .dept__year {
+    margin-bottom: 10px;
+}
+
+/* Тестовое голосование */
+.landing .dept__depts--list {
+    padding-left: 40px;
+}
+
+.landing .dept__item--sm {
+    display: list-item;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    border: none;
+    list-style: disc;
+}
+
+.landing .dept__item--sm .dept__last-name {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('/common/static/css/fonts/Golos_Text_Regular.eot');
+  src: url('/common/static/css/fonts/Golos_Text_Regular.eot?#iefix') format('embedded-opentype'),
+  url('/common/static/css/fonts/Golos_Text_Regular.woff') format('woff'),
+  url('/common/static/css/fonts/Golos_Text_Regular.woff2') format('woff2'),
+  url('/common/static/css/fonts/Golos_Text_Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('/common/static/css/fonts/Golos_Text_Medium.eot');
+  src: url('/common/static/css/fonts/Golos_Text_Medium.eot?#iefix') format('embedded-opentype'),
+  url('/common/static/css/fonts/Golos_Text_Medium.woff') format('woff'),
+  url('/common/static/css/fonts/Golos_Text_Medium.woff2') format('woff2'),
+  url('/common/static/css/fonts/Golos_Text_Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('/common/static/css/fonts/Golos_Text_DemiBold.eot');
+  src: url('/common/static/css/fonts/Golos_Text_DemiBold.eot?#iefix') format('embedded-opentype'),
+  url('/common/static/css/fonts/Golos_Text_DemiBold.woff') format('woff'),
+  url('/common/static/css/fonts/Golos_Text_DemiBold.woff2') format('woff2'),
+  url('/common/static/css/fonts/Golos_Text_DemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-18 { font-size: 18px; }
+.font-16 { font-size: 16px; }
+.font-15 { font-size: 15px; }
+.font-14 { font-size: 14px; }
+
+.mos-container { max-width:1600px; margin:0 auto; }
+.bg-mos-red { background-color:#cc2222; padding: 0; overflow: hidden; height:40px;}
+.mos-header {  margin:3px 33px 0px 33px; padding:0; }
+.mos-header .logo { height:24px; width:auto; display: inline-block; vertical-align: middle; margin: 2px 5px 0 0; }
+.mos-header strong { font-size: 18px; display: inline-block; vertical-align: middle; color: #fff; font-weight: normal; font-family: 'Golos Text'; margin-right: 10px; }
+.mos-header u { text-decoration: none; font-size: 16px; display: inline-block; vertical-align: middle; color: #fff; font-family: 'Golos Text'; margin-top: 2px;}
+.mos-header .logout-link { display: inline-block; vertical-align: middle; color:#fff; font-family: 'Golos Text'; font-size: 15px; margin-top: 5px; }
+.mos-wrap { margin:0 auto; padding:0 20px; max-width:1290px; font-family:'Golos Text';}
+
+.mt-lg-60 { margin-top:60px; }
+.mt-lg-50 { margin-top:50px; }
+.px-lg-30 { padding-left:30px; padding-right:30px; }
+
+.msg-block { boder-radius:2px; background-color: #fffdf7; }
+.msg-block li, .msg-block em { display:block; padding:20px 20px; font-style:normal; }
+.msg-success { border-left:4px solid #00b354; background-color:#e9fcf3; }
+.msg-fail { border-left:4px solid #cc2222; }
+
+.border-bottom-1 { border-bottom: 1px solid #DFE1E6; }
+.rules-list { margin:0 10px; padding:0 20px 10px 20px; }
+.rules-list li { font-size:16px; padding-left:10px; margin-bottom:8px; margin-top:10px;}
+.rules-list li ul { margin-left:15px; margin-top: 5px; padding-left:0; }
+.rules-list li li { margin-left:0 !important; padding-left:0 !important; font-size: 15px; }
+
+.rules-list-extra {
+    list-style: none;
+    background-image: url(/common/static/img/icons/icon_info.svg);
+    background-color: #EBF1FF;
+    background-repeat: no-repeat;
+    background-size: 24px 24px;
+    background-position: 20px 25px;
+    border-left: 4px solid #0044CC;
+    padding-left: 50px;
+}
+
+.rules-list-extra>li { font-weight: bold; background-color: #EBF1FF;}
+.rules-list-extra li li { font-weight: normal; }
+
+.election-block { border:1px solid #DFE1E6; border-radius:5px; }
+.election-block.active { box-shadow:0 0 15px rgba(0,0,0,0.1); }
+.election-block h2 { margin-left:-15px; margin-right:-15px; padding-top: 10px; padding-bottom: 5px;}
+.election-block.active h2 { border-bottom:1px solid #DFE1E6; padding-top:20px; padding-bottom: 20px; }
+/*.election-block h2.no-bottom-border { border-bottom: none; }*/
+.hide-till-wrapper-active { display:none; }
+.active>.hide-till-wrapper-active { display:block; }
+
+.footer { background-color:#F3F5F7; padding:15px 33px; font-size:14px; line-height:20px; color:#696C71; }
+
+.mos-btn { border:none; font-size:16px; padding:10px 20px; }
+.mos-btn-blue { background-color:#0044CC; color:#fff; }
+.mos-btn-blue:hover { color:#fff; background-color:#cc2222; }
+.mos-btn-gray { background-color:#dde7ff; color:#0033AA; }
+
+.mos-control { font-weight:400; font-size:16px; line-height:24px; padding:12px 16px; }
+
+a { color:#05d; }

@@ -1,0 +1,32 @@
+[package]
+name = "dit-voting-blockchain"
+version = "1.0.0"
+authors = []
+edition = "2018"
+
+
+[dependencies]
+anyhow = "1.0.26"
+
+exonum = "1.0.0"
+exonum-cli = "1.0.0"
+exonum-crypto = "1.0.0"
+exonum-derive = "1.0.0"
+exonum-merkledb = "1.0.0"
+exonum-proto = "1.0.0"
+exonum-rust-runtime = "1.0.0"
+exonum-supervisor = "1.0.0"
+exonum_sodiumoxide = "0.0.23"
+
+hex = "0.3.2"
+
+protobuf = "=2.14.0"
+
+dit-votings-service = { path = "./services/votings-service" }
+
+[dependencies.tokio] 
+version = "0.2.13" 
+features = ["blocking", "dns", "io-util", "macros", "rt-threaded", "tcp", "time"]
+
+[profile.release]
+lto = true

@@ -1,0 +1,38 @@
+{
+  "name": "frontend-lib",
+  "version": "0.0.0",
+  "private": true,
+  "description": "DIT Voting Frontend library",
+  "main": "src/index.js",
+  "scripts": {
+    "compile": "./node_modules/.bin/webpack"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.8.4",
+    "blockchain-connector": "0.0.0",
+    "crypto-lib": "0.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "common-deps": "0.0.0",
+    "core-js": "^3.6.4",
+    "i": "^0.3.6",
+    "karma": "4.1.0",
+    "karma-browserstack-launcher": "1.5.1",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-coverage": "1.1.2",
+    "karma-firefox-launcher": "1.1.0",
+    "karma-mocha": "1.3.0",
+    "karma-mocha-reporter": "2.2.5",
+    "karma-safari-launcher": "1.0.0",
+    "karma-webpack": "^4.0.2",
+    "npm": "^6.13.7",
+    "terser-webpack-plugin": "^2.3.6",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.1.11"
+  }
+}

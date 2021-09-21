@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package actual_ballots_service;
+
+import "google/protobuf/empty.proto";
+import "enums.proto";
+
+message BallotStatus {
+  oneof kind {
+    google.protobuf.Empty unknown = 1;
+    google.protobuf.Empty valid = 2;
+    actual_ballots_service.InvalidReason invalid = 3;
+  }
+}

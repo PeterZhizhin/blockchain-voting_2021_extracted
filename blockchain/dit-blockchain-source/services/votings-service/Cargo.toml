@@ -1,0 +1,35 @@
+[package]
+name = "dit-votings-service"
+version = "1.0.0"
+authors = []
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0.26"
+
+exonum = "1.0.0"
+exonum-cli = "1.0.0"
+exonum-crypto = "1.0.0"
+exonum-derive = "1.0.0"
+exonum-merkledb = "1.0.0"
+exonum-proto = "1.0.0"
+exonum-rust-runtime = "1.0.0"
+exonum-supervisor = "1.0.0"
+exonum_sodiumoxide = "0.0.23"
+
+hex = "0.3.2"
+num-bigint = { version = "0.2", features = ["rand", "serde"] }
+num-traits = "0.2"
+protobuf = "=2.14.0"
+serde = "1.0.10"
+serde_derive = "1.0.10"
+serde_json = "1.0.2"
+serde_repr = "0.1.6"
+toml = "0.5"
+
+[build-dependencies]
+exonum-build = "1.0.0"
+
+[features]
+default = ["with-serde"]
+with-serde = []

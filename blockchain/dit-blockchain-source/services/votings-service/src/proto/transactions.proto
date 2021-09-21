@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package votings_service;
+
+import "exonum/crypto/types.proto";
+import "custom_types.proto";
+import "enums.proto";
+
+message TxCryptoSystemSettings {
+  votings_service.SealedBoxPublicKey public_key = 1;
+}
+
+message TxDistrictResults {
+  uint32 district_id = 1;
+  map<uint32, uint32> tally = 2;
+  uint32 invalid_ballots_amount = 3;
+  uint32 unique_valid_ballots_amount = 4;
+}
+
+message TxVotingResults {
+  map<uint32, TxDistrictResults> district_results = 1;
+  uint32 invalid_ballots_amount = 2;
+  uint32 unique_valid_ballots_amount = 3;
+}
+
+message TxBallotConfig {
+  uint32 district_id = 1;
+  string question = 2;
+  map<uint32, string> options = 3;
+  uint32 min_choices = 4;
+  uint32 max_choices = 5;
+}
+
+message TxCreateVoting {
+  TxCryptoSystemSettings crypto_system = 1;
+  repeated TxBallotConfig ballots_config = 2;
+  bool revote_enabled = 3;
+}
+
+message TxRegisterVoters {
+  string voting_id = 1;
+  repeated string voters = 2;
+}
+
+message TxStopRegistration {
+  string voting_id = 1;
+  uint64 seed = 2;
+}
+
+message TxRevokeVoterParticipation {
+  string voting_id = 1;
+  string voter_id = 2;
+  uint64 seed = 3;
+}
+
+message TxIssueBallot {
+  string voting_id = 1;
+  string voter_id = 2;
+  uint32 district_id = 3;
+  uint64 seed = 4;
+}
+
+message TxAddVoterKey {
+  string voting_id = 1;
+  exonum.crypto.PublicKey voter_key = 2;
+}
+
+message TxEncryptedChoice {
+  bytes encrypted_message = 1;
+  votings_service.SealedBoxNonce nonce = 2;
+  votings_service.SealedBoxPublicKey public_key = 3;
+}
+
+message TxStoreBallot {
+  string voting_id = 1;
+  uint32 district_id = 2;
+  TxEncryptedChoice encrypted_choice = 3;
+}
+
+message TxStopVoting {
+  string voting_id = 1;
+  uint64 seed = 2;
+}
+
+message TxPublishDecryptionKey {
+  string voting_id = 1;
+  votings_service.SealedBoxSecretKey private_key = 2;
+  uint64 seed = 3;
+}
+
+message TxDecryptBallot {
+  string voting_id = 1;
+  uint32 ballot_index = 2;
+  uint64 seed = 3;
+}
+
+message TxFinalizeVoting {
+  string voting_id = 1;
+  uint64 seed = 2;
+}
+
+message TxFinalizeVotingWithResults {
+  string voting_id = 1;
+  uint64 seed = 2;
+  TxVotingResults results = 3;
+}

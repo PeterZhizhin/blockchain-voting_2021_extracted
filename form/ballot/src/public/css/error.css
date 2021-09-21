@@ -1,0 +1,14 @@
+* {
+	font-family: 'Golos Text' !important;
+}
+
+.mos-container { max-width:1600px; margin:0 auto; }
+.bg-mos-red { background-color:#cc2222; padding: 0; overflow: hidden; height:40px;}
+.mos-header {  margin:3px 33px 0px 33px; padding:0; }
+.mos-header .logo { height:24px; width:auto; display: inline-block; vertical-align: middle; margin: 2px 5px 0 0; }
+.mos-header strong { font-size: 18px; display: inline-block; vertical-align: middle; color: #fff; font-weight: normal; font-family: 'Golos Text'; margin-right: 10px; }
+.mos-header u { text-decoration: none; font-size: 16px; display: inline-block; vertical-align: middle; color: #fff; font-family: 'Golos Text'; margin-top: 2px;}
+.mos-header .logout-link { display: inline-block; vertical-align: middle; color:#fff; font-family: 'Golos Text'; font-size: 15px; margin-top: 5px; }
+.mos-wrap { margin:0 auto; padding:0 20px; max-width:1290px; font-family:'Golos Text';}
+
+.footer { background-color:#F3F5F7; padding:15px 33px; font-size:14px; line-height:20px; color:#696C71; }

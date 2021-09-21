@@ -1,0 +1,16 @@
+{
+  "name": "blockchain-connector",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Connector library for sending transactions & making requests to DIT blockchain node",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "exonum-client": "^0.18.3",
+    "tweetnacl": "^0.14.5"
+  },
+  "devDependencies": {
+    "common-deps": "0.0.0",
+    "protobufjs": "^6.8.8"
+  }
+}

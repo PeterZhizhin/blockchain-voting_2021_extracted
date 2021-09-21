@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package votings_service;
+
+import "exonum/crypto/types.proto";
+import "custom_types.proto";
+import "enums.proto";
+import "variants/ballot_status.proto";
+import "google/protobuf/empty.proto";
+
+message CryptoSystemSettings {
+  votings_service.SealedBoxPublicKey public_key = 1;
+  votings_service.SealedBoxSecretKey private_key = 2;
+}
+
+message BallotConfig {
+  uint32 district_id = 1;
+  string question = 2;
+  map<uint32, string> options = 3;
+  uint32 min_choices = 4;
+  uint32 max_choices = 5;
+}
+
+message Voting {
+  string voting_id = 1;
+  CryptoSystemSettings crypto_system = 2;
+  map<uint32, BallotConfig> ballots_config = 3;
+  votings_service.VotingState state = 4;
+  bool revote_enabled = 5;
+}
+
+message VotersRegistry {
+  string voting_id = 1;
+  uint32 voters_amount = 2;
+  map<uint32, uint32> issued_ballots_counter = 3;
+}
+
+message Voter {
+  string voter_id = 1;
+  bool is_participation_revoked = 2;
+  uint32 ballot_issuing_district = 3;
+}
+
+message Choices {
+  repeated uint32 data = 1;
+}
+
+message EncryptedChoice {
+  bytes encrypted_message = 1;
+  votings_service.SealedBoxNonce nonce = 2;
+  votings_service.SealedBoxPublicKey public_key = 3;
+}
+
+message Ballot {
+  uint32 index = 1;
+  exonum.crypto.PublicKey voter = 2;
+  uint32 district_id = 3;
+  EncryptedChoice encrypted_choice = 4;
+  repeated uint32 decrypted_choices = 5;
+  exonum.crypto.Hash store_tx_hash = 6;
+  exonum.crypto.Hash decrypt_tx_hash = 7;
+  votings_service.BallotStatus status = 8;
+}
+
+message DecryptionStatistics {
+  uint32 decrypted_ballots_amount = 1;
+  uint32 invalid_ballots_amount = 2;
+}
+
+message DistrictResults {
+  uint32 district_id = 1;
+  map<uint32, uint32> tally = 2;
+  uint32 invalid_ballots_amount = 3;
+  uint32 unique_valid_ballots_amount = 4;
+}
+
+message VotingResults {
+  map<uint32, DistrictResults> district_results = 1;
+  uint32 invalid_ballots_amount = 2;
+  uint32 unique_valid_ballots_amount = 3;
+}
+
+message BallotsStorage {
+  string voting_id = 1;
+  map<uint32, uint32> stored_ballots_counter = 2;
+  DecryptionStatistics decrypted_ballots_counter = 3;
+  VotingResults voting_results = 4;
+}

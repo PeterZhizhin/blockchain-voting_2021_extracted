@@ -1,0 +1,154 @@
+
+.header-logo {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.logo {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.heading {
+    font-family: "MCW XX";
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.unauthorization-text {
+    font-family: "MCW XX";
+    font-weight: 700;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.unauthorization-text__services {
+    font-size: 20px;
+}
+
+.unauthorization-text__continue {
+    font-size: 16px;
+}
+
+.button {
+    max-width: 400px;
+    width: 100%;
+    cursor: pointer;
+    font-family: "MCW XX";
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 65px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: .4px;
+    background-color: #4185dc;
+    text-align: center;
+    color: white;
+    border: none;
+}
+
+.button:hover {
+    background-color: #4ea6f2;
+    transition: background-color .3s;
+}
+.button[disabled],.button[disabled]:hover {
+    background-color: #ccc;
+}
+
+@media only screen and (max-width: 1024px) {
+    .header-logo {
+        display: none;
+    }
+
+    .logo {
+        display: block;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .button {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .heading {
+        font-size: 30px;
+    }
+
+    .heading,
+    .unauthorization-text {
+        text-align: center;
+    }
+
+    .logo img {
+        height: 110px;
+    }
+}
+
+
+@media only screen and (max-height: 420px) {
+    .heading {
+        font-size: 30px;
+    }
+
+    .logo {
+        margin-bottom: 0px;
+    }
+
+    .container {
+        height: auto;
+    }
+}
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+    .logo {
+        margin-bottom: 0px;
+    }
+
+    .container {
+        height: auto;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .container {
+        height: auto;
+    }
+
+    .logo {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+}
+
+@media only screen and (max-height: 375px) and (orientation: landscape) {
+    .logo img {
+        height: 60px;
+    }
+
+    .heading {
+        font-size: 26px;
+    }
+}
+
+.login form{
+    margin-bottom: 20px;
+}
+.login button {
+    margin-right:20px;
+}
+.login .group_fields{
+    margin-left:-15px;
+    margin-bottom: 0px;
+}

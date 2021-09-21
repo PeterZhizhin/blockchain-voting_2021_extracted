@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package actual_ballots_service;
+
+import "variants/ballot_status.proto";
+
+message GroupedTxHash {
+  uint32 index = 1;
+  string store_tx_hash = 2;
+  string encrypted_group_id = 3;
+  string group_id = 4;
+  int64 ts = 5;
+}
+
+message ActualBallot {
+  string voter = 1;
+  uint32 district_id = 2;
+  repeated uint32 decrypted_choices = 3;
+  string store_tx_hash = 4;
+  string decrypt_tx_hash = 5;
+  actual_ballots_service.BallotStatus status = 6;
+}
+
+message DistrictResults {
+  uint32 district_id = 1;
+  map<uint32, uint32> tally = 2;
+  uint32 invalid_ballots_amount = 3;
+  uint32 unique_valid_ballots_amount = 4;
+}
+
+message VotingResults {
+  map<uint32, DistrictResults> district_results = 1;
+  uint32 invalid_ballots_amount = 2;
+  uint32 unique_valid_ballots_amount = 3;
+}
+
+message ActualBallotsStorage {
+  string voting_id = 1;
+  uint32 actual_ballots_amount = 2;
+  VotingResults voting_results = 3;
+}
