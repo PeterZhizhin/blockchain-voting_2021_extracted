@@ -1,7 +1,7 @@
-<link rel="stylesheet" type="text/css" href="/static/css/app/election/mgd2021.css?{$smarty.now|date_format:'%Y-%m-%dT%H'}" />
+<link rel="stylesheet" type="text/css" href="/common/static/css/app/election/mgd2021.css?{$smarty.now|date_format:'%Y-%m-%dT%H'}" />
 
 <nav>
-	{include file="/app/resources/views/base/menu.tpl" logout=$logout}
+	{include file="./menu.tpl" logout=$logout}
 </nav>
 
 <main>

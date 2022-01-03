@@ -609,9 +609,11 @@ label.hint {
 }
 
 .bulletin__radio:checked + div {
-    background-image: url(/images/mos-ru/selected_2.png);
+    background-color: #0044CC;
+	border: none;
+    background-image: url(/images/mos-ru/check.svg);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 60%;
     background-position: center center;
 }
 

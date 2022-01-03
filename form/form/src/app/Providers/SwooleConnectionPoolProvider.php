@@ -27,9 +27,11 @@ class SwooleConnectionPoolProvider extends LumenServiceProvider {
             $config = $app->make('config')->get('database.redis', []);
             return new Service\Lumen\RedisManager($app, Arr::pull($config, 'client', 'phpredis'), $config);
         });
+        /*
         $this->app->singleton('cache', function ($app) {
             return new Service\Lumen\CacheManager($app);
         });
+         */
 
     }
 }
