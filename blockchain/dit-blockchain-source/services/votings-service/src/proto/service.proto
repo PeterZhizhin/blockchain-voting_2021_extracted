@@ -3,19 +3,14 @@ syntax = "proto3";
 package votings_service;
 
 import "custom_types.proto";
+import "transactions.proto";
 
 message Config {
   repeated string api_public_keys = 1;
 }
 
-message TxStoreBallot {
+message TxStoreBallotCopy {
   string voting_id = 1;
   uint32 district_id = 2;
-  TxEncryptedChoice encrypted_choice = 3;
-}
-
-message TxEncryptedChoice {
-  bytes encrypted_message = 1;
-  votings_service.SealedBoxNonce nonce = 2;
-  votings_service.SealedBoxPublicKey public_key = 3;
+  votings_service.TxEncryptedChoice encrypted_choice = 3;
 }
