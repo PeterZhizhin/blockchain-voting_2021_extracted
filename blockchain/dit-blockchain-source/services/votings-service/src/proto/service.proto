@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package votings_service;
+
+import 'transactions.proto';
+
+message Config {
+  repeated string api_public_keys = 1;
+}
