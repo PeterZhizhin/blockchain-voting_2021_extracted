@@ -49,6 +49,11 @@ class BlockchainConnector {
    */
   sendRawTransaction(rawTx) {
     // TODO: check whether hash really gives correct transaction hash
+    
+    if (typeof rawTx !== 'string') {
+        rawTx = Exonum.uint8ArrayToHexadecimal(new Uint8Array(rawTx));
+    }
+
     return axios.post(`${this.apiUrl}/api/explorer/v1/transactions`, { tx_body: rawTx }, {
       cancelToken: new CancelToken((cancel) => {
         const cancelRequest = () => cancel(`Cancelled by axios timeout (${AXIOS_REQUEST_TIMEOUT} ms)`);
