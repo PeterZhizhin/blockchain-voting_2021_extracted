@@ -46,7 +46,7 @@ fn generate_tables(mut file: &File) {
 }
 
 fn farray(array: [u8; 256], f: &mut fmt::Formatter) -> fmt::Result {
-    for (index, value) in array.into_iter().enumerate() {
+    for (index, value) in array.iter().enumerate() {
         try!(write!(f, "{}", value));
         if index != array.len() - 1 {
             try!(write!(f, ","));
