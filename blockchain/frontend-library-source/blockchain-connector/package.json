@@ -10,7 +10,6 @@
     "tweetnacl": "^0.14.5"
   },
   "devDependencies": {
-    "common-deps": "0.0.0",
     "protobufjs": "^6.8.8"
   }
 }

@@ -25,6 +25,251 @@
          */
         var exonum = {};
     
+        exonum.common = (function() {
+    
+            /**
+             * Namespace common.
+             * @memberof exonum
+             * @namespace
+             */
+            var common = {};
+    
+            common.BitVec = (function() {
+    
+                /**
+                 * Properties of a BitVec.
+                 * @memberof exonum.common
+                 * @interface IBitVec
+                 * @property {Uint8Array|null} [data] BitVec data
+                 * @property {number|Long|null} [len] BitVec len
+                 */
+    
+                /**
+                 * Constructs a new BitVec.
+                 * @memberof exonum.common
+                 * @classdesc Represents a BitVec.
+                 * @implements IBitVec
+                 * @constructor
+                 * @param {exonum.common.IBitVec=} [properties] Properties to set
+                 */
+                function BitVec(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * BitVec data.
+                 * @member {Uint8Array} data
+                 * @memberof exonum.common.BitVec
+                 * @instance
+                 */
+                BitVec.prototype.data = $util.newBuffer([]);
+    
+                /**
+                 * BitVec len.
+                 * @member {number|Long} len
+                 * @memberof exonum.common.BitVec
+                 * @instance
+                 */
+                BitVec.prototype.len = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+                /**
+                 * Creates a new BitVec instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {exonum.common.IBitVec=} [properties] Properties to set
+                 * @returns {exonum.common.BitVec} BitVec instance
+                 */
+                BitVec.create = function create(properties) {
+                    return new BitVec(properties);
+                };
+    
+                /**
+                 * Encodes the specified BitVec message. Does not implicitly {@link exonum.common.BitVec.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {exonum.common.IBitVec} message BitVec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BitVec.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.data != null && message.hasOwnProperty("data"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
+                    if (message.len != null && message.hasOwnProperty("len"))
+                        writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.len);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified BitVec message, length delimited. Does not implicitly {@link exonum.common.BitVec.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {exonum.common.IBitVec} message BitVec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BitVec.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a BitVec message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.common.BitVec} BitVec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BitVec.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.common.BitVec();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.data = reader.bytes();
+                            break;
+                        case 2:
+                            message.len = reader.uint64();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a BitVec message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.common.BitVec} BitVec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BitVec.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a BitVec message.
+                 * @function verify
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                BitVec.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.data != null && message.hasOwnProperty("data"))
+                        if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
+                            return "data: buffer expected";
+                    if (message.len != null && message.hasOwnProperty("len"))
+                        if (!$util.isInteger(message.len) && !(message.len && $util.isInteger(message.len.low) && $util.isInteger(message.len.high)))
+                            return "len: integer|Long expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a BitVec message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.common.BitVec} BitVec
+                 */
+                BitVec.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.common.BitVec)
+                        return object;
+                    var message = new $root.exonum.common.BitVec();
+                    if (object.data != null)
+                        if (typeof object.data === "string")
+                            $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
+                        else if (object.data.length)
+                            message.data = object.data;
+                    if (object.len != null)
+                        if ($util.Long)
+                            (message.len = $util.Long.fromValue(object.len)).unsigned = true;
+                        else if (typeof object.len === "string")
+                            message.len = parseInt(object.len, 10);
+                        else if (typeof object.len === "number")
+                            message.len = object.len;
+                        else if (typeof object.len === "object")
+                            message.len = new $util.LongBits(object.len.low >>> 0, object.len.high >>> 0).toNumber(true);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a BitVec message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.common.BitVec
+                 * @static
+                 * @param {exonum.common.BitVec} message BitVec
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                BitVec.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        if (options.bytes === String)
+                            object.data = "";
+                        else {
+                            object.data = [];
+                            if (options.bytes !== Array)
+                                object.data = $util.newBuffer(object.data);
+                        }
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, true);
+                            object.len = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.len = options.longs === String ? "0" : 0;
+                    }
+                    if (message.data != null && message.hasOwnProperty("data"))
+                        object.data = options.bytes === String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === Array ? Array.prototype.slice.call(message.data) : message.data;
+                    if (message.len != null && message.hasOwnProperty("len"))
+                        if (typeof message.len === "number")
+                            object.len = options.longs === String ? String(message.len) : message.len;
+                        else
+                            object.len = options.longs === String ? $util.Long.prototype.toString.call(message.len) : options.longs === Number ? new $util.LongBits(message.len.low >>> 0, message.len.high >>> 0).toNumber(true) : message.len;
+                    return object;
+                };
+    
+                /**
+                 * Converts this BitVec to JSON.
+                 * @function toJSON
+                 * @memberof exonum.common.BitVec
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                BitVec.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return BitVec;
+            })();
+    
+            return common;
+        })();
+    
         exonum.crypto = (function() {
     
             /**
@@ -426,25 +671,24 @@
                 return PublicKey;
             })();
     
-            crypto.BitVec = (function() {
+            crypto.Signature = (function() {
     
                 /**
-                 * Properties of a BitVec.
+                 * Properties of a Signature.
                  * @memberof exonum.crypto
-                 * @interface IBitVec
-                 * @property {Uint8Array|null} [data] BitVec data
-                 * @property {number|Long|null} [len] BitVec len
+                 * @interface ISignature
+                 * @property {Uint8Array|null} [data] Signature data
                  */
     
                 /**
-                 * Constructs a new BitVec.
+                 * Constructs a new Signature.
                  * @memberof exonum.crypto
-                 * @classdesc Represents a BitVec.
-                 * @implements IBitVec
+                 * @classdesc Represents a Signature.
+                 * @implements ISignature
                  * @constructor
-                 * @param {exonum.crypto.IBitVec=} [properties] Properties to set
+                 * @param {exonum.crypto.ISignature=} [properties] Properties to set
                  */
-                function BitVec(properties) {
+                function Signature(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -452,88 +696,75 @@
                 }
     
                 /**
-                 * BitVec data.
+                 * Signature data.
                  * @member {Uint8Array} data
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @instance
                  */
-                BitVec.prototype.data = $util.newBuffer([]);
+                Signature.prototype.data = $util.newBuffer([]);
     
                 /**
-                 * BitVec len.
-                 * @member {number|Long} len
-                 * @memberof exonum.crypto.BitVec
-                 * @instance
-                 */
-                BitVec.prototype.len = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
-                /**
-                 * Creates a new BitVec instance using the specified properties.
+                 * Creates a new Signature instance using the specified properties.
                  * @function create
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
-                 * @param {exonum.crypto.IBitVec=} [properties] Properties to set
-                 * @returns {exonum.crypto.BitVec} BitVec instance
+                 * @param {exonum.crypto.ISignature=} [properties] Properties to set
+                 * @returns {exonum.crypto.Signature} Signature instance
                  */
-                BitVec.create = function create(properties) {
-                    return new BitVec(properties);
+                Signature.create = function create(properties) {
+                    return new Signature(properties);
                 };
     
                 /**
-                 * Encodes the specified BitVec message. Does not implicitly {@link exonum.crypto.BitVec.verify|verify} messages.
+                 * Encodes the specified Signature message. Does not implicitly {@link exonum.crypto.Signature.verify|verify} messages.
                  * @function encode
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
-                 * @param {exonum.crypto.IBitVec} message BitVec message or plain object to encode
+                 * @param {exonum.crypto.ISignature} message Signature message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
-                BitVec.encode = function encode(message, writer) {
+                Signature.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
                     if (message.data != null && message.hasOwnProperty("data"))
                         writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
-                    if (message.len != null && message.hasOwnProperty("len"))
-                        writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.len);
                     return writer;
                 };
     
                 /**
-                 * Encodes the specified BitVec message, length delimited. Does not implicitly {@link exonum.crypto.BitVec.verify|verify} messages.
+                 * Encodes the specified Signature message, length delimited. Does not implicitly {@link exonum.crypto.Signature.verify|verify} messages.
                  * @function encodeDelimited
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
-                 * @param {exonum.crypto.IBitVec} message BitVec message or plain object to encode
+                 * @param {exonum.crypto.ISignature} message Signature message or plain object to encode
                  * @param {$protobuf.Writer} [writer] Writer to encode to
                  * @returns {$protobuf.Writer} Writer
                  */
-                BitVec.encodeDelimited = function encodeDelimited(message, writer) {
+                Signature.encodeDelimited = function encodeDelimited(message, writer) {
                     return this.encode(message, writer).ldelim();
                 };
     
                 /**
-                 * Decodes a BitVec message from the specified reader or buffer.
+                 * Decodes a Signature message from the specified reader or buffer.
                  * @function decode
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
                  * @param {number} [length] Message length if known beforehand
-                 * @returns {exonum.crypto.BitVec} BitVec
+                 * @returns {exonum.crypto.Signature} Signature
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                BitVec.decode = function decode(reader, length) {
+                Signature.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.crypto.BitVec();
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.crypto.Signature();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
                         case 1:
                             message.data = reader.bytes();
-                            break;
-                        case 2:
-                            message.len = reader.uint64();
                             break;
                         default:
                             reader.skipType(tag & 7);
@@ -544,84 +775,72 @@
                 };
     
                 /**
-                 * Decodes a BitVec message from the specified reader or buffer, length delimited.
+                 * Decodes a Signature message from the specified reader or buffer, length delimited.
                  * @function decodeDelimited
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
                  * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {exonum.crypto.BitVec} BitVec
+                 * @returns {exonum.crypto.Signature} Signature
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
-                BitVec.decodeDelimited = function decodeDelimited(reader) {
+                Signature.decodeDelimited = function decodeDelimited(reader) {
                     if (!(reader instanceof $Reader))
                         reader = new $Reader(reader);
                     return this.decode(reader, reader.uint32());
                 };
     
                 /**
-                 * Verifies a BitVec message.
+                 * Verifies a Signature message.
                  * @function verify
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                BitVec.verify = function verify(message) {
+                Signature.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.data != null && message.hasOwnProperty("data"))
                         if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
                             return "data: buffer expected";
-                    if (message.len != null && message.hasOwnProperty("len"))
-                        if (!$util.isInteger(message.len) && !(message.len && $util.isInteger(message.len.low) && $util.isInteger(message.len.high)))
-                            return "len: integer|Long expected";
                     return null;
                 };
     
                 /**
-                 * Creates a BitVec message from a plain object. Also converts values to their respective internal types.
+                 * Creates a Signature message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {exonum.crypto.BitVec} BitVec
+                 * @returns {exonum.crypto.Signature} Signature
                  */
-                BitVec.fromObject = function fromObject(object) {
-                    if (object instanceof $root.exonum.crypto.BitVec)
+                Signature.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.crypto.Signature)
                         return object;
-                    var message = new $root.exonum.crypto.BitVec();
+                    var message = new $root.exonum.crypto.Signature();
                     if (object.data != null)
                         if (typeof object.data === "string")
                             $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
                         else if (object.data.length)
                             message.data = object.data;
-                    if (object.len != null)
-                        if ($util.Long)
-                            (message.len = $util.Long.fromValue(object.len)).unsigned = true;
-                        else if (typeof object.len === "string")
-                            message.len = parseInt(object.len, 10);
-                        else if (typeof object.len === "number")
-                            message.len = object.len;
-                        else if (typeof object.len === "object")
-                            message.len = new $util.LongBits(object.len.low >>> 0, object.len.high >>> 0).toNumber(true);
                     return message;
                 };
     
                 /**
-                 * Creates a plain object from a BitVec message. Also converts values to other types if specified.
+                 * Creates a plain object from a Signature message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @static
-                 * @param {exonum.crypto.BitVec} message BitVec
+                 * @param {exonum.crypto.Signature} message Signature
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                BitVec.toObject = function toObject(message, options) {
+                Signature.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     var object = {};
-                    if (options.defaults) {
+                    if (options.defaults)
                         if (options.bytes === String)
                             object.data = "";
                         else {
@@ -629,40 +848,3099 @@
                             if (options.bytes !== Array)
                                 object.data = $util.newBuffer(object.data);
                         }
-                        if ($util.Long) {
-                            var long = new $util.Long(0, 0, true);
-                            object.len = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.len = options.longs === String ? "0" : 0;
-                    }
                     if (message.data != null && message.hasOwnProperty("data"))
                         object.data = options.bytes === String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === Array ? Array.prototype.slice.call(message.data) : message.data;
-                    if (message.len != null && message.hasOwnProperty("len"))
-                        if (typeof message.len === "number")
-                            object.len = options.longs === String ? String(message.len) : message.len;
-                        else
-                            object.len = options.longs === String ? $util.Long.prototype.toString.call(message.len) : options.longs === Number ? new $util.LongBits(message.len.low >>> 0, message.len.high >>> 0).toNumber(true) : message.len;
                     return object;
                 };
     
                 /**
-                 * Converts this BitVec to JSON.
+                 * Converts this Signature to JSON.
                  * @function toJSON
-                 * @memberof exonum.crypto.BitVec
+                 * @memberof exonum.crypto.Signature
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                BitVec.prototype.toJSON = function toJSON() {
+                Signature.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
     
-                return BitVec;
+                return Signature;
             })();
     
             return crypto;
         })();
     
+        exonum.KeyValue = (function() {
+    
+            /**
+             * Properties of a KeyValue.
+             * @memberof exonum
+             * @interface IKeyValue
+             * @property {string|null} [key] KeyValue key
+             * @property {Uint8Array|null} [value] KeyValue value
+             */
+    
+            /**
+             * Constructs a new KeyValue.
+             * @memberof exonum
+             * @classdesc Represents a KeyValue.
+             * @implements IKeyValue
+             * @constructor
+             * @param {exonum.IKeyValue=} [properties] Properties to set
+             */
+            function KeyValue(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * KeyValue key.
+             * @member {string} key
+             * @memberof exonum.KeyValue
+             * @instance
+             */
+            KeyValue.prototype.key = "";
+    
+            /**
+             * KeyValue value.
+             * @member {Uint8Array} value
+             * @memberof exonum.KeyValue
+             * @instance
+             */
+            KeyValue.prototype.value = $util.newBuffer([]);
+    
+            /**
+             * Creates a new KeyValue instance using the specified properties.
+             * @function create
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {exonum.IKeyValue=} [properties] Properties to set
+             * @returns {exonum.KeyValue} KeyValue instance
+             */
+            KeyValue.create = function create(properties) {
+                return new KeyValue(properties);
+            };
+    
+            /**
+             * Encodes the specified KeyValue message. Does not implicitly {@link exonum.KeyValue.verify|verify} messages.
+             * @function encode
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {exonum.IKeyValue} message KeyValue message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            KeyValue.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.key != null && message.hasOwnProperty("key"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.key);
+                if (message.value != null && message.hasOwnProperty("value"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.value);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified KeyValue message, length delimited. Does not implicitly {@link exonum.KeyValue.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {exonum.IKeyValue} message KeyValue message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            KeyValue.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a KeyValue message from the specified reader or buffer.
+             * @function decode
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {exonum.KeyValue} KeyValue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            KeyValue.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.KeyValue();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.key = reader.string();
+                        break;
+                    case 2:
+                        message.value = reader.bytes();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a KeyValue message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {exonum.KeyValue} KeyValue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            KeyValue.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a KeyValue message.
+             * @function verify
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            KeyValue.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.key != null && message.hasOwnProperty("key"))
+                    if (!$util.isString(message.key))
+                        return "key: string expected";
+                if (message.value != null && message.hasOwnProperty("value"))
+                    if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
+                        return "value: buffer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a KeyValue message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {exonum.KeyValue} KeyValue
+             */
+            KeyValue.fromObject = function fromObject(object) {
+                if (object instanceof $root.exonum.KeyValue)
+                    return object;
+                var message = new $root.exonum.KeyValue();
+                if (object.key != null)
+                    message.key = String(object.key);
+                if (object.value != null)
+                    if (typeof object.value === "string")
+                        $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
+                    else if (object.value.length)
+                        message.value = object.value;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a KeyValue message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof exonum.KeyValue
+             * @static
+             * @param {exonum.KeyValue} message KeyValue
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            KeyValue.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.key = "";
+                    if (options.bytes === String)
+                        object.value = "";
+                    else {
+                        object.value = [];
+                        if (options.bytes !== Array)
+                            object.value = $util.newBuffer(object.value);
+                    }
+                }
+                if (message.key != null && message.hasOwnProperty("key"))
+                    object.key = message.key;
+                if (message.value != null && message.hasOwnProperty("value"))
+                    object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
+                return object;
+            };
+    
+            /**
+             * Converts this KeyValue to JSON.
+             * @function toJSON
+             * @memberof exonum.KeyValue
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            KeyValue.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return KeyValue;
+        })();
+    
+        exonum.KeyValueSequence = (function() {
+    
+            /**
+             * Properties of a KeyValueSequence.
+             * @memberof exonum
+             * @interface IKeyValueSequence
+             * @property {Array.<exonum.IKeyValue>|null} [entries] KeyValueSequence entries
+             */
+    
+            /**
+             * Constructs a new KeyValueSequence.
+             * @memberof exonum
+             * @classdesc Represents a KeyValueSequence.
+             * @implements IKeyValueSequence
+             * @constructor
+             * @param {exonum.IKeyValueSequence=} [properties] Properties to set
+             */
+            function KeyValueSequence(properties) {
+                this.entries = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * KeyValueSequence entries.
+             * @member {Array.<exonum.IKeyValue>} entries
+             * @memberof exonum.KeyValueSequence
+             * @instance
+             */
+            KeyValueSequence.prototype.entries = $util.emptyArray;
+    
+            /**
+             * Creates a new KeyValueSequence instance using the specified properties.
+             * @function create
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {exonum.IKeyValueSequence=} [properties] Properties to set
+             * @returns {exonum.KeyValueSequence} KeyValueSequence instance
+             */
+            KeyValueSequence.create = function create(properties) {
+                return new KeyValueSequence(properties);
+            };
+    
+            /**
+             * Encodes the specified KeyValueSequence message. Does not implicitly {@link exonum.KeyValueSequence.verify|verify} messages.
+             * @function encode
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {exonum.IKeyValueSequence} message KeyValueSequence message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            KeyValueSequence.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.entries != null && message.entries.length)
+                    for (var i = 0; i < message.entries.length; ++i)
+                        $root.exonum.KeyValue.encode(message.entries[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified KeyValueSequence message, length delimited. Does not implicitly {@link exonum.KeyValueSequence.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {exonum.IKeyValueSequence} message KeyValueSequence message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            KeyValueSequence.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a KeyValueSequence message from the specified reader or buffer.
+             * @function decode
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {exonum.KeyValueSequence} KeyValueSequence
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            KeyValueSequence.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.KeyValueSequence();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        if (!(message.entries && message.entries.length))
+                            message.entries = [];
+                        message.entries.push($root.exonum.KeyValue.decode(reader, reader.uint32()));
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a KeyValueSequence message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {exonum.KeyValueSequence} KeyValueSequence
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            KeyValueSequence.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a KeyValueSequence message.
+             * @function verify
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            KeyValueSequence.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.entries != null && message.hasOwnProperty("entries")) {
+                    if (!Array.isArray(message.entries))
+                        return "entries: array expected";
+                    for (var i = 0; i < message.entries.length; ++i) {
+                        var error = $root.exonum.KeyValue.verify(message.entries[i]);
+                        if (error)
+                            return "entries." + error;
+                    }
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a KeyValueSequence message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {exonum.KeyValueSequence} KeyValueSequence
+             */
+            KeyValueSequence.fromObject = function fromObject(object) {
+                if (object instanceof $root.exonum.KeyValueSequence)
+                    return object;
+                var message = new $root.exonum.KeyValueSequence();
+                if (object.entries) {
+                    if (!Array.isArray(object.entries))
+                        throw TypeError(".exonum.KeyValueSequence.entries: array expected");
+                    message.entries = [];
+                    for (var i = 0; i < object.entries.length; ++i) {
+                        if (typeof object.entries[i] !== "object")
+                            throw TypeError(".exonum.KeyValueSequence.entries: object expected");
+                        message.entries[i] = $root.exonum.KeyValue.fromObject(object.entries[i]);
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a KeyValueSequence message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof exonum.KeyValueSequence
+             * @static
+             * @param {exonum.KeyValueSequence} message KeyValueSequence
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            KeyValueSequence.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.entries = [];
+                if (message.entries && message.entries.length) {
+                    object.entries = [];
+                    for (var j = 0; j < message.entries.length; ++j)
+                        object.entries[j] = $root.exonum.KeyValue.toObject(message.entries[j], options);
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this KeyValueSequence to JSON.
+             * @function toJSON
+             * @memberof exonum.KeyValueSequence
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            KeyValueSequence.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return KeyValueSequence;
+        })();
+    
+        exonum.SignedMessage = (function() {
+    
+            /**
+             * Properties of a SignedMessage.
+             * @memberof exonum
+             * @interface ISignedMessage
+             * @property {Uint8Array|null} [payload] SignedMessage payload
+             * @property {exonum.crypto.IPublicKey|null} [author] SignedMessage author
+             * @property {exonum.crypto.ISignature|null} [signature] SignedMessage signature
+             */
+    
+            /**
+             * Constructs a new SignedMessage.
+             * @memberof exonum
+             * @classdesc Represents a SignedMessage.
+             * @implements ISignedMessage
+             * @constructor
+             * @param {exonum.ISignedMessage=} [properties] Properties to set
+             */
+            function SignedMessage(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * SignedMessage payload.
+             * @member {Uint8Array} payload
+             * @memberof exonum.SignedMessage
+             * @instance
+             */
+            SignedMessage.prototype.payload = $util.newBuffer([]);
+    
+            /**
+             * SignedMessage author.
+             * @member {exonum.crypto.IPublicKey|null|undefined} author
+             * @memberof exonum.SignedMessage
+             * @instance
+             */
+            SignedMessage.prototype.author = null;
+    
+            /**
+             * SignedMessage signature.
+             * @member {exonum.crypto.ISignature|null|undefined} signature
+             * @memberof exonum.SignedMessage
+             * @instance
+             */
+            SignedMessage.prototype.signature = null;
+    
+            /**
+             * Creates a new SignedMessage instance using the specified properties.
+             * @function create
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {exonum.ISignedMessage=} [properties] Properties to set
+             * @returns {exonum.SignedMessage} SignedMessage instance
+             */
+            SignedMessage.create = function create(properties) {
+                return new SignedMessage(properties);
+            };
+    
+            /**
+             * Encodes the specified SignedMessage message. Does not implicitly {@link exonum.SignedMessage.verify|verify} messages.
+             * @function encode
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {exonum.ISignedMessage} message SignedMessage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            SignedMessage.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.payload != null && message.hasOwnProperty("payload"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.payload);
+                if (message.author != null && message.hasOwnProperty("author"))
+                    $root.exonum.crypto.PublicKey.encode(message.author, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                if (message.signature != null && message.hasOwnProperty("signature"))
+                    $root.exonum.crypto.Signature.encode(message.signature, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified SignedMessage message, length delimited. Does not implicitly {@link exonum.SignedMessage.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {exonum.ISignedMessage} message SignedMessage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            SignedMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a SignedMessage message from the specified reader or buffer.
+             * @function decode
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {exonum.SignedMessage} SignedMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            SignedMessage.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.SignedMessage();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.payload = reader.bytes();
+                        break;
+                    case 2:
+                        message.author = $root.exonum.crypto.PublicKey.decode(reader, reader.uint32());
+                        break;
+                    case 3:
+                        message.signature = $root.exonum.crypto.Signature.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a SignedMessage message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {exonum.SignedMessage} SignedMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            SignedMessage.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a SignedMessage message.
+             * @function verify
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            SignedMessage.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.payload != null && message.hasOwnProperty("payload"))
+                    if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
+                        return "payload: buffer expected";
+                if (message.author != null && message.hasOwnProperty("author")) {
+                    var error = $root.exonum.crypto.PublicKey.verify(message.author);
+                    if (error)
+                        return "author." + error;
+                }
+                if (message.signature != null && message.hasOwnProperty("signature")) {
+                    var error = $root.exonum.crypto.Signature.verify(message.signature);
+                    if (error)
+                        return "signature." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a SignedMessage message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {exonum.SignedMessage} SignedMessage
+             */
+            SignedMessage.fromObject = function fromObject(object) {
+                if (object instanceof $root.exonum.SignedMessage)
+                    return object;
+                var message = new $root.exonum.SignedMessage();
+                if (object.payload != null)
+                    if (typeof object.payload === "string")
+                        $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
+                    else if (object.payload.length)
+                        message.payload = object.payload;
+                if (object.author != null) {
+                    if (typeof object.author !== "object")
+                        throw TypeError(".exonum.SignedMessage.author: object expected");
+                    message.author = $root.exonum.crypto.PublicKey.fromObject(object.author);
+                }
+                if (object.signature != null) {
+                    if (typeof object.signature !== "object")
+                        throw TypeError(".exonum.SignedMessage.signature: object expected");
+                    message.signature = $root.exonum.crypto.Signature.fromObject(object.signature);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a SignedMessage message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof exonum.SignedMessage
+             * @static
+             * @param {exonum.SignedMessage} message SignedMessage
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            SignedMessage.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    if (options.bytes === String)
+                        object.payload = "";
+                    else {
+                        object.payload = [];
+                        if (options.bytes !== Array)
+                            object.payload = $util.newBuffer(object.payload);
+                    }
+                    object.author = null;
+                    object.signature = null;
+                }
+                if (message.payload != null && message.hasOwnProperty("payload"))
+                    object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
+                if (message.author != null && message.hasOwnProperty("author"))
+                    object.author = $root.exonum.crypto.PublicKey.toObject(message.author, options);
+                if (message.signature != null && message.hasOwnProperty("signature"))
+                    object.signature = $root.exonum.crypto.Signature.toObject(message.signature, options);
+                return object;
+            };
+    
+            /**
+             * Converts this SignedMessage to JSON.
+             * @function toJSON
+             * @memberof exonum.SignedMessage
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            SignedMessage.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return SignedMessage;
+        })();
+    
+        exonum.CoreMessage = (function() {
+    
+            /**
+             * Properties of a CoreMessage.
+             * @memberof exonum
+             * @interface ICoreMessage
+             * @property {exonum.runtime.IAnyTx|null} [any_tx] CoreMessage any_tx
+             * @property {exonum.IPrecommit|null} [precommit] CoreMessage precommit
+             */
+    
+            /**
+             * Constructs a new CoreMessage.
+             * @memberof exonum
+             * @classdesc Represents a CoreMessage.
+             * @implements ICoreMessage
+             * @constructor
+             * @param {exonum.ICoreMessage=} [properties] Properties to set
+             */
+            function CoreMessage(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * CoreMessage any_tx.
+             * @member {exonum.runtime.IAnyTx|null|undefined} any_tx
+             * @memberof exonum.CoreMessage
+             * @instance
+             */
+            CoreMessage.prototype.any_tx = null;
+    
+            /**
+             * CoreMessage precommit.
+             * @member {exonum.IPrecommit|null|undefined} precommit
+             * @memberof exonum.CoreMessage
+             * @instance
+             */
+            CoreMessage.prototype.precommit = null;
+    
+            // OneOf field names bound to virtual getters and setters
+            var $oneOfFields;
+    
+            /**
+             * CoreMessage kind.
+             * @member {"any_tx"|"precommit"|undefined} kind
+             * @memberof exonum.CoreMessage
+             * @instance
+             */
+            Object.defineProperty(CoreMessage.prototype, "kind", {
+                get: $util.oneOfGetter($oneOfFields = ["any_tx", "precommit"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+    
+            /**
+             * Creates a new CoreMessage instance using the specified properties.
+             * @function create
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {exonum.ICoreMessage=} [properties] Properties to set
+             * @returns {exonum.CoreMessage} CoreMessage instance
+             */
+            CoreMessage.create = function create(properties) {
+                return new CoreMessage(properties);
+            };
+    
+            /**
+             * Encodes the specified CoreMessage message. Does not implicitly {@link exonum.CoreMessage.verify|verify} messages.
+             * @function encode
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {exonum.ICoreMessage} message CoreMessage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CoreMessage.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.any_tx != null && message.hasOwnProperty("any_tx"))
+                    $root.exonum.runtime.AnyTx.encode(message.any_tx, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.precommit != null && message.hasOwnProperty("precommit"))
+                    $root.exonum.Precommit.encode(message.precommit, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified CoreMessage message, length delimited. Does not implicitly {@link exonum.CoreMessage.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {exonum.ICoreMessage} message CoreMessage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            CoreMessage.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a CoreMessage message from the specified reader or buffer.
+             * @function decode
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {exonum.CoreMessage} CoreMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CoreMessage.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.CoreMessage();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.any_tx = $root.exonum.runtime.AnyTx.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.precommit = $root.exonum.Precommit.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a CoreMessage message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {exonum.CoreMessage} CoreMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            CoreMessage.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a CoreMessage message.
+             * @function verify
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            CoreMessage.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                var properties = {};
+                if (message.any_tx != null && message.hasOwnProperty("any_tx")) {
+                    properties.kind = 1;
+                    {
+                        var error = $root.exonum.runtime.AnyTx.verify(message.any_tx);
+                        if (error)
+                            return "any_tx." + error;
+                    }
+                }
+                if (message.precommit != null && message.hasOwnProperty("precommit")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        var error = $root.exonum.Precommit.verify(message.precommit);
+                        if (error)
+                            return "precommit." + error;
+                    }
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a CoreMessage message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {exonum.CoreMessage} CoreMessage
+             */
+            CoreMessage.fromObject = function fromObject(object) {
+                if (object instanceof $root.exonum.CoreMessage)
+                    return object;
+                var message = new $root.exonum.CoreMessage();
+                if (object.any_tx != null) {
+                    if (typeof object.any_tx !== "object")
+                        throw TypeError(".exonum.CoreMessage.any_tx: object expected");
+                    message.any_tx = $root.exonum.runtime.AnyTx.fromObject(object.any_tx);
+                }
+                if (object.precommit != null) {
+                    if (typeof object.precommit !== "object")
+                        throw TypeError(".exonum.CoreMessage.precommit: object expected");
+                    message.precommit = $root.exonum.Precommit.fromObject(object.precommit);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a CoreMessage message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof exonum.CoreMessage
+             * @static
+             * @param {exonum.CoreMessage} message CoreMessage
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            CoreMessage.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (message.any_tx != null && message.hasOwnProperty("any_tx")) {
+                    object.any_tx = $root.exonum.runtime.AnyTx.toObject(message.any_tx, options);
+                    if (options.oneofs)
+                        object.kind = "any_tx";
+                }
+                if (message.precommit != null && message.hasOwnProperty("precommit")) {
+                    object.precommit = $root.exonum.Precommit.toObject(message.precommit, options);
+                    if (options.oneofs)
+                        object.kind = "precommit";
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this CoreMessage to JSON.
+             * @function toJSON
+             * @memberof exonum.CoreMessage
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            CoreMessage.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return CoreMessage;
+        })();
+    
+        exonum.Precommit = (function() {
+    
+            /**
+             * Properties of a Precommit.
+             * @memberof exonum
+             * @interface IPrecommit
+             * @property {number|null} [validator] Precommit validator
+             * @property {number|Long|null} [height] Precommit height
+             * @property {number|null} [round] Precommit round
+             * @property {exonum.crypto.IHash|null} [propose_hash] Precommit propose_hash
+             * @property {exonum.crypto.IHash|null} [block_hash] Precommit block_hash
+             * @property {google.protobuf.ITimestamp|null} [time] Precommit time
+             */
+    
+            /**
+             * Constructs a new Precommit.
+             * @memberof exonum
+             * @classdesc Represents a Precommit.
+             * @implements IPrecommit
+             * @constructor
+             * @param {exonum.IPrecommit=} [properties] Properties to set
+             */
+            function Precommit(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * Precommit validator.
+             * @member {number} validator
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.validator = 0;
+    
+            /**
+             * Precommit height.
+             * @member {number|Long} height
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.height = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * Precommit round.
+             * @member {number} round
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.round = 0;
+    
+            /**
+             * Precommit propose_hash.
+             * @member {exonum.crypto.IHash|null|undefined} propose_hash
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.propose_hash = null;
+    
+            /**
+             * Precommit block_hash.
+             * @member {exonum.crypto.IHash|null|undefined} block_hash
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.block_hash = null;
+    
+            /**
+             * Precommit time.
+             * @member {google.protobuf.ITimestamp|null|undefined} time
+             * @memberof exonum.Precommit
+             * @instance
+             */
+            Precommit.prototype.time = null;
+    
+            /**
+             * Creates a new Precommit instance using the specified properties.
+             * @function create
+             * @memberof exonum.Precommit
+             * @static
+             * @param {exonum.IPrecommit=} [properties] Properties to set
+             * @returns {exonum.Precommit} Precommit instance
+             */
+            Precommit.create = function create(properties) {
+                return new Precommit(properties);
+            };
+    
+            /**
+             * Encodes the specified Precommit message. Does not implicitly {@link exonum.Precommit.verify|verify} messages.
+             * @function encode
+             * @memberof exonum.Precommit
+             * @static
+             * @param {exonum.IPrecommit} message Precommit message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Precommit.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.validator != null && message.hasOwnProperty("validator"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.validator);
+                if (message.height != null && message.hasOwnProperty("height"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.height);
+                if (message.round != null && message.hasOwnProperty("round"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.round);
+                if (message.propose_hash != null && message.hasOwnProperty("propose_hash"))
+                    $root.exonum.crypto.Hash.encode(message.propose_hash, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                if (message.block_hash != null && message.hasOwnProperty("block_hash"))
+                    $root.exonum.crypto.Hash.encode(message.block_hash, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                if (message.time != null && message.hasOwnProperty("time"))
+                    $root.google.protobuf.Timestamp.encode(message.time, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified Precommit message, length delimited. Does not implicitly {@link exonum.Precommit.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof exonum.Precommit
+             * @static
+             * @param {exonum.IPrecommit} message Precommit message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Precommit.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a Precommit message from the specified reader or buffer.
+             * @function decode
+             * @memberof exonum.Precommit
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {exonum.Precommit} Precommit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Precommit.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.Precommit();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.validator = reader.uint32();
+                        break;
+                    case 2:
+                        message.height = reader.uint64();
+                        break;
+                    case 3:
+                        message.round = reader.uint32();
+                        break;
+                    case 4:
+                        message.propose_hash = $root.exonum.crypto.Hash.decode(reader, reader.uint32());
+                        break;
+                    case 5:
+                        message.block_hash = $root.exonum.crypto.Hash.decode(reader, reader.uint32());
+                        break;
+                    case 6:
+                        message.time = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a Precommit message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof exonum.Precommit
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {exonum.Precommit} Precommit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Precommit.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a Precommit message.
+             * @function verify
+             * @memberof exonum.Precommit
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Precommit.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.validator != null && message.hasOwnProperty("validator"))
+                    if (!$util.isInteger(message.validator))
+                        return "validator: integer expected";
+                if (message.height != null && message.hasOwnProperty("height"))
+                    if (!$util.isInteger(message.height) && !(message.height && $util.isInteger(message.height.low) && $util.isInteger(message.height.high)))
+                        return "height: integer|Long expected";
+                if (message.round != null && message.hasOwnProperty("round"))
+                    if (!$util.isInteger(message.round))
+                        return "round: integer expected";
+                if (message.propose_hash != null && message.hasOwnProperty("propose_hash")) {
+                    var error = $root.exonum.crypto.Hash.verify(message.propose_hash);
+                    if (error)
+                        return "propose_hash." + error;
+                }
+                if (message.block_hash != null && message.hasOwnProperty("block_hash")) {
+                    var error = $root.exonum.crypto.Hash.verify(message.block_hash);
+                    if (error)
+                        return "block_hash." + error;
+                }
+                if (message.time != null && message.hasOwnProperty("time")) {
+                    var error = $root.google.protobuf.Timestamp.verify(message.time);
+                    if (error)
+                        return "time." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a Precommit message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof exonum.Precommit
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {exonum.Precommit} Precommit
+             */
+            Precommit.fromObject = function fromObject(object) {
+                if (object instanceof $root.exonum.Precommit)
+                    return object;
+                var message = new $root.exonum.Precommit();
+                if (object.validator != null)
+                    message.validator = object.validator >>> 0;
+                if (object.height != null)
+                    if ($util.Long)
+                        (message.height = $util.Long.fromValue(object.height)).unsigned = true;
+                    else if (typeof object.height === "string")
+                        message.height = parseInt(object.height, 10);
+                    else if (typeof object.height === "number")
+                        message.height = object.height;
+                    else if (typeof object.height === "object")
+                        message.height = new $util.LongBits(object.height.low >>> 0, object.height.high >>> 0).toNumber(true);
+                if (object.round != null)
+                    message.round = object.round >>> 0;
+                if (object.propose_hash != null) {
+                    if (typeof object.propose_hash !== "object")
+                        throw TypeError(".exonum.Precommit.propose_hash: object expected");
+                    message.propose_hash = $root.exonum.crypto.Hash.fromObject(object.propose_hash);
+                }
+                if (object.block_hash != null) {
+                    if (typeof object.block_hash !== "object")
+                        throw TypeError(".exonum.Precommit.block_hash: object expected");
+                    message.block_hash = $root.exonum.crypto.Hash.fromObject(object.block_hash);
+                }
+                if (object.time != null) {
+                    if (typeof object.time !== "object")
+                        throw TypeError(".exonum.Precommit.time: object expected");
+                    message.time = $root.google.protobuf.Timestamp.fromObject(object.time);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a Precommit message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof exonum.Precommit
+             * @static
+             * @param {exonum.Precommit} message Precommit
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Precommit.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.validator = 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.height = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.height = options.longs === String ? "0" : 0;
+                    object.round = 0;
+                    object.propose_hash = null;
+                    object.block_hash = null;
+                    object.time = null;
+                }
+                if (message.validator != null && message.hasOwnProperty("validator"))
+                    object.validator = message.validator;
+                if (message.height != null && message.hasOwnProperty("height"))
+                    if (typeof message.height === "number")
+                        object.height = options.longs === String ? String(message.height) : message.height;
+                    else
+                        object.height = options.longs === String ? $util.Long.prototype.toString.call(message.height) : options.longs === Number ? new $util.LongBits(message.height.low >>> 0, message.height.high >>> 0).toNumber(true) : message.height;
+                if (message.round != null && message.hasOwnProperty("round"))
+                    object.round = message.round;
+                if (message.propose_hash != null && message.hasOwnProperty("propose_hash"))
+                    object.propose_hash = $root.exonum.crypto.Hash.toObject(message.propose_hash, options);
+                if (message.block_hash != null && message.hasOwnProperty("block_hash"))
+                    object.block_hash = $root.exonum.crypto.Hash.toObject(message.block_hash, options);
+                if (message.time != null && message.hasOwnProperty("time"))
+                    object.time = $root.google.protobuf.Timestamp.toObject(message.time, options);
+                return object;
+            };
+    
+            /**
+             * Converts this Precommit to JSON.
+             * @function toJSON
+             * @memberof exonum.Precommit
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Precommit.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return Precommit;
+        })();
+    
+        exonum.runtime = (function() {
+    
+            /**
+             * Namespace runtime.
+             * @memberof exonum
+             * @namespace
+             */
+            var runtime = {};
+    
+            runtime.Caller = (function() {
+    
+                /**
+                 * Properties of a Caller.
+                 * @memberof exonum.runtime
+                 * @interface ICaller
+                 * @property {exonum.crypto.IPublicKey|null} [transaction_author] Caller transaction_author
+                 * @property {number|null} [instance_id] Caller instance_id
+                 * @property {google.protobuf.IEmpty|null} [blockchain] Caller blockchain
+                 */
+    
+                /**
+                 * Constructs a new Caller.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents a Caller.
+                 * @implements ICaller
+                 * @constructor
+                 * @param {exonum.runtime.ICaller=} [properties] Properties to set
+                 */
+                function Caller(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * Caller transaction_author.
+                 * @member {exonum.crypto.IPublicKey|null|undefined} transaction_author
+                 * @memberof exonum.runtime.Caller
+                 * @instance
+                 */
+                Caller.prototype.transaction_author = null;
+    
+                /**
+                 * Caller instance_id.
+                 * @member {number} instance_id
+                 * @memberof exonum.runtime.Caller
+                 * @instance
+                 */
+                Caller.prototype.instance_id = 0;
+    
+                /**
+                 * Caller blockchain.
+                 * @member {google.protobuf.IEmpty|null|undefined} blockchain
+                 * @memberof exonum.runtime.Caller
+                 * @instance
+                 */
+                Caller.prototype.blockchain = null;
+    
+                // OneOf field names bound to virtual getters and setters
+                var $oneOfFields;
+    
+                /**
+                 * Caller caller.
+                 * @member {"transaction_author"|"instance_id"|"blockchain"|undefined} caller
+                 * @memberof exonum.runtime.Caller
+                 * @instance
+                 */
+                Object.defineProperty(Caller.prototype, "caller", {
+                    get: $util.oneOfGetter($oneOfFields = ["transaction_author", "instance_id", "blockchain"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+    
+                /**
+                 * Creates a new Caller instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {exonum.runtime.ICaller=} [properties] Properties to set
+                 * @returns {exonum.runtime.Caller} Caller instance
+                 */
+                Caller.create = function create(properties) {
+                    return new Caller(properties);
+                };
+    
+                /**
+                 * Encodes the specified Caller message. Does not implicitly {@link exonum.runtime.Caller.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {exonum.runtime.ICaller} message Caller message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Caller.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.transaction_author != null && message.hasOwnProperty("transaction_author"))
+                        $root.exonum.crypto.PublicKey.encode(message.transaction_author, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id"))
+                        writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.instance_id);
+                    if (message.blockchain != null && message.hasOwnProperty("blockchain"))
+                        $root.google.protobuf.Empty.encode(message.blockchain, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified Caller message, length delimited. Does not implicitly {@link exonum.runtime.Caller.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {exonum.runtime.ICaller} message Caller message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Caller.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a Caller message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.Caller} Caller
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Caller.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.Caller();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.transaction_author = $root.exonum.crypto.PublicKey.decode(reader, reader.uint32());
+                            break;
+                        case 2:
+                            message.instance_id = reader.uint32();
+                            break;
+                        case 3:
+                            message.blockchain = $root.google.protobuf.Empty.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a Caller message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.Caller} Caller
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Caller.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a Caller message.
+                 * @function verify
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Caller.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    var properties = {};
+                    if (message.transaction_author != null && message.hasOwnProperty("transaction_author")) {
+                        properties.caller = 1;
+                        {
+                            var error = $root.exonum.crypto.PublicKey.verify(message.transaction_author);
+                            if (error)
+                                return "transaction_author." + error;
+                        }
+                    }
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id")) {
+                        if (properties.caller === 1)
+                            return "caller: multiple values";
+                        properties.caller = 1;
+                        if (!$util.isInteger(message.instance_id))
+                            return "instance_id: integer expected";
+                    }
+                    if (message.blockchain != null && message.hasOwnProperty("blockchain")) {
+                        if (properties.caller === 1)
+                            return "caller: multiple values";
+                        properties.caller = 1;
+                        {
+                            var error = $root.google.protobuf.Empty.verify(message.blockchain);
+                            if (error)
+                                return "blockchain." + error;
+                        }
+                    }
+                    return null;
+                };
+    
+                /**
+                 * Creates a Caller message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.Caller} Caller
+                 */
+                Caller.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.Caller)
+                        return object;
+                    var message = new $root.exonum.runtime.Caller();
+                    if (object.transaction_author != null) {
+                        if (typeof object.transaction_author !== "object")
+                            throw TypeError(".exonum.runtime.Caller.transaction_author: object expected");
+                        message.transaction_author = $root.exonum.crypto.PublicKey.fromObject(object.transaction_author);
+                    }
+                    if (object.instance_id != null)
+                        message.instance_id = object.instance_id >>> 0;
+                    if (object.blockchain != null) {
+                        if (typeof object.blockchain !== "object")
+                            throw TypeError(".exonum.runtime.Caller.blockchain: object expected");
+                        message.blockchain = $root.google.protobuf.Empty.fromObject(object.blockchain);
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a Caller message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.Caller
+                 * @static
+                 * @param {exonum.runtime.Caller} message Caller
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Caller.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (message.transaction_author != null && message.hasOwnProperty("transaction_author")) {
+                        object.transaction_author = $root.exonum.crypto.PublicKey.toObject(message.transaction_author, options);
+                        if (options.oneofs)
+                            object.caller = "transaction_author";
+                    }
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id")) {
+                        object.instance_id = message.instance_id;
+                        if (options.oneofs)
+                            object.caller = "instance_id";
+                    }
+                    if (message.blockchain != null && message.hasOwnProperty("blockchain")) {
+                        object.blockchain = $root.google.protobuf.Empty.toObject(message.blockchain, options);
+                        if (options.oneofs)
+                            object.caller = "blockchain";
+                    }
+                    return object;
+                };
+    
+                /**
+                 * Converts this Caller to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.Caller
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Caller.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return Caller;
+            })();
+    
+            runtime.CallInfo = (function() {
+    
+                /**
+                 * Properties of a CallInfo.
+                 * @memberof exonum.runtime
+                 * @interface ICallInfo
+                 * @property {number|null} [instance_id] CallInfo instance_id
+                 * @property {number|null} [method_id] CallInfo method_id
+                 */
+    
+                /**
+                 * Constructs a new CallInfo.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents a CallInfo.
+                 * @implements ICallInfo
+                 * @constructor
+                 * @param {exonum.runtime.ICallInfo=} [properties] Properties to set
+                 */
+                function CallInfo(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * CallInfo instance_id.
+                 * @member {number} instance_id
+                 * @memberof exonum.runtime.CallInfo
+                 * @instance
+                 */
+                CallInfo.prototype.instance_id = 0;
+    
+                /**
+                 * CallInfo method_id.
+                 * @member {number} method_id
+                 * @memberof exonum.runtime.CallInfo
+                 * @instance
+                 */
+                CallInfo.prototype.method_id = 0;
+    
+                /**
+                 * Creates a new CallInfo instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {exonum.runtime.ICallInfo=} [properties] Properties to set
+                 * @returns {exonum.runtime.CallInfo} CallInfo instance
+                 */
+                CallInfo.create = function create(properties) {
+                    return new CallInfo(properties);
+                };
+    
+                /**
+                 * Encodes the specified CallInfo message. Does not implicitly {@link exonum.runtime.CallInfo.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {exonum.runtime.ICallInfo} message CallInfo message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CallInfo.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.instance_id);
+                    if (message.method_id != null && message.hasOwnProperty("method_id"))
+                        writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.method_id);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified CallInfo message, length delimited. Does not implicitly {@link exonum.runtime.CallInfo.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {exonum.runtime.ICallInfo} message CallInfo message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                CallInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a CallInfo message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.CallInfo} CallInfo
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CallInfo.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.CallInfo();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.instance_id = reader.uint32();
+                            break;
+                        case 2:
+                            message.method_id = reader.uint32();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a CallInfo message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.CallInfo} CallInfo
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                CallInfo.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a CallInfo message.
+                 * @function verify
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CallInfo.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id"))
+                        if (!$util.isInteger(message.instance_id))
+                            return "instance_id: integer expected";
+                    if (message.method_id != null && message.hasOwnProperty("method_id"))
+                        if (!$util.isInteger(message.method_id))
+                            return "method_id: integer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a CallInfo message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.CallInfo} CallInfo
+                 */
+                CallInfo.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.CallInfo)
+                        return object;
+                    var message = new $root.exonum.runtime.CallInfo();
+                    if (object.instance_id != null)
+                        message.instance_id = object.instance_id >>> 0;
+                    if (object.method_id != null)
+                        message.method_id = object.method_id >>> 0;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a CallInfo message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.CallInfo
+                 * @static
+                 * @param {exonum.runtime.CallInfo} message CallInfo
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CallInfo.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.instance_id = 0;
+                        object.method_id = 0;
+                    }
+                    if (message.instance_id != null && message.hasOwnProperty("instance_id"))
+                        object.instance_id = message.instance_id;
+                    if (message.method_id != null && message.hasOwnProperty("method_id"))
+                        object.method_id = message.method_id;
+                    return object;
+                };
+    
+                /**
+                 * Converts this CallInfo to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.CallInfo
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CallInfo.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return CallInfo;
+            })();
+    
+            runtime.AnyTx = (function() {
+    
+                /**
+                 * Properties of an AnyTx.
+                 * @memberof exonum.runtime
+                 * @interface IAnyTx
+                 * @property {exonum.runtime.ICallInfo|null} [call_info] AnyTx call_info
+                 * @property {Uint8Array|null} ["arguments"] AnyTx arguments
+                 */
+    
+                /**
+                 * Constructs a new AnyTx.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents an AnyTx.
+                 * @implements IAnyTx
+                 * @constructor
+                 * @param {exonum.runtime.IAnyTx=} [properties] Properties to set
+                 */
+                function AnyTx(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * AnyTx call_info.
+                 * @member {exonum.runtime.ICallInfo|null|undefined} call_info
+                 * @memberof exonum.runtime.AnyTx
+                 * @instance
+                 */
+                AnyTx.prototype.call_info = null;
+    
+                /**
+                 * AnyTx arguments.
+                 * @member {Uint8Array} arguments
+                 * @memberof exonum.runtime.AnyTx
+                 * @instance
+                 */
+                AnyTx.prototype["arguments"] = $util.newBuffer([]);
+    
+                /**
+                 * Creates a new AnyTx instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {exonum.runtime.IAnyTx=} [properties] Properties to set
+                 * @returns {exonum.runtime.AnyTx} AnyTx instance
+                 */
+                AnyTx.create = function create(properties) {
+                    return new AnyTx(properties);
+                };
+    
+                /**
+                 * Encodes the specified AnyTx message. Does not implicitly {@link exonum.runtime.AnyTx.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {exonum.runtime.IAnyTx} message AnyTx message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AnyTx.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.call_info != null && message.hasOwnProperty("call_info"))
+                        $root.exonum.runtime.CallInfo.encode(message.call_info, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message["arguments"] != null && message.hasOwnProperty("arguments"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).bytes(message["arguments"]);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified AnyTx message, length delimited. Does not implicitly {@link exonum.runtime.AnyTx.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {exonum.runtime.IAnyTx} message AnyTx message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                AnyTx.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an AnyTx message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.AnyTx} AnyTx
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AnyTx.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.AnyTx();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.call_info = $root.exonum.runtime.CallInfo.decode(reader, reader.uint32());
+                            break;
+                        case 2:
+                            message["arguments"] = reader.bytes();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an AnyTx message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.AnyTx} AnyTx
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                AnyTx.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an AnyTx message.
+                 * @function verify
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AnyTx.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.call_info != null && message.hasOwnProperty("call_info")) {
+                        var error = $root.exonum.runtime.CallInfo.verify(message.call_info);
+                        if (error)
+                            return "call_info." + error;
+                    }
+                    if (message["arguments"] != null && message.hasOwnProperty("arguments"))
+                        if (!(message["arguments"] && typeof message["arguments"].length === "number" || $util.isString(message["arguments"])))
+                            return "arguments: buffer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an AnyTx message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.AnyTx} AnyTx
+                 */
+                AnyTx.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.AnyTx)
+                        return object;
+                    var message = new $root.exonum.runtime.AnyTx();
+                    if (object.call_info != null) {
+                        if (typeof object.call_info !== "object")
+                            throw TypeError(".exonum.runtime.AnyTx.call_info: object expected");
+                        message.call_info = $root.exonum.runtime.CallInfo.fromObject(object.call_info);
+                    }
+                    if (object["arguments"] != null)
+                        if (typeof object["arguments"] === "string")
+                            $util.base64.decode(object["arguments"], message["arguments"] = $util.newBuffer($util.base64.length(object["arguments"])), 0);
+                        else if (object["arguments"].length)
+                            message["arguments"] = object["arguments"];
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an AnyTx message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.AnyTx
+                 * @static
+                 * @param {exonum.runtime.AnyTx} message AnyTx
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AnyTx.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.call_info = null;
+                        if (options.bytes === String)
+                            object["arguments"] = "";
+                        else {
+                            object["arguments"] = [];
+                            if (options.bytes !== Array)
+                                object["arguments"] = $util.newBuffer(object["arguments"]);
+                        }
+                    }
+                    if (message.call_info != null && message.hasOwnProperty("call_info"))
+                        object.call_info = $root.exonum.runtime.CallInfo.toObject(message.call_info, options);
+                    if (message["arguments"] != null && message.hasOwnProperty("arguments"))
+                        object["arguments"] = options.bytes === String ? $util.base64.encode(message["arguments"], 0, message["arguments"].length) : options.bytes === Array ? Array.prototype.slice.call(message["arguments"]) : message["arguments"];
+                    return object;
+                };
+    
+                /**
+                 * Converts this AnyTx to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.AnyTx
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AnyTx.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return AnyTx;
+            })();
+    
+            runtime.ArtifactId = (function() {
+    
+                /**
+                 * Properties of an ArtifactId.
+                 * @memberof exonum.runtime
+                 * @interface IArtifactId
+                 * @property {number|null} [runtime_id] ArtifactId runtime_id
+                 * @property {string|null} [name] ArtifactId name
+                 * @property {string|null} [version] ArtifactId version
+                 */
+    
+                /**
+                 * Constructs a new ArtifactId.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents an ArtifactId.
+                 * @implements IArtifactId
+                 * @constructor
+                 * @param {exonum.runtime.IArtifactId=} [properties] Properties to set
+                 */
+                function ArtifactId(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * ArtifactId runtime_id.
+                 * @member {number} runtime_id
+                 * @memberof exonum.runtime.ArtifactId
+                 * @instance
+                 */
+                ArtifactId.prototype.runtime_id = 0;
+    
+                /**
+                 * ArtifactId name.
+                 * @member {string} name
+                 * @memberof exonum.runtime.ArtifactId
+                 * @instance
+                 */
+                ArtifactId.prototype.name = "";
+    
+                /**
+                 * ArtifactId version.
+                 * @member {string} version
+                 * @memberof exonum.runtime.ArtifactId
+                 * @instance
+                 */
+                ArtifactId.prototype.version = "";
+    
+                /**
+                 * Creates a new ArtifactId instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {exonum.runtime.IArtifactId=} [properties] Properties to set
+                 * @returns {exonum.runtime.ArtifactId} ArtifactId instance
+                 */
+                ArtifactId.create = function create(properties) {
+                    return new ArtifactId(properties);
+                };
+    
+                /**
+                 * Encodes the specified ArtifactId message. Does not implicitly {@link exonum.runtime.ArtifactId.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {exonum.runtime.IArtifactId} message ArtifactId message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ArtifactId.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.runtime_id != null && message.hasOwnProperty("runtime_id"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.runtime_id);
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+                    if (message.version != null && message.hasOwnProperty("version"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.version);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified ArtifactId message, length delimited. Does not implicitly {@link exonum.runtime.ArtifactId.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {exonum.runtime.IArtifactId} message ArtifactId message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ArtifactId.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an ArtifactId message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.ArtifactId} ArtifactId
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ArtifactId.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.ArtifactId();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.runtime_id = reader.uint32();
+                            break;
+                        case 2:
+                            message.name = reader.string();
+                            break;
+                        case 3:
+                            message.version = reader.string();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an ArtifactId message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.ArtifactId} ArtifactId
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ArtifactId.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an ArtifactId message.
+                 * @function verify
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ArtifactId.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.runtime_id != null && message.hasOwnProperty("runtime_id"))
+                        if (!$util.isInteger(message.runtime_id))
+                            return "runtime_id: integer expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.version != null && message.hasOwnProperty("version"))
+                        if (!$util.isString(message.version))
+                            return "version: string expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an ArtifactId message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.ArtifactId} ArtifactId
+                 */
+                ArtifactId.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.ArtifactId)
+                        return object;
+                    var message = new $root.exonum.runtime.ArtifactId();
+                    if (object.runtime_id != null)
+                        message.runtime_id = object.runtime_id >>> 0;
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.version != null)
+                        message.version = String(object.version);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an ArtifactId message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.ArtifactId
+                 * @static
+                 * @param {exonum.runtime.ArtifactId} message ArtifactId
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ArtifactId.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.runtime_id = 0;
+                        object.name = "";
+                        object.version = "";
+                    }
+                    if (message.runtime_id != null && message.hasOwnProperty("runtime_id"))
+                        object.runtime_id = message.runtime_id;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.version != null && message.hasOwnProperty("version"))
+                        object.version = message.version;
+                    return object;
+                };
+    
+                /**
+                 * Converts this ArtifactId to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.ArtifactId
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ArtifactId.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return ArtifactId;
+            })();
+    
+            runtime.ArtifactSpec = (function() {
+    
+                /**
+                 * Properties of an ArtifactSpec.
+                 * @memberof exonum.runtime
+                 * @interface IArtifactSpec
+                 * @property {exonum.runtime.IArtifactId|null} [artifact] ArtifactSpec artifact
+                 * @property {Uint8Array|null} [payload] ArtifactSpec payload
+                 */
+    
+                /**
+                 * Constructs a new ArtifactSpec.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents an ArtifactSpec.
+                 * @implements IArtifactSpec
+                 * @constructor
+                 * @param {exonum.runtime.IArtifactSpec=} [properties] Properties to set
+                 */
+                function ArtifactSpec(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * ArtifactSpec artifact.
+                 * @member {exonum.runtime.IArtifactId|null|undefined} artifact
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @instance
+                 */
+                ArtifactSpec.prototype.artifact = null;
+    
+                /**
+                 * ArtifactSpec payload.
+                 * @member {Uint8Array} payload
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @instance
+                 */
+                ArtifactSpec.prototype.payload = $util.newBuffer([]);
+    
+                /**
+                 * Creates a new ArtifactSpec instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {exonum.runtime.IArtifactSpec=} [properties] Properties to set
+                 * @returns {exonum.runtime.ArtifactSpec} ArtifactSpec instance
+                 */
+                ArtifactSpec.create = function create(properties) {
+                    return new ArtifactSpec(properties);
+                };
+    
+                /**
+                 * Encodes the specified ArtifactSpec message. Does not implicitly {@link exonum.runtime.ArtifactSpec.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {exonum.runtime.IArtifactSpec} message ArtifactSpec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ArtifactSpec.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.artifact != null && message.hasOwnProperty("artifact"))
+                        $root.exonum.runtime.ArtifactId.encode(message.artifact, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                    if (message.payload != null && message.hasOwnProperty("payload"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.payload);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified ArtifactSpec message, length delimited. Does not implicitly {@link exonum.runtime.ArtifactSpec.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {exonum.runtime.IArtifactSpec} message ArtifactSpec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ArtifactSpec.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an ArtifactSpec message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.ArtifactSpec} ArtifactSpec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ArtifactSpec.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.ArtifactSpec();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.artifact = $root.exonum.runtime.ArtifactId.decode(reader, reader.uint32());
+                            break;
+                        case 2:
+                            message.payload = reader.bytes();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an ArtifactSpec message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.ArtifactSpec} ArtifactSpec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ArtifactSpec.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an ArtifactSpec message.
+                 * @function verify
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ArtifactSpec.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.artifact != null && message.hasOwnProperty("artifact")) {
+                        var error = $root.exonum.runtime.ArtifactId.verify(message.artifact);
+                        if (error)
+                            return "artifact." + error;
+                    }
+                    if (message.payload != null && message.hasOwnProperty("payload"))
+                        if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
+                            return "payload: buffer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an ArtifactSpec message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.ArtifactSpec} ArtifactSpec
+                 */
+                ArtifactSpec.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.ArtifactSpec)
+                        return object;
+                    var message = new $root.exonum.runtime.ArtifactSpec();
+                    if (object.artifact != null) {
+                        if (typeof object.artifact !== "object")
+                            throw TypeError(".exonum.runtime.ArtifactSpec.artifact: object expected");
+                        message.artifact = $root.exonum.runtime.ArtifactId.fromObject(object.artifact);
+                    }
+                    if (object.payload != null)
+                        if (typeof object.payload === "string")
+                            $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
+                        else if (object.payload.length)
+                            message.payload = object.payload;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an ArtifactSpec message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @static
+                 * @param {exonum.runtime.ArtifactSpec} message ArtifactSpec
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ArtifactSpec.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.artifact = null;
+                        if (options.bytes === String)
+                            object.payload = "";
+                        else {
+                            object.payload = [];
+                            if (options.bytes !== Array)
+                                object.payload = $util.newBuffer(object.payload);
+                        }
+                    }
+                    if (message.artifact != null && message.hasOwnProperty("artifact"))
+                        object.artifact = $root.exonum.runtime.ArtifactId.toObject(message.artifact, options);
+                    if (message.payload != null && message.hasOwnProperty("payload"))
+                        object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
+                    return object;
+                };
+    
+                /**
+                 * Converts this ArtifactSpec to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.ArtifactSpec
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ArtifactSpec.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return ArtifactSpec;
+            })();
+    
+            runtime.InstanceSpec = (function() {
+    
+                /**
+                 * Properties of an InstanceSpec.
+                 * @memberof exonum.runtime
+                 * @interface IInstanceSpec
+                 * @property {number|null} [id] InstanceSpec id
+                 * @property {string|null} [name] InstanceSpec name
+                 * @property {exonum.runtime.IArtifactId|null} [artifact] InstanceSpec artifact
+                 */
+    
+                /**
+                 * Constructs a new InstanceSpec.
+                 * @memberof exonum.runtime
+                 * @classdesc Represents an InstanceSpec.
+                 * @implements IInstanceSpec
+                 * @constructor
+                 * @param {exonum.runtime.IInstanceSpec=} [properties] Properties to set
+                 */
+                function InstanceSpec(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * InstanceSpec id.
+                 * @member {number} id
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @instance
+                 */
+                InstanceSpec.prototype.id = 0;
+    
+                /**
+                 * InstanceSpec name.
+                 * @member {string} name
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @instance
+                 */
+                InstanceSpec.prototype.name = "";
+    
+                /**
+                 * InstanceSpec artifact.
+                 * @member {exonum.runtime.IArtifactId|null|undefined} artifact
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @instance
+                 */
+                InstanceSpec.prototype.artifact = null;
+    
+                /**
+                 * Creates a new InstanceSpec instance using the specified properties.
+                 * @function create
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {exonum.runtime.IInstanceSpec=} [properties] Properties to set
+                 * @returns {exonum.runtime.InstanceSpec} InstanceSpec instance
+                 */
+                InstanceSpec.create = function create(properties) {
+                    return new InstanceSpec(properties);
+                };
+    
+                /**
+                 * Encodes the specified InstanceSpec message. Does not implicitly {@link exonum.runtime.InstanceSpec.verify|verify} messages.
+                 * @function encode
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {exonum.runtime.IInstanceSpec} message InstanceSpec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                InstanceSpec.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+                    if (message.artifact != null && message.hasOwnProperty("artifact"))
+                        $root.exonum.runtime.ArtifactId.encode(message.artifact, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified InstanceSpec message, length delimited. Does not implicitly {@link exonum.runtime.InstanceSpec.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {exonum.runtime.IInstanceSpec} message InstanceSpec message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                InstanceSpec.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an InstanceSpec message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {exonum.runtime.InstanceSpec} InstanceSpec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                InstanceSpec.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.exonum.runtime.InstanceSpec();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.id = reader.uint32();
+                            break;
+                        case 2:
+                            message.name = reader.string();
+                            break;
+                        case 3:
+                            message.artifact = $root.exonum.runtime.ArtifactId.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an InstanceSpec message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {exonum.runtime.InstanceSpec} InstanceSpec
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                InstanceSpec.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an InstanceSpec message.
+                 * @function verify
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                InstanceSpec.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isInteger(message.id))
+                            return "id: integer expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.artifact != null && message.hasOwnProperty("artifact")) {
+                        var error = $root.exonum.runtime.ArtifactId.verify(message.artifact);
+                        if (error)
+                            return "artifact." + error;
+                    }
+                    return null;
+                };
+    
+                /**
+                 * Creates an InstanceSpec message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {exonum.runtime.InstanceSpec} InstanceSpec
+                 */
+                InstanceSpec.fromObject = function fromObject(object) {
+                    if (object instanceof $root.exonum.runtime.InstanceSpec)
+                        return object;
+                    var message = new $root.exonum.runtime.InstanceSpec();
+                    if (object.id != null)
+                        message.id = object.id >>> 0;
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.artifact != null) {
+                        if (typeof object.artifact !== "object")
+                            throw TypeError(".exonum.runtime.InstanceSpec.artifact: object expected");
+                        message.artifact = $root.exonum.runtime.ArtifactId.fromObject(object.artifact);
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an InstanceSpec message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @static
+                 * @param {exonum.runtime.InstanceSpec} message InstanceSpec
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                InstanceSpec.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        object.id = 0;
+                        object.name = "";
+                        object.artifact = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.artifact != null && message.hasOwnProperty("artifact"))
+                        object.artifact = $root.exonum.runtime.ArtifactId.toObject(message.artifact, options);
+                    return object;
+                };
+    
+                /**
+                 * Converts this InstanceSpec to JSON.
+                 * @function toJSON
+                 * @memberof exonum.runtime.InstanceSpec
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                InstanceSpec.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return InstanceSpec;
+            })();
+    
+            return runtime;
+        })();
+    
         return exonum;
+    })();
+    
+    $root.google = (function() {
+    
+        /**
+         * Namespace google.
+         * @exports google
+         * @namespace
+         */
+        var google = {};
+    
+        google.protobuf = (function() {
+    
+            /**
+             * Namespace protobuf.
+             * @memberof google
+             * @namespace
+             */
+            var protobuf = {};
+    
+            protobuf.Empty = (function() {
+    
+                /**
+                 * Properties of an Empty.
+                 * @memberof google.protobuf
+                 * @interface IEmpty
+                 */
+    
+                /**
+                 * Constructs a new Empty.
+                 * @memberof google.protobuf
+                 * @classdesc Represents an Empty.
+                 * @implements IEmpty
+                 * @constructor
+                 * @param {google.protobuf.IEmpty=} [properties] Properties to set
+                 */
+                function Empty(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * Creates a new Empty instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {google.protobuf.IEmpty=} [properties] Properties to set
+                 * @returns {google.protobuf.Empty} Empty instance
+                 */
+                Empty.create = function create(properties) {
+                    return new Empty(properties);
+                };
+    
+                /**
+                 * Encodes the specified Empty message. Does not implicitly {@link google.protobuf.Empty.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {google.protobuf.IEmpty} message Empty message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Empty.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified Empty message, length delimited. Does not implicitly {@link google.protobuf.Empty.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {google.protobuf.IEmpty} message Empty message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Empty.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an Empty message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.Empty} Empty
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Empty.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Empty();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an Empty message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.Empty} Empty
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Empty.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an Empty message.
+                 * @function verify
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Empty.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an Empty message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.Empty} Empty
+                 */
+                Empty.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.Empty)
+                        return object;
+                    return new $root.google.protobuf.Empty();
+                };
+    
+                /**
+                 * Creates a plain object from an Empty message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.Empty
+                 * @static
+                 * @param {google.protobuf.Empty} message Empty
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Empty.toObject = function toObject() {
+                    return {};
+                };
+    
+                /**
+                 * Converts this Empty to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.Empty
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Empty.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return Empty;
+            })();
+    
+            protobuf.Timestamp = (function() {
+    
+                /**
+                 * Properties of a Timestamp.
+                 * @memberof google.protobuf
+                 * @interface ITimestamp
+                 * @property {number|Long|null} [seconds] Timestamp seconds
+                 * @property {number|null} [nanos] Timestamp nanos
+                 */
+    
+                /**
+                 * Constructs a new Timestamp.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a Timestamp.
+                 * @implements ITimestamp
+                 * @constructor
+                 * @param {google.protobuf.ITimestamp=} [properties] Properties to set
+                 */
+                function Timestamp(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * Timestamp seconds.
+                 * @member {number|Long} seconds
+                 * @memberof google.protobuf.Timestamp
+                 * @instance
+                 */
+                Timestamp.prototype.seconds = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+    
+                /**
+                 * Timestamp nanos.
+                 * @member {number} nanos
+                 * @memberof google.protobuf.Timestamp
+                 * @instance
+                 */
+                Timestamp.prototype.nanos = 0;
+    
+                /**
+                 * Creates a new Timestamp instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {google.protobuf.ITimestamp=} [properties] Properties to set
+                 * @returns {google.protobuf.Timestamp} Timestamp instance
+                 */
+                Timestamp.create = function create(properties) {
+                    return new Timestamp(properties);
+                };
+    
+                /**
+                 * Encodes the specified Timestamp message. Does not implicitly {@link google.protobuf.Timestamp.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {google.protobuf.ITimestamp} message Timestamp message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Timestamp.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.seconds != null && message.hasOwnProperty("seconds"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.seconds);
+                    if (message.nanos != null && message.hasOwnProperty("nanos"))
+                        writer.uint32(/* id 2, wireType 0 =*/16).int32(message.nanos);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified Timestamp message, length delimited. Does not implicitly {@link google.protobuf.Timestamp.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {google.protobuf.ITimestamp} message Timestamp message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Timestamp.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a Timestamp message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.Timestamp} Timestamp
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Timestamp.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Timestamp();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.seconds = reader.int64();
+                            break;
+                        case 2:
+                            message.nanos = reader.int32();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a Timestamp message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.Timestamp} Timestamp
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Timestamp.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a Timestamp message.
+                 * @function verify
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Timestamp.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.seconds != null && message.hasOwnProperty("seconds"))
+                        if (!$util.isInteger(message.seconds) && !(message.seconds && $util.isInteger(message.seconds.low) && $util.isInteger(message.seconds.high)))
+                            return "seconds: integer|Long expected";
+                    if (message.nanos != null && message.hasOwnProperty("nanos"))
+                        if (!$util.isInteger(message.nanos))
+                            return "nanos: integer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a Timestamp message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.Timestamp} Timestamp
+                 */
+                Timestamp.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.Timestamp)
+                        return object;
+                    var message = new $root.google.protobuf.Timestamp();
+                    if (object.seconds != null)
+                        if ($util.Long)
+                            (message.seconds = $util.Long.fromValue(object.seconds)).unsigned = false;
+                        else if (typeof object.seconds === "string")
+                            message.seconds = parseInt(object.seconds, 10);
+                        else if (typeof object.seconds === "number")
+                            message.seconds = object.seconds;
+                        else if (typeof object.seconds === "object")
+                            message.seconds = new $util.LongBits(object.seconds.low >>> 0, object.seconds.high >>> 0).toNumber();
+                    if (object.nanos != null)
+                        message.nanos = object.nanos | 0;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a Timestamp message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.Timestamp
+                 * @static
+                 * @param {google.protobuf.Timestamp} message Timestamp
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Timestamp.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults) {
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, false);
+                            object.seconds = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.seconds = options.longs === String ? "0" : 0;
+                        object.nanos = 0;
+                    }
+                    if (message.seconds != null && message.hasOwnProperty("seconds"))
+                        if (typeof message.seconds === "number")
+                            object.seconds = options.longs === String ? String(message.seconds) : message.seconds;
+                        else
+                            object.seconds = options.longs === String ? $util.Long.prototype.toString.call(message.seconds) : options.longs === Number ? new $util.LongBits(message.seconds.low >>> 0, message.seconds.high >>> 0).toNumber() : message.seconds;
+                    if (message.nanos != null && message.hasOwnProperty("nanos"))
+                        object.nanos = message.nanos;
+                    return object;
+                };
+    
+                /**
+                 * Converts this Timestamp to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.Timestamp
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Timestamp.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return Timestamp;
+            })();
+    
+            return protobuf;
+        })();
+    
+        return google;
     })();
     
     $root.votings_service = (function() {
@@ -4937,6 +8215,732 @@
             return BallotsStorage;
         })();
     
+        votings_service.BallotStatus = (function() {
+    
+            /**
+             * Properties of a BallotStatus.
+             * @memberof votings_service
+             * @interface IBallotStatus
+             * @property {google.protobuf.IEmpty|null} [unknown] BallotStatus unknown
+             * @property {google.protobuf.IEmpty|null} [valid] BallotStatus valid
+             * @property {votings_service.InvalidReason|null} [invalid] BallotStatus invalid
+             */
+    
+            /**
+             * Constructs a new BallotStatus.
+             * @memberof votings_service
+             * @classdesc Represents a BallotStatus.
+             * @implements IBallotStatus
+             * @constructor
+             * @param {votings_service.IBallotStatus=} [properties] Properties to set
+             */
+            function BallotStatus(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * BallotStatus unknown.
+             * @member {google.protobuf.IEmpty|null|undefined} unknown
+             * @memberof votings_service.BallotStatus
+             * @instance
+             */
+            BallotStatus.prototype.unknown = null;
+    
+            /**
+             * BallotStatus valid.
+             * @member {google.protobuf.IEmpty|null|undefined} valid
+             * @memberof votings_service.BallotStatus
+             * @instance
+             */
+            BallotStatus.prototype.valid = null;
+    
+            /**
+             * BallotStatus invalid.
+             * @member {votings_service.InvalidReason} invalid
+             * @memberof votings_service.BallotStatus
+             * @instance
+             */
+            BallotStatus.prototype.invalid = 0;
+    
+            // OneOf field names bound to virtual getters and setters
+            var $oneOfFields;
+    
+            /**
+             * BallotStatus kind.
+             * @member {"unknown"|"valid"|"invalid"|undefined} kind
+             * @memberof votings_service.BallotStatus
+             * @instance
+             */
+            Object.defineProperty(BallotStatus.prototype, "kind", {
+                get: $util.oneOfGetter($oneOfFields = ["unknown", "valid", "invalid"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+    
+            /**
+             * Creates a new BallotStatus instance using the specified properties.
+             * @function create
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {votings_service.IBallotStatus=} [properties] Properties to set
+             * @returns {votings_service.BallotStatus} BallotStatus instance
+             */
+            BallotStatus.create = function create(properties) {
+                return new BallotStatus(properties);
+            };
+    
+            /**
+             * Encodes the specified BallotStatus message. Does not implicitly {@link votings_service.BallotStatus.verify|verify} messages.
+             * @function encode
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {votings_service.IBallotStatus} message BallotStatus message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BallotStatus.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.unknown != null && message.hasOwnProperty("unknown"))
+                    $root.google.protobuf.Empty.encode(message.unknown, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                if (message.valid != null && message.hasOwnProperty("valid"))
+                    $root.google.protobuf.Empty.encode(message.valid, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                if (message.invalid != null && message.hasOwnProperty("invalid"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.invalid);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified BallotStatus message, length delimited. Does not implicitly {@link votings_service.BallotStatus.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {votings_service.IBallotStatus} message BallotStatus message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            BallotStatus.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a BallotStatus message from the specified reader or buffer.
+             * @function decode
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {votings_service.BallotStatus} BallotStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BallotStatus.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.votings_service.BallotStatus();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.unknown = $root.google.protobuf.Empty.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.valid = $root.google.protobuf.Empty.decode(reader, reader.uint32());
+                        break;
+                    case 3:
+                        message.invalid = reader.int32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a BallotStatus message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {votings_service.BallotStatus} BallotStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            BallotStatus.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a BallotStatus message.
+             * @function verify
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            BallotStatus.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                var properties = {};
+                if (message.unknown != null && message.hasOwnProperty("unknown")) {
+                    properties.kind = 1;
+                    {
+                        var error = $root.google.protobuf.Empty.verify(message.unknown);
+                        if (error)
+                            return "unknown." + error;
+                    }
+                }
+                if (message.valid != null && message.hasOwnProperty("valid")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        var error = $root.google.protobuf.Empty.verify(message.valid);
+                        if (error)
+                            return "valid." + error;
+                    }
+                }
+                if (message.invalid != null && message.hasOwnProperty("invalid")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    switch (message.invalid) {
+                    default:
+                        return "invalid: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a BallotStatus message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {votings_service.BallotStatus} BallotStatus
+             */
+            BallotStatus.fromObject = function fromObject(object) {
+                if (object instanceof $root.votings_service.BallotStatus)
+                    return object;
+                var message = new $root.votings_service.BallotStatus();
+                if (object.unknown != null) {
+                    if (typeof object.unknown !== "object")
+                        throw TypeError(".votings_service.BallotStatus.unknown: object expected");
+                    message.unknown = $root.google.protobuf.Empty.fromObject(object.unknown);
+                }
+                if (object.valid != null) {
+                    if (typeof object.valid !== "object")
+                        throw TypeError(".votings_service.BallotStatus.valid: object expected");
+                    message.valid = $root.google.protobuf.Empty.fromObject(object.valid);
+                }
+                switch (object.invalid) {
+                case "WrongDistrict":
+                case 0:
+                    message.invalid = 0;
+                    break;
+                case "DecryptionError":
+                case 1:
+                    message.invalid = 1;
+                    break;
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a BallotStatus message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof votings_service.BallotStatus
+             * @static
+             * @param {votings_service.BallotStatus} message BallotStatus
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            BallotStatus.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (message.unknown != null && message.hasOwnProperty("unknown")) {
+                    object.unknown = $root.google.protobuf.Empty.toObject(message.unknown, options);
+                    if (options.oneofs)
+                        object.kind = "unknown";
+                }
+                if (message.valid != null && message.hasOwnProperty("valid")) {
+                    object.valid = $root.google.protobuf.Empty.toObject(message.valid, options);
+                    if (options.oneofs)
+                        object.kind = "valid";
+                }
+                if (message.invalid != null && message.hasOwnProperty("invalid")) {
+                    object.invalid = options.enums === String ? $root.votings_service.InvalidReason[message.invalid] : message.invalid;
+                    if (options.oneofs)
+                        object.kind = "invalid";
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this BallotStatus to JSON.
+             * @function toJSON
+             * @memberof votings_service.BallotStatus
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            BallotStatus.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return BallotStatus;
+        })();
+    
+        votings_service.Config = (function() {
+    
+            /**
+             * Properties of a Config.
+             * @memberof votings_service
+             * @interface IConfig
+             * @property {Array.<string>|null} [api_public_keys] Config api_public_keys
+             */
+    
+            /**
+             * Constructs a new Config.
+             * @memberof votings_service
+             * @classdesc Represents a Config.
+             * @implements IConfig
+             * @constructor
+             * @param {votings_service.IConfig=} [properties] Properties to set
+             */
+            function Config(properties) {
+                this.api_public_keys = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * Config api_public_keys.
+             * @member {Array.<string>} api_public_keys
+             * @memberof votings_service.Config
+             * @instance
+             */
+            Config.prototype.api_public_keys = $util.emptyArray;
+    
+            /**
+             * Creates a new Config instance using the specified properties.
+             * @function create
+             * @memberof votings_service.Config
+             * @static
+             * @param {votings_service.IConfig=} [properties] Properties to set
+             * @returns {votings_service.Config} Config instance
+             */
+            Config.create = function create(properties) {
+                return new Config(properties);
+            };
+    
+            /**
+             * Encodes the specified Config message. Does not implicitly {@link votings_service.Config.verify|verify} messages.
+             * @function encode
+             * @memberof votings_service.Config
+             * @static
+             * @param {votings_service.IConfig} message Config message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Config.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.api_public_keys != null && message.api_public_keys.length)
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.api_public_keys[i]);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified Config message, length delimited. Does not implicitly {@link votings_service.Config.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof votings_service.Config
+             * @static
+             * @param {votings_service.IConfig} message Config message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Config.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a Config message from the specified reader or buffer.
+             * @function decode
+             * @memberof votings_service.Config
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {votings_service.Config} Config
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Config.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.votings_service.Config();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        if (!(message.api_public_keys && message.api_public_keys.length))
+                            message.api_public_keys = [];
+                        message.api_public_keys.push(reader.string());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a Config message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof votings_service.Config
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {votings_service.Config} Config
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Config.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a Config message.
+             * @function verify
+             * @memberof votings_service.Config
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Config.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.api_public_keys != null && message.hasOwnProperty("api_public_keys")) {
+                    if (!Array.isArray(message.api_public_keys))
+                        return "api_public_keys: array expected";
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        if (!$util.isString(message.api_public_keys[i]))
+                            return "api_public_keys: string[] expected";
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof votings_service.Config
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {votings_service.Config} Config
+             */
+            Config.fromObject = function fromObject(object) {
+                if (object instanceof $root.votings_service.Config)
+                    return object;
+                var message = new $root.votings_service.Config();
+                if (object.api_public_keys) {
+                    if (!Array.isArray(object.api_public_keys))
+                        throw TypeError(".votings_service.Config.api_public_keys: array expected");
+                    message.api_public_keys = [];
+                    for (var i = 0; i < object.api_public_keys.length; ++i)
+                        message.api_public_keys[i] = String(object.api_public_keys[i]);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a Config message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof votings_service.Config
+             * @static
+             * @param {votings_service.Config} message Config
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Config.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.api_public_keys = [];
+                if (message.api_public_keys && message.api_public_keys.length) {
+                    object.api_public_keys = [];
+                    for (var j = 0; j < message.api_public_keys.length; ++j)
+                        object.api_public_keys[j] = message.api_public_keys[j];
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this Config to JSON.
+             * @function toJSON
+             * @memberof votings_service.Config
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Config.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return Config;
+        })();
+    
+        votings_service.TxStoreBallotCopy = (function() {
+    
+            /**
+             * Properties of a TxStoreBallotCopy.
+             * @memberof votings_service
+             * @interface ITxStoreBallotCopy
+             * @property {string|null} [voting_id] TxStoreBallotCopy voting_id
+             * @property {number|null} [district_id] TxStoreBallotCopy district_id
+             * @property {votings_service.ITxEncryptedChoice|null} [encrypted_choice] TxStoreBallotCopy encrypted_choice
+             */
+    
+            /**
+             * Constructs a new TxStoreBallotCopy.
+             * @memberof votings_service
+             * @classdesc Represents a TxStoreBallotCopy.
+             * @implements ITxStoreBallotCopy
+             * @constructor
+             * @param {votings_service.ITxStoreBallotCopy=} [properties] Properties to set
+             */
+            function TxStoreBallotCopy(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxStoreBallotCopy voting_id.
+             * @member {string} voting_id
+             * @memberof votings_service.TxStoreBallotCopy
+             * @instance
+             */
+            TxStoreBallotCopy.prototype.voting_id = "";
+    
+            /**
+             * TxStoreBallotCopy district_id.
+             * @member {number} district_id
+             * @memberof votings_service.TxStoreBallotCopy
+             * @instance
+             */
+            TxStoreBallotCopy.prototype.district_id = 0;
+    
+            /**
+             * TxStoreBallotCopy encrypted_choice.
+             * @member {votings_service.ITxEncryptedChoice|null|undefined} encrypted_choice
+             * @memberof votings_service.TxStoreBallotCopy
+             * @instance
+             */
+            TxStoreBallotCopy.prototype.encrypted_choice = null;
+    
+            /**
+             * Creates a new TxStoreBallotCopy instance using the specified properties.
+             * @function create
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {votings_service.ITxStoreBallotCopy=} [properties] Properties to set
+             * @returns {votings_service.TxStoreBallotCopy} TxStoreBallotCopy instance
+             */
+            TxStoreBallotCopy.create = function create(properties) {
+                return new TxStoreBallotCopy(properties);
+            };
+    
+            /**
+             * Encodes the specified TxStoreBallotCopy message. Does not implicitly {@link votings_service.TxStoreBallotCopy.verify|verify} messages.
+             * @function encode
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {votings_service.ITxStoreBallotCopy} message TxStoreBallotCopy message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreBallotCopy.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.district_id);
+                if (message.encrypted_choice != null && message.hasOwnProperty("encrypted_choice"))
+                    $root.votings_service.TxEncryptedChoice.encode(message.encrypted_choice, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxStoreBallotCopy message, length delimited. Does not implicitly {@link votings_service.TxStoreBallotCopy.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {votings_service.ITxStoreBallotCopy} message TxStoreBallotCopy message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreBallotCopy.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxStoreBallotCopy message from the specified reader or buffer.
+             * @function decode
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {votings_service.TxStoreBallotCopy} TxStoreBallotCopy
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreBallotCopy.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.votings_service.TxStoreBallotCopy();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        message.district_id = reader.uint32();
+                        break;
+                    case 3:
+                        message.encrypted_choice = $root.votings_service.TxEncryptedChoice.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxStoreBallotCopy message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {votings_service.TxStoreBallotCopy} TxStoreBallotCopy
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreBallotCopy.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxStoreBallotCopy message.
+             * @function verify
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxStoreBallotCopy.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    if (!$util.isInteger(message.district_id))
+                        return "district_id: integer expected";
+                if (message.encrypted_choice != null && message.hasOwnProperty("encrypted_choice")) {
+                    var error = $root.votings_service.TxEncryptedChoice.verify(message.encrypted_choice);
+                    if (error)
+                        return "encrypted_choice." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a TxStoreBallotCopy message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {votings_service.TxStoreBallotCopy} TxStoreBallotCopy
+             */
+            TxStoreBallotCopy.fromObject = function fromObject(object) {
+                if (object instanceof $root.votings_service.TxStoreBallotCopy)
+                    return object;
+                var message = new $root.votings_service.TxStoreBallotCopy();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.district_id != null)
+                    message.district_id = object.district_id >>> 0;
+                if (object.encrypted_choice != null) {
+                    if (typeof object.encrypted_choice !== "object")
+                        throw TypeError(".votings_service.TxStoreBallotCopy.encrypted_choice: object expected");
+                    message.encrypted_choice = $root.votings_service.TxEncryptedChoice.fromObject(object.encrypted_choice);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxStoreBallotCopy message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof votings_service.TxStoreBallotCopy
+             * @static
+             * @param {votings_service.TxStoreBallotCopy} message TxStoreBallotCopy
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxStoreBallotCopy.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.voting_id = "";
+                    object.district_id = 0;
+                    object.encrypted_choice = null;
+                }
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    object.district_id = message.district_id;
+                if (message.encrypted_choice != null && message.hasOwnProperty("encrypted_choice"))
+                    object.encrypted_choice = $root.votings_service.TxEncryptedChoice.toObject(message.encrypted_choice, options);
+                return object;
+            };
+    
+            /**
+             * Converts this TxStoreBallotCopy to JSON.
+             * @function toJSON
+             * @memberof votings_service.TxStoreBallotCopy
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxStoreBallotCopy.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxStoreBallotCopy;
+        })();
+    
         votings_service.TxCryptoSystemSettings = (function() {
     
             /**
@@ -9096,24 +13100,1652 @@
             return TxFinalizeVotingWithResults;
         })();
     
-        votings_service.BallotStatus = (function() {
+        return votings_service;
+    })();
+    
+    $root.actual_ballots_service = (function() {
+    
+        /**
+         * Namespace actual_ballots_service.
+         * @exports actual_ballots_service
+         * @namespace
+         */
+        var actual_ballots_service = {};
+    
+        actual_ballots_service.ServiceConfig = (function() {
+    
+            /**
+             * Properties of a ServiceConfig.
+             * @memberof actual_ballots_service
+             * @interface IServiceConfig
+             * @property {Array.<string>|null} [api_public_keys] ServiceConfig api_public_keys
+             */
+    
+            /**
+             * Constructs a new ServiceConfig.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a ServiceConfig.
+             * @implements IServiceConfig
+             * @constructor
+             * @param {actual_ballots_service.IServiceConfig=} [properties] Properties to set
+             */
+            function ServiceConfig(properties) {
+                this.api_public_keys = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * ServiceConfig api_public_keys.
+             * @member {Array.<string>} api_public_keys
+             * @memberof actual_ballots_service.ServiceConfig
+             * @instance
+             */
+            ServiceConfig.prototype.api_public_keys = $util.emptyArray;
+    
+            /**
+             * Creates a new ServiceConfig instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {actual_ballots_service.IServiceConfig=} [properties] Properties to set
+             * @returns {actual_ballots_service.ServiceConfig} ServiceConfig instance
+             */
+            ServiceConfig.create = function create(properties) {
+                return new ServiceConfig(properties);
+            };
+    
+            /**
+             * Encodes the specified ServiceConfig message. Does not implicitly {@link actual_ballots_service.ServiceConfig.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {actual_ballots_service.IServiceConfig} message ServiceConfig message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ServiceConfig.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.api_public_keys != null && message.api_public_keys.length)
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.api_public_keys[i]);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified ServiceConfig message, length delimited. Does not implicitly {@link actual_ballots_service.ServiceConfig.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {actual_ballots_service.IServiceConfig} message ServiceConfig message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ServiceConfig.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a ServiceConfig message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.ServiceConfig} ServiceConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ServiceConfig.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.ServiceConfig();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        if (!(message.api_public_keys && message.api_public_keys.length))
+                            message.api_public_keys = [];
+                        message.api_public_keys.push(reader.string());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a ServiceConfig message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.ServiceConfig} ServiceConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ServiceConfig.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a ServiceConfig message.
+             * @function verify
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ServiceConfig.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.api_public_keys != null && message.hasOwnProperty("api_public_keys")) {
+                    if (!Array.isArray(message.api_public_keys))
+                        return "api_public_keys: array expected";
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        if (!$util.isString(message.api_public_keys[i]))
+                            return "api_public_keys: string[] expected";
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a ServiceConfig message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.ServiceConfig} ServiceConfig
+             */
+            ServiceConfig.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.ServiceConfig)
+                    return object;
+                var message = new $root.actual_ballots_service.ServiceConfig();
+                if (object.api_public_keys) {
+                    if (!Array.isArray(object.api_public_keys))
+                        throw TypeError(".actual_ballots_service.ServiceConfig.api_public_keys: array expected");
+                    message.api_public_keys = [];
+                    for (var i = 0; i < object.api_public_keys.length; ++i)
+                        message.api_public_keys[i] = String(object.api_public_keys[i]);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a ServiceConfig message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.ServiceConfig
+             * @static
+             * @param {actual_ballots_service.ServiceConfig} message ServiceConfig
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ServiceConfig.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.api_public_keys = [];
+                if (message.api_public_keys && message.api_public_keys.length) {
+                    object.api_public_keys = [];
+                    for (var j = 0; j < message.api_public_keys.length; ++j)
+                        object.api_public_keys[j] = message.api_public_keys[j];
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this ServiceConfig to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.ServiceConfig
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ServiceConfig.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return ServiceConfig;
+        })();
+    
+        /**
+         * InvalidReason enum.
+         * @name actual_ballots_service.InvalidReason
+         * @enum {string}
+         * @property {number} WrongDistrict=0 WrongDistrict value
+         * @property {number} DecryptionError=1 DecryptionError value
+         */
+        actual_ballots_service.InvalidReason = (function() {
+            var valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "WrongDistrict"] = 0;
+            values[valuesById[1] = "DecryptionError"] = 1;
+            return values;
+        })();
+    
+        actual_ballots_service.GroupedTxHash = (function() {
+    
+            /**
+             * Properties of a GroupedTxHash.
+             * @memberof actual_ballots_service
+             * @interface IGroupedTxHash
+             * @property {number|null} [index] GroupedTxHash index
+             * @property {string|null} [store_tx_hash] GroupedTxHash store_tx_hash
+             * @property {string|null} [encrypted_group_id] GroupedTxHash encrypted_group_id
+             * @property {string|null} [group_id] GroupedTxHash group_id
+             * @property {number|Long|null} [ts] GroupedTxHash ts
+             */
+    
+            /**
+             * Constructs a new GroupedTxHash.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a GroupedTxHash.
+             * @implements IGroupedTxHash
+             * @constructor
+             * @param {actual_ballots_service.IGroupedTxHash=} [properties] Properties to set
+             */
+            function GroupedTxHash(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * GroupedTxHash index.
+             * @member {number} index
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             */
+            GroupedTxHash.prototype.index = 0;
+    
+            /**
+             * GroupedTxHash store_tx_hash.
+             * @member {string} store_tx_hash
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             */
+            GroupedTxHash.prototype.store_tx_hash = "";
+    
+            /**
+             * GroupedTxHash encrypted_group_id.
+             * @member {string} encrypted_group_id
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             */
+            GroupedTxHash.prototype.encrypted_group_id = "";
+    
+            /**
+             * GroupedTxHash group_id.
+             * @member {string} group_id
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             */
+            GroupedTxHash.prototype.group_id = "";
+    
+            /**
+             * GroupedTxHash ts.
+             * @member {number|Long} ts
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             */
+            GroupedTxHash.prototype.ts = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+    
+            /**
+             * Creates a new GroupedTxHash instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {actual_ballots_service.IGroupedTxHash=} [properties] Properties to set
+             * @returns {actual_ballots_service.GroupedTxHash} GroupedTxHash instance
+             */
+            GroupedTxHash.create = function create(properties) {
+                return new GroupedTxHash(properties);
+            };
+    
+            /**
+             * Encodes the specified GroupedTxHash message. Does not implicitly {@link actual_ballots_service.GroupedTxHash.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {actual_ballots_service.IGroupedTxHash} message GroupedTxHash message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GroupedTxHash.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.index != null && message.hasOwnProperty("index"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.index);
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.store_tx_hash);
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.encrypted_group_id);
+                if (message.group_id != null && message.hasOwnProperty("group_id"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.group_id);
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int64(message.ts);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified GroupedTxHash message, length delimited. Does not implicitly {@link actual_ballots_service.GroupedTxHash.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {actual_ballots_service.IGroupedTxHash} message GroupedTxHash message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GroupedTxHash.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a GroupedTxHash message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.GroupedTxHash} GroupedTxHash
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GroupedTxHash.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.GroupedTxHash();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.index = reader.uint32();
+                        break;
+                    case 2:
+                        message.store_tx_hash = reader.string();
+                        break;
+                    case 3:
+                        message.encrypted_group_id = reader.string();
+                        break;
+                    case 4:
+                        message.group_id = reader.string();
+                        break;
+                    case 5:
+                        message.ts = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a GroupedTxHash message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.GroupedTxHash} GroupedTxHash
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GroupedTxHash.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a GroupedTxHash message.
+             * @function verify
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GroupedTxHash.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.index != null && message.hasOwnProperty("index"))
+                    if (!$util.isInteger(message.index))
+                        return "index: integer expected";
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    if (!$util.isString(message.store_tx_hash))
+                        return "store_tx_hash: string expected";
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    if (!$util.isString(message.encrypted_group_id))
+                        return "encrypted_group_id: string expected";
+                if (message.group_id != null && message.hasOwnProperty("group_id"))
+                    if (!$util.isString(message.group_id))
+                        return "group_id: string expected";
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    if (!$util.isInteger(message.ts) && !(message.ts && $util.isInteger(message.ts.low) && $util.isInteger(message.ts.high)))
+                        return "ts: integer|Long expected";
+                return null;
+            };
+    
+            /**
+             * Creates a GroupedTxHash message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.GroupedTxHash} GroupedTxHash
+             */
+            GroupedTxHash.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.GroupedTxHash)
+                    return object;
+                var message = new $root.actual_ballots_service.GroupedTxHash();
+                if (object.index != null)
+                    message.index = object.index >>> 0;
+                if (object.store_tx_hash != null)
+                    message.store_tx_hash = String(object.store_tx_hash);
+                if (object.encrypted_group_id != null)
+                    message.encrypted_group_id = String(object.encrypted_group_id);
+                if (object.group_id != null)
+                    message.group_id = String(object.group_id);
+                if (object.ts != null)
+                    if ($util.Long)
+                        (message.ts = $util.Long.fromValue(object.ts)).unsigned = false;
+                    else if (typeof object.ts === "string")
+                        message.ts = parseInt(object.ts, 10);
+                    else if (typeof object.ts === "number")
+                        message.ts = object.ts;
+                    else if (typeof object.ts === "object")
+                        message.ts = new $util.LongBits(object.ts.low >>> 0, object.ts.high >>> 0).toNumber();
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a GroupedTxHash message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @static
+             * @param {actual_ballots_service.GroupedTxHash} message GroupedTxHash
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GroupedTxHash.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.index = 0;
+                    object.store_tx_hash = "";
+                    object.encrypted_group_id = "";
+                    object.group_id = "";
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.ts = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.ts = options.longs === String ? "0" : 0;
+                }
+                if (message.index != null && message.hasOwnProperty("index"))
+                    object.index = message.index;
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    object.store_tx_hash = message.store_tx_hash;
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    object.encrypted_group_id = message.encrypted_group_id;
+                if (message.group_id != null && message.hasOwnProperty("group_id"))
+                    object.group_id = message.group_id;
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    if (typeof message.ts === "number")
+                        object.ts = options.longs === String ? String(message.ts) : message.ts;
+                    else
+                        object.ts = options.longs === String ? $util.Long.prototype.toString.call(message.ts) : options.longs === Number ? new $util.LongBits(message.ts.low >>> 0, message.ts.high >>> 0).toNumber() : message.ts;
+                return object;
+            };
+    
+            /**
+             * Converts this GroupedTxHash to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.GroupedTxHash
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GroupedTxHash.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return GroupedTxHash;
+        })();
+    
+        actual_ballots_service.ActualBallot = (function() {
+    
+            /**
+             * Properties of an ActualBallot.
+             * @memberof actual_ballots_service
+             * @interface IActualBallot
+             * @property {string|null} [voter] ActualBallot voter
+             * @property {number|null} [district_id] ActualBallot district_id
+             * @property {Array.<number>|null} [decrypted_choices] ActualBallot decrypted_choices
+             * @property {string|null} [store_tx_hash] ActualBallot store_tx_hash
+             * @property {string|null} [decrypt_tx_hash] ActualBallot decrypt_tx_hash
+             * @property {actual_ballots_service.IBallotStatus|null} [status] ActualBallot status
+             */
+    
+            /**
+             * Constructs a new ActualBallot.
+             * @memberof actual_ballots_service
+             * @classdesc Represents an ActualBallot.
+             * @implements IActualBallot
+             * @constructor
+             * @param {actual_ballots_service.IActualBallot=} [properties] Properties to set
+             */
+            function ActualBallot(properties) {
+                this.decrypted_choices = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * ActualBallot voter.
+             * @member {string} voter
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.voter = "";
+    
+            /**
+             * ActualBallot district_id.
+             * @member {number} district_id
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.district_id = 0;
+    
+            /**
+             * ActualBallot decrypted_choices.
+             * @member {Array.<number>} decrypted_choices
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.decrypted_choices = $util.emptyArray;
+    
+            /**
+             * ActualBallot store_tx_hash.
+             * @member {string} store_tx_hash
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.store_tx_hash = "";
+    
+            /**
+             * ActualBallot decrypt_tx_hash.
+             * @member {string} decrypt_tx_hash
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.decrypt_tx_hash = "";
+    
+            /**
+             * ActualBallot status.
+             * @member {actual_ballots_service.IBallotStatus|null|undefined} status
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             */
+            ActualBallot.prototype.status = null;
+    
+            /**
+             * Creates a new ActualBallot instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {actual_ballots_service.IActualBallot=} [properties] Properties to set
+             * @returns {actual_ballots_service.ActualBallot} ActualBallot instance
+             */
+            ActualBallot.create = function create(properties) {
+                return new ActualBallot(properties);
+            };
+    
+            /**
+             * Encodes the specified ActualBallot message. Does not implicitly {@link actual_ballots_service.ActualBallot.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {actual_ballots_service.IActualBallot} message ActualBallot message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ActualBallot.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voter);
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.district_id);
+                if (message.decrypted_choices != null && message.decrypted_choices.length) {
+                    writer.uint32(/* id 3, wireType 2 =*/26).fork();
+                    for (var i = 0; i < message.decrypted_choices.length; ++i)
+                        writer.uint32(message.decrypted_choices[i]);
+                    writer.ldelim();
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.store_tx_hash);
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.decrypt_tx_hash);
+                if (message.status != null && message.hasOwnProperty("status"))
+                    $root.actual_ballots_service.BallotStatus.encode(message.status, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified ActualBallot message, length delimited. Does not implicitly {@link actual_ballots_service.ActualBallot.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {actual_ballots_service.IActualBallot} message ActualBallot message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ActualBallot.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes an ActualBallot message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.ActualBallot} ActualBallot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ActualBallot.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.ActualBallot();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voter = reader.string();
+                        break;
+                    case 2:
+                        message.district_id = reader.uint32();
+                        break;
+                    case 3:
+                        if (!(message.decrypted_choices && message.decrypted_choices.length))
+                            message.decrypted_choices = [];
+                        if ((tag & 7) === 2) {
+                            var end2 = reader.uint32() + reader.pos;
+                            while (reader.pos < end2)
+                                message.decrypted_choices.push(reader.uint32());
+                        } else
+                            message.decrypted_choices.push(reader.uint32());
+                        break;
+                    case 4:
+                        message.store_tx_hash = reader.string();
+                        break;
+                    case 5:
+                        message.decrypt_tx_hash = reader.string();
+                        break;
+                    case 6:
+                        message.status = $root.actual_ballots_service.BallotStatus.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes an ActualBallot message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.ActualBallot} ActualBallot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ActualBallot.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies an ActualBallot message.
+             * @function verify
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ActualBallot.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    if (!$util.isString(message.voter))
+                        return "voter: string expected";
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    if (!$util.isInteger(message.district_id))
+                        return "district_id: integer expected";
+                if (message.decrypted_choices != null && message.hasOwnProperty("decrypted_choices")) {
+                    if (!Array.isArray(message.decrypted_choices))
+                        return "decrypted_choices: array expected";
+                    for (var i = 0; i < message.decrypted_choices.length; ++i)
+                        if (!$util.isInteger(message.decrypted_choices[i]))
+                            return "decrypted_choices: integer[] expected";
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    if (!$util.isString(message.store_tx_hash))
+                        return "store_tx_hash: string expected";
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    if (!$util.isString(message.decrypt_tx_hash))
+                        return "decrypt_tx_hash: string expected";
+                if (message.status != null && message.hasOwnProperty("status")) {
+                    var error = $root.actual_ballots_service.BallotStatus.verify(message.status);
+                    if (error)
+                        return "status." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates an ActualBallot message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.ActualBallot} ActualBallot
+             */
+            ActualBallot.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.ActualBallot)
+                    return object;
+                var message = new $root.actual_ballots_service.ActualBallot();
+                if (object.voter != null)
+                    message.voter = String(object.voter);
+                if (object.district_id != null)
+                    message.district_id = object.district_id >>> 0;
+                if (object.decrypted_choices) {
+                    if (!Array.isArray(object.decrypted_choices))
+                        throw TypeError(".actual_ballots_service.ActualBallot.decrypted_choices: array expected");
+                    message.decrypted_choices = [];
+                    for (var i = 0; i < object.decrypted_choices.length; ++i)
+                        message.decrypted_choices[i] = object.decrypted_choices[i] >>> 0;
+                }
+                if (object.store_tx_hash != null)
+                    message.store_tx_hash = String(object.store_tx_hash);
+                if (object.decrypt_tx_hash != null)
+                    message.decrypt_tx_hash = String(object.decrypt_tx_hash);
+                if (object.status != null) {
+                    if (typeof object.status !== "object")
+                        throw TypeError(".actual_ballots_service.ActualBallot.status: object expected");
+                    message.status = $root.actual_ballots_service.BallotStatus.fromObject(object.status);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from an ActualBallot message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.ActualBallot
+             * @static
+             * @param {actual_ballots_service.ActualBallot} message ActualBallot
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ActualBallot.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.decrypted_choices = [];
+                if (options.defaults) {
+                    object.voter = "";
+                    object.district_id = 0;
+                    object.store_tx_hash = "";
+                    object.decrypt_tx_hash = "";
+                    object.status = null;
+                }
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    object.voter = message.voter;
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    object.district_id = message.district_id;
+                if (message.decrypted_choices && message.decrypted_choices.length) {
+                    object.decrypted_choices = [];
+                    for (var j = 0; j < message.decrypted_choices.length; ++j)
+                        object.decrypted_choices[j] = message.decrypted_choices[j];
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    object.store_tx_hash = message.store_tx_hash;
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    object.decrypt_tx_hash = message.decrypt_tx_hash;
+                if (message.status != null && message.hasOwnProperty("status"))
+                    object.status = $root.actual_ballots_service.BallotStatus.toObject(message.status, options);
+                return object;
+            };
+    
+            /**
+             * Converts this ActualBallot to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.ActualBallot
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ActualBallot.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return ActualBallot;
+        })();
+    
+        actual_ballots_service.DistrictResults = (function() {
+    
+            /**
+             * Properties of a DistrictResults.
+             * @memberof actual_ballots_service
+             * @interface IDistrictResults
+             * @property {number|null} [district_id] DistrictResults district_id
+             * @property {Object.<string,number>|null} [tally] DistrictResults tally
+             * @property {number|null} [invalid_ballots_amount] DistrictResults invalid_ballots_amount
+             * @property {number|null} [unique_valid_ballots_amount] DistrictResults unique_valid_ballots_amount
+             */
+    
+            /**
+             * Constructs a new DistrictResults.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a DistrictResults.
+             * @implements IDistrictResults
+             * @constructor
+             * @param {actual_ballots_service.IDistrictResults=} [properties] Properties to set
+             */
+            function DistrictResults(properties) {
+                this.tally = {};
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * DistrictResults district_id.
+             * @member {number} district_id
+             * @memberof actual_ballots_service.DistrictResults
+             * @instance
+             */
+            DistrictResults.prototype.district_id = 0;
+    
+            /**
+             * DistrictResults tally.
+             * @member {Object.<string,number>} tally
+             * @memberof actual_ballots_service.DistrictResults
+             * @instance
+             */
+            DistrictResults.prototype.tally = $util.emptyObject;
+    
+            /**
+             * DistrictResults invalid_ballots_amount.
+             * @member {number} invalid_ballots_amount
+             * @memberof actual_ballots_service.DistrictResults
+             * @instance
+             */
+            DistrictResults.prototype.invalid_ballots_amount = 0;
+    
+            /**
+             * DistrictResults unique_valid_ballots_amount.
+             * @member {number} unique_valid_ballots_amount
+             * @memberof actual_ballots_service.DistrictResults
+             * @instance
+             */
+            DistrictResults.prototype.unique_valid_ballots_amount = 0;
+    
+            /**
+             * Creates a new DistrictResults instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {actual_ballots_service.IDistrictResults=} [properties] Properties to set
+             * @returns {actual_ballots_service.DistrictResults} DistrictResults instance
+             */
+            DistrictResults.create = function create(properties) {
+                return new DistrictResults(properties);
+            };
+    
+            /**
+             * Encodes the specified DistrictResults message. Does not implicitly {@link actual_ballots_service.DistrictResults.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {actual_ballots_service.IDistrictResults} message DistrictResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            DistrictResults.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.district_id);
+                if (message.tally != null && message.hasOwnProperty("tally"))
+                    for (var keys = Object.keys(message.tally), i = 0; i < keys.length; ++i)
+                        writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]).uint32(/* id 2, wireType 0 =*/16).uint32(message.tally[keys[i]]).ldelim();
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.invalid_ballots_amount);
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.unique_valid_ballots_amount);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified DistrictResults message, length delimited. Does not implicitly {@link actual_ballots_service.DistrictResults.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {actual_ballots_service.IDistrictResults} message DistrictResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            DistrictResults.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a DistrictResults message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.DistrictResults} DistrictResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            DistrictResults.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.DistrictResults(), key;
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.district_id = reader.uint32();
+                        break;
+                    case 2:
+                        reader.skip().pos++;
+                        if (message.tally === $util.emptyObject)
+                            message.tally = {};
+                        key = reader.uint32();
+                        reader.pos++;
+                        message.tally[key] = reader.uint32();
+                        break;
+                    case 3:
+                        message.invalid_ballots_amount = reader.uint32();
+                        break;
+                    case 4:
+                        message.unique_valid_ballots_amount = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a DistrictResults message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.DistrictResults} DistrictResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            DistrictResults.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a DistrictResults message.
+             * @function verify
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            DistrictResults.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    if (!$util.isInteger(message.district_id))
+                        return "district_id: integer expected";
+                if (message.tally != null && message.hasOwnProperty("tally")) {
+                    if (!$util.isObject(message.tally))
+                        return "tally: object expected";
+                    var key = Object.keys(message.tally);
+                    for (var i = 0; i < key.length; ++i) {
+                        if (!$util.key32Re.test(key[i]))
+                            return "tally: integer key{k:uint32} expected";
+                        if (!$util.isInteger(message.tally[key[i]]))
+                            return "tally: integer{k:uint32} expected";
+                    }
+                }
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    if (!$util.isInteger(message.invalid_ballots_amount))
+                        return "invalid_ballots_amount: integer expected";
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    if (!$util.isInteger(message.unique_valid_ballots_amount))
+                        return "unique_valid_ballots_amount: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a DistrictResults message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.DistrictResults} DistrictResults
+             */
+            DistrictResults.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.DistrictResults)
+                    return object;
+                var message = new $root.actual_ballots_service.DistrictResults();
+                if (object.district_id != null)
+                    message.district_id = object.district_id >>> 0;
+                if (object.tally) {
+                    if (typeof object.tally !== "object")
+                        throw TypeError(".actual_ballots_service.DistrictResults.tally: object expected");
+                    message.tally = {};
+                    for (var keys = Object.keys(object.tally), i = 0; i < keys.length; ++i)
+                        message.tally[keys[i]] = object.tally[keys[i]] >>> 0;
+                }
+                if (object.invalid_ballots_amount != null)
+                    message.invalid_ballots_amount = object.invalid_ballots_amount >>> 0;
+                if (object.unique_valid_ballots_amount != null)
+                    message.unique_valid_ballots_amount = object.unique_valid_ballots_amount >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a DistrictResults message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.DistrictResults
+             * @static
+             * @param {actual_ballots_service.DistrictResults} message DistrictResults
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            DistrictResults.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.objects || options.defaults)
+                    object.tally = {};
+                if (options.defaults) {
+                    object.district_id = 0;
+                    object.invalid_ballots_amount = 0;
+                    object.unique_valid_ballots_amount = 0;
+                }
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    object.district_id = message.district_id;
+                var keys2;
+                if (message.tally && (keys2 = Object.keys(message.tally)).length) {
+                    object.tally = {};
+                    for (var j = 0; j < keys2.length; ++j)
+                        object.tally[keys2[j]] = message.tally[keys2[j]];
+                }
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    object.invalid_ballots_amount = message.invalid_ballots_amount;
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    object.unique_valid_ballots_amount = message.unique_valid_ballots_amount;
+                return object;
+            };
+    
+            /**
+             * Converts this DistrictResults to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.DistrictResults
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            DistrictResults.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return DistrictResults;
+        })();
+    
+        actual_ballots_service.VotingResults = (function() {
+    
+            /**
+             * Properties of a VotingResults.
+             * @memberof actual_ballots_service
+             * @interface IVotingResults
+             * @property {Object.<string,actual_ballots_service.IDistrictResults>|null} [district_results] VotingResults district_results
+             * @property {number|null} [invalid_ballots_amount] VotingResults invalid_ballots_amount
+             * @property {number|null} [unique_valid_ballots_amount] VotingResults unique_valid_ballots_amount
+             */
+    
+            /**
+             * Constructs a new VotingResults.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a VotingResults.
+             * @implements IVotingResults
+             * @constructor
+             * @param {actual_ballots_service.IVotingResults=} [properties] Properties to set
+             */
+            function VotingResults(properties) {
+                this.district_results = {};
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * VotingResults district_results.
+             * @member {Object.<string,actual_ballots_service.IDistrictResults>} district_results
+             * @memberof actual_ballots_service.VotingResults
+             * @instance
+             */
+            VotingResults.prototype.district_results = $util.emptyObject;
+    
+            /**
+             * VotingResults invalid_ballots_amount.
+             * @member {number} invalid_ballots_amount
+             * @memberof actual_ballots_service.VotingResults
+             * @instance
+             */
+            VotingResults.prototype.invalid_ballots_amount = 0;
+    
+            /**
+             * VotingResults unique_valid_ballots_amount.
+             * @member {number} unique_valid_ballots_amount
+             * @memberof actual_ballots_service.VotingResults
+             * @instance
+             */
+            VotingResults.prototype.unique_valid_ballots_amount = 0;
+    
+            /**
+             * Creates a new VotingResults instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {actual_ballots_service.IVotingResults=} [properties] Properties to set
+             * @returns {actual_ballots_service.VotingResults} VotingResults instance
+             */
+            VotingResults.create = function create(properties) {
+                return new VotingResults(properties);
+            };
+    
+            /**
+             * Encodes the specified VotingResults message. Does not implicitly {@link actual_ballots_service.VotingResults.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {actual_ballots_service.IVotingResults} message VotingResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            VotingResults.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.district_results != null && message.hasOwnProperty("district_results"))
+                    for (var keys = Object.keys(message.district_results), i = 0; i < keys.length; ++i) {
+                        writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]);
+                        $root.actual_ballots_service.DistrictResults.encode(message.district_results[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
+                    }
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.invalid_ballots_amount);
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.unique_valid_ballots_amount);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified VotingResults message, length delimited. Does not implicitly {@link actual_ballots_service.VotingResults.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {actual_ballots_service.IVotingResults} message VotingResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            VotingResults.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a VotingResults message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.VotingResults} VotingResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            VotingResults.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.VotingResults(), key;
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        reader.skip().pos++;
+                        if (message.district_results === $util.emptyObject)
+                            message.district_results = {};
+                        key = reader.uint32();
+                        reader.pos++;
+                        message.district_results[key] = $root.actual_ballots_service.DistrictResults.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.invalid_ballots_amount = reader.uint32();
+                        break;
+                    case 3:
+                        message.unique_valid_ballots_amount = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a VotingResults message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.VotingResults} VotingResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            VotingResults.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a VotingResults message.
+             * @function verify
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            VotingResults.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.district_results != null && message.hasOwnProperty("district_results")) {
+                    if (!$util.isObject(message.district_results))
+                        return "district_results: object expected";
+                    var key = Object.keys(message.district_results);
+                    for (var i = 0; i < key.length; ++i) {
+                        if (!$util.key32Re.test(key[i]))
+                            return "district_results: integer key{k:uint32} expected";
+                        {
+                            var error = $root.actual_ballots_service.DistrictResults.verify(message.district_results[key[i]]);
+                            if (error)
+                                return "district_results." + error;
+                        }
+                    }
+                }
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    if (!$util.isInteger(message.invalid_ballots_amount))
+                        return "invalid_ballots_amount: integer expected";
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    if (!$util.isInteger(message.unique_valid_ballots_amount))
+                        return "unique_valid_ballots_amount: integer expected";
+                return null;
+            };
+    
+            /**
+             * Creates a VotingResults message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.VotingResults} VotingResults
+             */
+            VotingResults.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.VotingResults)
+                    return object;
+                var message = new $root.actual_ballots_service.VotingResults();
+                if (object.district_results) {
+                    if (typeof object.district_results !== "object")
+                        throw TypeError(".actual_ballots_service.VotingResults.district_results: object expected");
+                    message.district_results = {};
+                    for (var keys = Object.keys(object.district_results), i = 0; i < keys.length; ++i) {
+                        if (typeof object.district_results[keys[i]] !== "object")
+                            throw TypeError(".actual_ballots_service.VotingResults.district_results: object expected");
+                        message.district_results[keys[i]] = $root.actual_ballots_service.DistrictResults.fromObject(object.district_results[keys[i]]);
+                    }
+                }
+                if (object.invalid_ballots_amount != null)
+                    message.invalid_ballots_amount = object.invalid_ballots_amount >>> 0;
+                if (object.unique_valid_ballots_amount != null)
+                    message.unique_valid_ballots_amount = object.unique_valid_ballots_amount >>> 0;
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a VotingResults message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.VotingResults
+             * @static
+             * @param {actual_ballots_service.VotingResults} message VotingResults
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            VotingResults.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.objects || options.defaults)
+                    object.district_results = {};
+                if (options.defaults) {
+                    object.invalid_ballots_amount = 0;
+                    object.unique_valid_ballots_amount = 0;
+                }
+                var keys2;
+                if (message.district_results && (keys2 = Object.keys(message.district_results)).length) {
+                    object.district_results = {};
+                    for (var j = 0; j < keys2.length; ++j)
+                        object.district_results[keys2[j]] = $root.actual_ballots_service.DistrictResults.toObject(message.district_results[keys2[j]], options);
+                }
+                if (message.invalid_ballots_amount != null && message.hasOwnProperty("invalid_ballots_amount"))
+                    object.invalid_ballots_amount = message.invalid_ballots_amount;
+                if (message.unique_valid_ballots_amount != null && message.hasOwnProperty("unique_valid_ballots_amount"))
+                    object.unique_valid_ballots_amount = message.unique_valid_ballots_amount;
+                return object;
+            };
+    
+            /**
+             * Converts this VotingResults to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.VotingResults
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            VotingResults.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return VotingResults;
+        })();
+    
+        actual_ballots_service.ActualBallotsStorage = (function() {
+    
+            /**
+             * Properties of an ActualBallotsStorage.
+             * @memberof actual_ballots_service
+             * @interface IActualBallotsStorage
+             * @property {string|null} [voting_id] ActualBallotsStorage voting_id
+             * @property {number|null} [actual_ballots_amount] ActualBallotsStorage actual_ballots_amount
+             * @property {actual_ballots_service.IVotingResults|null} [voting_results] ActualBallotsStorage voting_results
+             */
+    
+            /**
+             * Constructs a new ActualBallotsStorage.
+             * @memberof actual_ballots_service
+             * @classdesc Represents an ActualBallotsStorage.
+             * @implements IActualBallotsStorage
+             * @constructor
+             * @param {actual_ballots_service.IActualBallotsStorage=} [properties] Properties to set
+             */
+            function ActualBallotsStorage(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * ActualBallotsStorage voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @instance
+             */
+            ActualBallotsStorage.prototype.voting_id = "";
+    
+            /**
+             * ActualBallotsStorage actual_ballots_amount.
+             * @member {number} actual_ballots_amount
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @instance
+             */
+            ActualBallotsStorage.prototype.actual_ballots_amount = 0;
+    
+            /**
+             * ActualBallotsStorage voting_results.
+             * @member {actual_ballots_service.IVotingResults|null|undefined} voting_results
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @instance
+             */
+            ActualBallotsStorage.prototype.voting_results = null;
+    
+            /**
+             * Creates a new ActualBallotsStorage instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.IActualBallotsStorage=} [properties] Properties to set
+             * @returns {actual_ballots_service.ActualBallotsStorage} ActualBallotsStorage instance
+             */
+            ActualBallotsStorage.create = function create(properties) {
+                return new ActualBallotsStorage(properties);
+            };
+    
+            /**
+             * Encodes the specified ActualBallotsStorage message. Does not implicitly {@link actual_ballots_service.ActualBallotsStorage.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.IActualBallotsStorage} message ActualBallotsStorage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ActualBallotsStorage.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.actual_ballots_amount != null && message.hasOwnProperty("actual_ballots_amount"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.actual_ballots_amount);
+                if (message.voting_results != null && message.hasOwnProperty("voting_results"))
+                    $root.actual_ballots_service.VotingResults.encode(message.voting_results, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified ActualBallotsStorage message, length delimited. Does not implicitly {@link actual_ballots_service.ActualBallotsStorage.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.IActualBallotsStorage} message ActualBallotsStorage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ActualBallotsStorage.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes an ActualBallotsStorage message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.ActualBallotsStorage} ActualBallotsStorage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ActualBallotsStorage.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.ActualBallotsStorage();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        message.actual_ballots_amount = reader.uint32();
+                        break;
+                    case 3:
+                        message.voting_results = $root.actual_ballots_service.VotingResults.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes an ActualBallotsStorage message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.ActualBallotsStorage} ActualBallotsStorage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ActualBallotsStorage.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies an ActualBallotsStorage message.
+             * @function verify
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ActualBallotsStorage.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.actual_ballots_amount != null && message.hasOwnProperty("actual_ballots_amount"))
+                    if (!$util.isInteger(message.actual_ballots_amount))
+                        return "actual_ballots_amount: integer expected";
+                if (message.voting_results != null && message.hasOwnProperty("voting_results")) {
+                    var error = $root.actual_ballots_service.VotingResults.verify(message.voting_results);
+                    if (error)
+                        return "voting_results." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates an ActualBallotsStorage message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.ActualBallotsStorage} ActualBallotsStorage
+             */
+            ActualBallotsStorage.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.ActualBallotsStorage)
+                    return object;
+                var message = new $root.actual_ballots_service.ActualBallotsStorage();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.actual_ballots_amount != null)
+                    message.actual_ballots_amount = object.actual_ballots_amount >>> 0;
+                if (object.voting_results != null) {
+                    if (typeof object.voting_results !== "object")
+                        throw TypeError(".actual_ballots_service.ActualBallotsStorage.voting_results: object expected");
+                    message.voting_results = $root.actual_ballots_service.VotingResults.fromObject(object.voting_results);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from an ActualBallotsStorage message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.ActualBallotsStorage} message ActualBallotsStorage
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ActualBallotsStorage.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.voting_id = "";
+                    object.actual_ballots_amount = 0;
+                    object.voting_results = null;
+                }
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                if (message.actual_ballots_amount != null && message.hasOwnProperty("actual_ballots_amount"))
+                    object.actual_ballots_amount = message.actual_ballots_amount;
+                if (message.voting_results != null && message.hasOwnProperty("voting_results"))
+                    object.voting_results = $root.actual_ballots_service.VotingResults.toObject(message.voting_results, options);
+                return object;
+            };
+    
+            /**
+             * Converts this ActualBallotsStorage to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.ActualBallotsStorage
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ActualBallotsStorage.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return ActualBallotsStorage;
+        })();
+    
+        actual_ballots_service.BallotStatus = (function() {
     
             /**
              * Properties of a BallotStatus.
-             * @memberof votings_service
+             * @memberof actual_ballots_service
              * @interface IBallotStatus
              * @property {google.protobuf.IEmpty|null} [unknown] BallotStatus unknown
              * @property {google.protobuf.IEmpty|null} [valid] BallotStatus valid
-             * @property {votings_service.InvalidReason|null} [invalid] BallotStatus invalid
+             * @property {actual_ballots_service.InvalidReason|null} [invalid] BallotStatus invalid
              */
     
             /**
              * Constructs a new BallotStatus.
-             * @memberof votings_service
+             * @memberof actual_ballots_service
              * @classdesc Represents a BallotStatus.
              * @implements IBallotStatus
              * @constructor
-             * @param {votings_service.IBallotStatus=} [properties] Properties to set
+             * @param {actual_ballots_service.IBallotStatus=} [properties] Properties to set
              */
             function BallotStatus(properties) {
                 if (properties)
@@ -9125,7 +14757,7 @@
             /**
              * BallotStatus unknown.
              * @member {google.protobuf.IEmpty|null|undefined} unknown
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @instance
              */
             BallotStatus.prototype.unknown = null;
@@ -9133,15 +14765,15 @@
             /**
              * BallotStatus valid.
              * @member {google.protobuf.IEmpty|null|undefined} valid
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @instance
              */
             BallotStatus.prototype.valid = null;
     
             /**
              * BallotStatus invalid.
-             * @member {votings_service.InvalidReason} invalid
-             * @memberof votings_service.BallotStatus
+             * @member {actual_ballots_service.InvalidReason} invalid
+             * @memberof actual_ballots_service.BallotStatus
              * @instance
              */
             BallotStatus.prototype.invalid = 0;
@@ -9152,7 +14784,7 @@
             /**
              * BallotStatus kind.
              * @member {"unknown"|"valid"|"invalid"|undefined} kind
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @instance
              */
             Object.defineProperty(BallotStatus.prototype, "kind", {
@@ -9163,21 +14795,21 @@
             /**
              * Creates a new BallotStatus instance using the specified properties.
              * @function create
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
-             * @param {votings_service.IBallotStatus=} [properties] Properties to set
-             * @returns {votings_service.BallotStatus} BallotStatus instance
+             * @param {actual_ballots_service.IBallotStatus=} [properties] Properties to set
+             * @returns {actual_ballots_service.BallotStatus} BallotStatus instance
              */
             BallotStatus.create = function create(properties) {
                 return new BallotStatus(properties);
             };
     
             /**
-             * Encodes the specified BallotStatus message. Does not implicitly {@link votings_service.BallotStatus.verify|verify} messages.
+             * Encodes the specified BallotStatus message. Does not implicitly {@link actual_ballots_service.BallotStatus.verify|verify} messages.
              * @function encode
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
-             * @param {votings_service.IBallotStatus} message BallotStatus message or plain object to encode
+             * @param {actual_ballots_service.IBallotStatus} message BallotStatus message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
@@ -9194,11 +14826,11 @@
             };
     
             /**
-             * Encodes the specified BallotStatus message, length delimited. Does not implicitly {@link votings_service.BallotStatus.verify|verify} messages.
+             * Encodes the specified BallotStatus message, length delimited. Does not implicitly {@link actual_ballots_service.BallotStatus.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
-             * @param {votings_service.IBallotStatus} message BallotStatus message or plain object to encode
+             * @param {actual_ballots_service.IBallotStatus} message BallotStatus message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
@@ -9209,18 +14841,18 @@
             /**
              * Decodes a BallotStatus message from the specified reader or buffer.
              * @function decode
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {votings_service.BallotStatus} BallotStatus
+             * @returns {actual_ballots_service.BallotStatus} BallotStatus
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             BallotStatus.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.votings_service.BallotStatus();
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.BallotStatus();
                 while (reader.pos < end) {
                     var tag = reader.uint32();
                     switch (tag >>> 3) {
@@ -9244,10 +14876,10 @@
             /**
              * Decodes a BallotStatus message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {votings_service.BallotStatus} BallotStatus
+             * @returns {actual_ballots_service.BallotStatus} BallotStatus
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
@@ -9260,7 +14892,7 @@
             /**
              * Verifies a BallotStatus message.
              * @function verify
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -9305,23 +14937,23 @@
             /**
              * Creates a BallotStatus message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {votings_service.BallotStatus} BallotStatus
+             * @returns {actual_ballots_service.BallotStatus} BallotStatus
              */
             BallotStatus.fromObject = function fromObject(object) {
-                if (object instanceof $root.votings_service.BallotStatus)
+                if (object instanceof $root.actual_ballots_service.BallotStatus)
                     return object;
-                var message = new $root.votings_service.BallotStatus();
+                var message = new $root.actual_ballots_service.BallotStatus();
                 if (object.unknown != null) {
                     if (typeof object.unknown !== "object")
-                        throw TypeError(".votings_service.BallotStatus.unknown: object expected");
+                        throw TypeError(".actual_ballots_service.BallotStatus.unknown: object expected");
                     message.unknown = $root.google.protobuf.Empty.fromObject(object.unknown);
                 }
                 if (object.valid != null) {
                     if (typeof object.valid !== "object")
-                        throw TypeError(".votings_service.BallotStatus.valid: object expected");
+                        throw TypeError(".actual_ballots_service.BallotStatus.valid: object expected");
                     message.valid = $root.google.protobuf.Empty.fromObject(object.valid);
                 }
                 switch (object.invalid) {
@@ -9340,9 +14972,9 @@
             /**
              * Creates a plain object from a BallotStatus message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @static
-             * @param {votings_service.BallotStatus} message BallotStatus
+             * @param {actual_ballots_service.BallotStatus} message BallotStatus
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
@@ -9361,7 +14993,7 @@
                         object.kind = "valid";
                 }
                 if (message.invalid != null && message.hasOwnProperty("invalid")) {
-                    object.invalid = options.enums === String ? $root.votings_service.InvalidReason[message.invalid] : message.invalid;
+                    object.invalid = options.enums === String ? $root.actual_ballots_service.InvalidReason[message.invalid] : message.invalid;
                     if (options.oneofs)
                         object.kind = "invalid";
                 }
@@ -9371,7 +15003,7 @@
             /**
              * Converts this BallotStatus to JSON.
              * @function toJSON
-             * @memberof votings_service.BallotStatus
+             * @memberof actual_ballots_service.BallotStatus
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
@@ -9382,191 +15014,1679 @@
             return BallotStatus;
         })();
     
-        return votings_service;
-    })();
-    
-    $root.google = (function() {
-    
-        /**
-         * Namespace google.
-         * @exports google
-         * @namespace
-         */
-        var google = {};
-    
-        google.protobuf = (function() {
+        actual_ballots_service.Config = (function() {
     
             /**
-             * Namespace protobuf.
-             * @memberof google
-             * @namespace
+             * Properties of a Config.
+             * @memberof actual_ballots_service
+             * @interface IConfig
+             * @property {Array.<string>|null} [api_public_keys] Config api_public_keys
              */
-            var protobuf = {};
     
-            protobuf.Empty = (function() {
+            /**
+             * Constructs a new Config.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a Config.
+             * @implements IConfig
+             * @constructor
+             * @param {actual_ballots_service.IConfig=} [properties] Properties to set
+             */
+            function Config(properties) {
+                this.api_public_keys = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
     
-                /**
-                 * Properties of an Empty.
-                 * @memberof google.protobuf
-                 * @interface IEmpty
-                 */
+            /**
+             * Config api_public_keys.
+             * @member {Array.<string>} api_public_keys
+             * @memberof actual_ballots_service.Config
+             * @instance
+             */
+            Config.prototype.api_public_keys = $util.emptyArray;
     
-                /**
-                 * Constructs a new Empty.
-                 * @memberof google.protobuf
-                 * @classdesc Represents an Empty.
-                 * @implements IEmpty
-                 * @constructor
-                 * @param {google.protobuf.IEmpty=} [properties] Properties to set
-                 */
-                function Empty(properties) {
-                    if (properties)
-                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
+            /**
+             * Creates a new Config instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {actual_ballots_service.IConfig=} [properties] Properties to set
+             * @returns {actual_ballots_service.Config} Config instance
+             */
+            Config.create = function create(properties) {
+                return new Config(properties);
+            };
     
-                /**
-                 * Creates a new Empty instance using the specified properties.
-                 * @function create
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {google.protobuf.IEmpty=} [properties] Properties to set
-                 * @returns {google.protobuf.Empty} Empty instance
-                 */
-                Empty.create = function create(properties) {
-                    return new Empty(properties);
-                };
+            /**
+             * Encodes the specified Config message. Does not implicitly {@link actual_ballots_service.Config.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {actual_ballots_service.IConfig} message Config message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Config.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.api_public_keys != null && message.api_public_keys.length)
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.api_public_keys[i]);
+                return writer;
+            };
     
-                /**
-                 * Encodes the specified Empty message. Does not implicitly {@link google.protobuf.Empty.verify|verify} messages.
-                 * @function encode
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {google.protobuf.IEmpty} message Empty message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                Empty.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    return writer;
-                };
+            /**
+             * Encodes the specified Config message, length delimited. Does not implicitly {@link actual_ballots_service.Config.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {actual_ballots_service.IConfig} message Config message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Config.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
     
-                /**
-                 * Encodes the specified Empty message, length delimited. Does not implicitly {@link google.protobuf.Empty.verify|verify} messages.
-                 * @function encodeDelimited
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {google.protobuf.IEmpty} message Empty message or plain object to encode
-                 * @param {$protobuf.Writer} [writer] Writer to encode to
-                 * @returns {$protobuf.Writer} Writer
-                 */
-                Empty.encodeDelimited = function encodeDelimited(message, writer) {
-                    return this.encode(message, writer).ldelim();
-                };
-    
-                /**
-                 * Decodes an Empty message from the specified reader or buffer.
-                 * @function decode
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @param {number} [length] Message length if known beforehand
-                 * @returns {google.protobuf.Empty} Empty
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                Empty.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Empty();
-                    while (reader.pos < end) {
-                        var tag = reader.uint32();
-                        switch (tag >>> 3) {
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
-                        }
+            /**
+             * Decodes a Config message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.Config} Config
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Config.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.Config();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        if (!(message.api_public_keys && message.api_public_keys.length))
+                            message.api_public_keys = [];
+                        message.api_public_keys.push(reader.string());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                     }
-                    return message;
-                };
+                }
+                return message;
+            };
     
-                /**
-                 * Decodes an Empty message from the specified reader or buffer, length delimited.
-                 * @function decodeDelimited
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-                 * @returns {google.protobuf.Empty} Empty
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                Empty.decodeDelimited = function decodeDelimited(reader) {
-                    if (!(reader instanceof $Reader))
-                        reader = new $Reader(reader);
-                    return this.decode(reader, reader.uint32());
-                };
+            /**
+             * Decodes a Config message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.Config} Config
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Config.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
     
-                /**
-                 * Verifies an Empty message.
-                 * @function verify
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                Empty.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
+            /**
+             * Verifies a Config message.
+             * @function verify
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Config.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.api_public_keys != null && message.hasOwnProperty("api_public_keys")) {
+                    if (!Array.isArray(message.api_public_keys))
+                        return "api_public_keys: array expected";
+                    for (var i = 0; i < message.api_public_keys.length; ++i)
+                        if (!$util.isString(message.api_public_keys[i]))
+                            return "api_public_keys: string[] expected";
+                }
+                return null;
+            };
     
-                /**
-                 * Creates an Empty message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {google.protobuf.Empty} Empty
-                 */
-                Empty.fromObject = function fromObject(object) {
-                    if (object instanceof $root.google.protobuf.Empty)
-                        return object;
-                    return new $root.google.protobuf.Empty();
-                };
+            /**
+             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.Config} Config
+             */
+            Config.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.Config)
+                    return object;
+                var message = new $root.actual_ballots_service.Config();
+                if (object.api_public_keys) {
+                    if (!Array.isArray(object.api_public_keys))
+                        throw TypeError(".actual_ballots_service.Config.api_public_keys: array expected");
+                    message.api_public_keys = [];
+                    for (var i = 0; i < object.api_public_keys.length; ++i)
+                        message.api_public_keys[i] = String(object.api_public_keys[i]);
+                }
+                return message;
+            };
     
-                /**
-                 * Creates a plain object from an Empty message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof google.protobuf.Empty
-                 * @static
-                 * @param {google.protobuf.Empty} message Empty
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                Empty.toObject = function toObject() {
-                    return {};
-                };
+            /**
+             * Creates a plain object from a Config message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.Config
+             * @static
+             * @param {actual_ballots_service.Config} message Config
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Config.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.api_public_keys = [];
+                if (message.api_public_keys && message.api_public_keys.length) {
+                    object.api_public_keys = [];
+                    for (var j = 0; j < message.api_public_keys.length; ++j)
+                        object.api_public_keys[j] = message.api_public_keys[j];
+                }
+                return object;
+            };
     
-                /**
-                 * Converts this Empty to JSON.
-                 * @function toJSON
-                 * @memberof google.protobuf.Empty
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                Empty.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
+            /**
+             * Converts this Config to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.Config
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Config.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
     
-                return Empty;
-            })();
-    
-            return protobuf;
+            return Config;
         })();
     
-        return google;
+        actual_ballots_service.TxActualBallot = (function() {
+    
+            /**
+             * Properties of a TxActualBallot.
+             * @memberof actual_ballots_service
+             * @interface ITxActualBallot
+             * @property {string|null} [voter] TxActualBallot voter
+             * @property {number|null} [district_id] TxActualBallot district_id
+             * @property {Array.<number>|null} [decrypted_choices] TxActualBallot decrypted_choices
+             * @property {string|null} [store_tx_hash] TxActualBallot store_tx_hash
+             * @property {string|null} [decrypt_tx_hash] TxActualBallot decrypt_tx_hash
+             * @property {actual_ballots_service.IBallotStatus|null} [status] TxActualBallot status
+             */
+    
+            /**
+             * Constructs a new TxActualBallot.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxActualBallot.
+             * @implements ITxActualBallot
+             * @constructor
+             * @param {actual_ballots_service.ITxActualBallot=} [properties] Properties to set
+             */
+            function TxActualBallot(properties) {
+                this.decrypted_choices = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxActualBallot voter.
+             * @member {string} voter
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.voter = "";
+    
+            /**
+             * TxActualBallot district_id.
+             * @member {number} district_id
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.district_id = 0;
+    
+            /**
+             * TxActualBallot decrypted_choices.
+             * @member {Array.<number>} decrypted_choices
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.decrypted_choices = $util.emptyArray;
+    
+            /**
+             * TxActualBallot store_tx_hash.
+             * @member {string} store_tx_hash
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.store_tx_hash = "";
+    
+            /**
+             * TxActualBallot decrypt_tx_hash.
+             * @member {string} decrypt_tx_hash
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.decrypt_tx_hash = "";
+    
+            /**
+             * TxActualBallot status.
+             * @member {actual_ballots_service.IBallotStatus|null|undefined} status
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             */
+            TxActualBallot.prototype.status = null;
+    
+            /**
+             * Creates a new TxActualBallot instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {actual_ballots_service.ITxActualBallot=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxActualBallot} TxActualBallot instance
+             */
+            TxActualBallot.create = function create(properties) {
+                return new TxActualBallot(properties);
+            };
+    
+            /**
+             * Encodes the specified TxActualBallot message. Does not implicitly {@link actual_ballots_service.TxActualBallot.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {actual_ballots_service.ITxActualBallot} message TxActualBallot message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxActualBallot.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voter);
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.district_id);
+                if (message.decrypted_choices != null && message.decrypted_choices.length) {
+                    writer.uint32(/* id 3, wireType 2 =*/26).fork();
+                    for (var i = 0; i < message.decrypted_choices.length; ++i)
+                        writer.uint32(message.decrypted_choices[i]);
+                    writer.ldelim();
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.store_tx_hash);
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.decrypt_tx_hash);
+                if (message.status != null && message.hasOwnProperty("status"))
+                    $root.actual_ballots_service.BallotStatus.encode(message.status, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxActualBallot message, length delimited. Does not implicitly {@link actual_ballots_service.TxActualBallot.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {actual_ballots_service.ITxActualBallot} message TxActualBallot message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxActualBallot.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxActualBallot message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxActualBallot} TxActualBallot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxActualBallot.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxActualBallot();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voter = reader.string();
+                        break;
+                    case 2:
+                        message.district_id = reader.uint32();
+                        break;
+                    case 3:
+                        if (!(message.decrypted_choices && message.decrypted_choices.length))
+                            message.decrypted_choices = [];
+                        if ((tag & 7) === 2) {
+                            var end2 = reader.uint32() + reader.pos;
+                            while (reader.pos < end2)
+                                message.decrypted_choices.push(reader.uint32());
+                        } else
+                            message.decrypted_choices.push(reader.uint32());
+                        break;
+                    case 4:
+                        message.store_tx_hash = reader.string();
+                        break;
+                    case 5:
+                        message.decrypt_tx_hash = reader.string();
+                        break;
+                    case 6:
+                        message.status = $root.actual_ballots_service.BallotStatus.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxActualBallot message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxActualBallot} TxActualBallot
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxActualBallot.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxActualBallot message.
+             * @function verify
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxActualBallot.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    if (!$util.isString(message.voter))
+                        return "voter: string expected";
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    if (!$util.isInteger(message.district_id))
+                        return "district_id: integer expected";
+                if (message.decrypted_choices != null && message.hasOwnProperty("decrypted_choices")) {
+                    if (!Array.isArray(message.decrypted_choices))
+                        return "decrypted_choices: array expected";
+                    for (var i = 0; i < message.decrypted_choices.length; ++i)
+                        if (!$util.isInteger(message.decrypted_choices[i]))
+                            return "decrypted_choices: integer[] expected";
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    if (!$util.isString(message.store_tx_hash))
+                        return "store_tx_hash: string expected";
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    if (!$util.isString(message.decrypt_tx_hash))
+                        return "decrypt_tx_hash: string expected";
+                if (message.status != null && message.hasOwnProperty("status")) {
+                    var error = $root.actual_ballots_service.BallotStatus.verify(message.status);
+                    if (error)
+                        return "status." + error;
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a TxActualBallot message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxActualBallot} TxActualBallot
+             */
+            TxActualBallot.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxActualBallot)
+                    return object;
+                var message = new $root.actual_ballots_service.TxActualBallot();
+                if (object.voter != null)
+                    message.voter = String(object.voter);
+                if (object.district_id != null)
+                    message.district_id = object.district_id >>> 0;
+                if (object.decrypted_choices) {
+                    if (!Array.isArray(object.decrypted_choices))
+                        throw TypeError(".actual_ballots_service.TxActualBallot.decrypted_choices: array expected");
+                    message.decrypted_choices = [];
+                    for (var i = 0; i < object.decrypted_choices.length; ++i)
+                        message.decrypted_choices[i] = object.decrypted_choices[i] >>> 0;
+                }
+                if (object.store_tx_hash != null)
+                    message.store_tx_hash = String(object.store_tx_hash);
+                if (object.decrypt_tx_hash != null)
+                    message.decrypt_tx_hash = String(object.decrypt_tx_hash);
+                if (object.status != null) {
+                    if (typeof object.status !== "object")
+                        throw TypeError(".actual_ballots_service.TxActualBallot.status: object expected");
+                    message.status = $root.actual_ballots_service.BallotStatus.fromObject(object.status);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxActualBallot message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxActualBallot
+             * @static
+             * @param {actual_ballots_service.TxActualBallot} message TxActualBallot
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxActualBallot.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.decrypted_choices = [];
+                if (options.defaults) {
+                    object.voter = "";
+                    object.district_id = 0;
+                    object.store_tx_hash = "";
+                    object.decrypt_tx_hash = "";
+                    object.status = null;
+                }
+                if (message.voter != null && message.hasOwnProperty("voter"))
+                    object.voter = message.voter;
+                if (message.district_id != null && message.hasOwnProperty("district_id"))
+                    object.district_id = message.district_id;
+                if (message.decrypted_choices && message.decrypted_choices.length) {
+                    object.decrypted_choices = [];
+                    for (var j = 0; j < message.decrypted_choices.length; ++j)
+                        object.decrypted_choices[j] = message.decrypted_choices[j];
+                }
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    object.store_tx_hash = message.store_tx_hash;
+                if (message.decrypt_tx_hash != null && message.hasOwnProperty("decrypt_tx_hash"))
+                    object.decrypt_tx_hash = message.decrypt_tx_hash;
+                if (message.status != null && message.hasOwnProperty("status"))
+                    object.status = $root.actual_ballots_service.BallotStatus.toObject(message.status, options);
+                return object;
+            };
+    
+            /**
+             * Converts this TxActualBallot to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxActualBallot
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxActualBallot.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxActualBallot;
+        })();
+    
+        actual_ballots_service.TxCreateActualBallotsStorage = (function() {
+    
+            /**
+             * Properties of a TxCreateActualBallotsStorage.
+             * @memberof actual_ballots_service
+             * @interface ITxCreateActualBallotsStorage
+             * @property {string|null} [voting_id] TxCreateActualBallotsStorage voting_id
+             */
+    
+            /**
+             * Constructs a new TxCreateActualBallotsStorage.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxCreateActualBallotsStorage.
+             * @implements ITxCreateActualBallotsStorage
+             * @constructor
+             * @param {actual_ballots_service.ITxCreateActualBallotsStorage=} [properties] Properties to set
+             */
+            function TxCreateActualBallotsStorage(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxCreateActualBallotsStorage voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @instance
+             */
+            TxCreateActualBallotsStorage.prototype.voting_id = "";
+    
+            /**
+             * Creates a new TxCreateActualBallotsStorage instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.ITxCreateActualBallotsStorage=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxCreateActualBallotsStorage} TxCreateActualBallotsStorage instance
+             */
+            TxCreateActualBallotsStorage.create = function create(properties) {
+                return new TxCreateActualBallotsStorage(properties);
+            };
+    
+            /**
+             * Encodes the specified TxCreateActualBallotsStorage message. Does not implicitly {@link actual_ballots_service.TxCreateActualBallotsStorage.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.ITxCreateActualBallotsStorage} message TxCreateActualBallotsStorage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxCreateActualBallotsStorage.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxCreateActualBallotsStorage message, length delimited. Does not implicitly {@link actual_ballots_service.TxCreateActualBallotsStorage.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.ITxCreateActualBallotsStorage} message TxCreateActualBallotsStorage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxCreateActualBallotsStorage.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxCreateActualBallotsStorage message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxCreateActualBallotsStorage} TxCreateActualBallotsStorage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxCreateActualBallotsStorage.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxCreateActualBallotsStorage();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxCreateActualBallotsStorage message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxCreateActualBallotsStorage} TxCreateActualBallotsStorage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxCreateActualBallotsStorage.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxCreateActualBallotsStorage message.
+             * @function verify
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxCreateActualBallotsStorage.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                return null;
+            };
+    
+            /**
+             * Creates a TxCreateActualBallotsStorage message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxCreateActualBallotsStorage} TxCreateActualBallotsStorage
+             */
+            TxCreateActualBallotsStorage.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxCreateActualBallotsStorage)
+                    return object;
+                var message = new $root.actual_ballots_service.TxCreateActualBallotsStorage();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxCreateActualBallotsStorage message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @static
+             * @param {actual_ballots_service.TxCreateActualBallotsStorage} message TxCreateActualBallotsStorage
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxCreateActualBallotsStorage.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults)
+                    object.voting_id = "";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                return object;
+            };
+    
+            /**
+             * Converts this TxCreateActualBallotsStorage to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxCreateActualBallotsStorage
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxCreateActualBallotsStorage.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxCreateActualBallotsStorage;
+        })();
+    
+        actual_ballots_service.TxStoreGroupedTxHash = (function() {
+    
+            /**
+             * Properties of a TxStoreGroupedTxHash.
+             * @memberof actual_ballots_service
+             * @interface ITxStoreGroupedTxHash
+             * @property {string|null} [voting_id] TxStoreGroupedTxHash voting_id
+             * @property {string|null} [store_tx_hash] TxStoreGroupedTxHash store_tx_hash
+             * @property {string|null} [encrypted_group_id] TxStoreGroupedTxHash encrypted_group_id
+             * @property {number|Long|null} [ts] TxStoreGroupedTxHash ts
+             */
+    
+            /**
+             * Constructs a new TxStoreGroupedTxHash.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxStoreGroupedTxHash.
+             * @implements ITxStoreGroupedTxHash
+             * @constructor
+             * @param {actual_ballots_service.ITxStoreGroupedTxHash=} [properties] Properties to set
+             */
+            function TxStoreGroupedTxHash(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxStoreGroupedTxHash voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @instance
+             */
+            TxStoreGroupedTxHash.prototype.voting_id = "";
+    
+            /**
+             * TxStoreGroupedTxHash store_tx_hash.
+             * @member {string} store_tx_hash
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @instance
+             */
+            TxStoreGroupedTxHash.prototype.store_tx_hash = "";
+    
+            /**
+             * TxStoreGroupedTxHash encrypted_group_id.
+             * @member {string} encrypted_group_id
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @instance
+             */
+            TxStoreGroupedTxHash.prototype.encrypted_group_id = "";
+    
+            /**
+             * TxStoreGroupedTxHash ts.
+             * @member {number|Long} ts
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @instance
+             */
+            TxStoreGroupedTxHash.prototype.ts = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+    
+            /**
+             * Creates a new TxStoreGroupedTxHash instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {actual_ballots_service.ITxStoreGroupedTxHash=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxStoreGroupedTxHash} TxStoreGroupedTxHash instance
+             */
+            TxStoreGroupedTxHash.create = function create(properties) {
+                return new TxStoreGroupedTxHash(properties);
+            };
+    
+            /**
+             * Encodes the specified TxStoreGroupedTxHash message. Does not implicitly {@link actual_ballots_service.TxStoreGroupedTxHash.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {actual_ballots_service.ITxStoreGroupedTxHash} message TxStoreGroupedTxHash message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreGroupedTxHash.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.store_tx_hash);
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.encrypted_group_id);
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int64(message.ts);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxStoreGroupedTxHash message, length delimited. Does not implicitly {@link actual_ballots_service.TxStoreGroupedTxHash.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {actual_ballots_service.ITxStoreGroupedTxHash} message TxStoreGroupedTxHash message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreGroupedTxHash.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxStoreGroupedTxHash message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxStoreGroupedTxHash} TxStoreGroupedTxHash
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreGroupedTxHash.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxStoreGroupedTxHash();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        message.store_tx_hash = reader.string();
+                        break;
+                    case 3:
+                        message.encrypted_group_id = reader.string();
+                        break;
+                    case 4:
+                        message.ts = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxStoreGroupedTxHash message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxStoreGroupedTxHash} TxStoreGroupedTxHash
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreGroupedTxHash.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxStoreGroupedTxHash message.
+             * @function verify
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxStoreGroupedTxHash.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    if (!$util.isString(message.store_tx_hash))
+                        return "store_tx_hash: string expected";
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    if (!$util.isString(message.encrypted_group_id))
+                        return "encrypted_group_id: string expected";
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    if (!$util.isInteger(message.ts) && !(message.ts && $util.isInteger(message.ts.low) && $util.isInteger(message.ts.high)))
+                        return "ts: integer|Long expected";
+                return null;
+            };
+    
+            /**
+             * Creates a TxStoreGroupedTxHash message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxStoreGroupedTxHash} TxStoreGroupedTxHash
+             */
+            TxStoreGroupedTxHash.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxStoreGroupedTxHash)
+                    return object;
+                var message = new $root.actual_ballots_service.TxStoreGroupedTxHash();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.store_tx_hash != null)
+                    message.store_tx_hash = String(object.store_tx_hash);
+                if (object.encrypted_group_id != null)
+                    message.encrypted_group_id = String(object.encrypted_group_id);
+                if (object.ts != null)
+                    if ($util.Long)
+                        (message.ts = $util.Long.fromValue(object.ts)).unsigned = false;
+                    else if (typeof object.ts === "string")
+                        message.ts = parseInt(object.ts, 10);
+                    else if (typeof object.ts === "number")
+                        message.ts = object.ts;
+                    else if (typeof object.ts === "object")
+                        message.ts = new $util.LongBits(object.ts.low >>> 0, object.ts.high >>> 0).toNumber();
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxStoreGroupedTxHash message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @static
+             * @param {actual_ballots_service.TxStoreGroupedTxHash} message TxStoreGroupedTxHash
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxStoreGroupedTxHash.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.voting_id = "";
+                    object.store_tx_hash = "";
+                    object.encrypted_group_id = "";
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.ts = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.ts = options.longs === String ? "0" : 0;
+                }
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                if (message.store_tx_hash != null && message.hasOwnProperty("store_tx_hash"))
+                    object.store_tx_hash = message.store_tx_hash;
+                if (message.encrypted_group_id != null && message.hasOwnProperty("encrypted_group_id"))
+                    object.encrypted_group_id = message.encrypted_group_id;
+                if (message.ts != null && message.hasOwnProperty("ts"))
+                    if (typeof message.ts === "number")
+                        object.ts = options.longs === String ? String(message.ts) : message.ts;
+                    else
+                        object.ts = options.longs === String ? $util.Long.prototype.toString.call(message.ts) : options.longs === Number ? new $util.LongBits(message.ts.low >>> 0, message.ts.high >>> 0).toNumber() : message.ts;
+                return object;
+            };
+    
+            /**
+             * Converts this TxStoreGroupedTxHash to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxStoreGroupedTxHash
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxStoreGroupedTxHash.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxStoreGroupedTxHash;
+        })();
+    
+        actual_ballots_service.TxResolveGroupIds = (function() {
+    
+            /**
+             * Properties of a TxResolveGroupIds.
+             * @memberof actual_ballots_service
+             * @interface ITxResolveGroupIds
+             * @property {string|null} [voting_id] TxResolveGroupIds voting_id
+             * @property {Object.<string,string>|null} [resolved_group_ids] TxResolveGroupIds resolved_group_ids
+             */
+    
+            /**
+             * Constructs a new TxResolveGroupIds.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxResolveGroupIds.
+             * @implements ITxResolveGroupIds
+             * @constructor
+             * @param {actual_ballots_service.ITxResolveGroupIds=} [properties] Properties to set
+             */
+            function TxResolveGroupIds(properties) {
+                this.resolved_group_ids = {};
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxResolveGroupIds voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @instance
+             */
+            TxResolveGroupIds.prototype.voting_id = "";
+    
+            /**
+             * TxResolveGroupIds resolved_group_ids.
+             * @member {Object.<string,string>} resolved_group_ids
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @instance
+             */
+            TxResolveGroupIds.prototype.resolved_group_ids = $util.emptyObject;
+    
+            /**
+             * Creates a new TxResolveGroupIds instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {actual_ballots_service.ITxResolveGroupIds=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxResolveGroupIds} TxResolveGroupIds instance
+             */
+            TxResolveGroupIds.create = function create(properties) {
+                return new TxResolveGroupIds(properties);
+            };
+    
+            /**
+             * Encodes the specified TxResolveGroupIds message. Does not implicitly {@link actual_ballots_service.TxResolveGroupIds.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {actual_ballots_service.ITxResolveGroupIds} message TxResolveGroupIds message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxResolveGroupIds.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.resolved_group_ids != null && message.hasOwnProperty("resolved_group_ids"))
+                    for (var keys = Object.keys(message.resolved_group_ids), i = 0; i < keys.length; ++i)
+                        writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.resolved_group_ids[keys[i]]).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxResolveGroupIds message, length delimited. Does not implicitly {@link actual_ballots_service.TxResolveGroupIds.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {actual_ballots_service.ITxResolveGroupIds} message TxResolveGroupIds message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxResolveGroupIds.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxResolveGroupIds message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxResolveGroupIds} TxResolveGroupIds
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxResolveGroupIds.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxResolveGroupIds(), key;
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        reader.skip().pos++;
+                        if (message.resolved_group_ids === $util.emptyObject)
+                            message.resolved_group_ids = {};
+                        key = reader.string();
+                        reader.pos++;
+                        message.resolved_group_ids[key] = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxResolveGroupIds message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxResolveGroupIds} TxResolveGroupIds
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxResolveGroupIds.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxResolveGroupIds message.
+             * @function verify
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxResolveGroupIds.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.resolved_group_ids != null && message.hasOwnProperty("resolved_group_ids")) {
+                    if (!$util.isObject(message.resolved_group_ids))
+                        return "resolved_group_ids: object expected";
+                    var key = Object.keys(message.resolved_group_ids);
+                    for (var i = 0; i < key.length; ++i)
+                        if (!$util.isString(message.resolved_group_ids[key[i]]))
+                            return "resolved_group_ids: string{k:string} expected";
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a TxResolveGroupIds message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxResolveGroupIds} TxResolveGroupIds
+             */
+            TxResolveGroupIds.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxResolveGroupIds)
+                    return object;
+                var message = new $root.actual_ballots_service.TxResolveGroupIds();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.resolved_group_ids) {
+                    if (typeof object.resolved_group_ids !== "object")
+                        throw TypeError(".actual_ballots_service.TxResolveGroupIds.resolved_group_ids: object expected");
+                    message.resolved_group_ids = {};
+                    for (var keys = Object.keys(object.resolved_group_ids), i = 0; i < keys.length; ++i)
+                        message.resolved_group_ids[keys[i]] = String(object.resolved_group_ids[keys[i]]);
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxResolveGroupIds message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @static
+             * @param {actual_ballots_service.TxResolveGroupIds} message TxResolveGroupIds
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxResolveGroupIds.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.objects || options.defaults)
+                    object.resolved_group_ids = {};
+                if (options.defaults)
+                    object.voting_id = "";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                var keys2;
+                if (message.resolved_group_ids && (keys2 = Object.keys(message.resolved_group_ids)).length) {
+                    object.resolved_group_ids = {};
+                    for (var j = 0; j < keys2.length; ++j)
+                        object.resolved_group_ids[keys2[j]] = message.resolved_group_ids[keys2[j]];
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this TxResolveGroupIds to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxResolveGroupIds
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxResolveGroupIds.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxResolveGroupIds;
+        })();
+    
+        actual_ballots_service.TxStoreActualBallots = (function() {
+    
+            /**
+             * Properties of a TxStoreActualBallots.
+             * @memberof actual_ballots_service
+             * @interface ITxStoreActualBallots
+             * @property {string|null} [voting_id] TxStoreActualBallots voting_id
+             * @property {Array.<actual_ballots_service.ITxActualBallot>|null} [actual_ballots] TxStoreActualBallots actual_ballots
+             */
+    
+            /**
+             * Constructs a new TxStoreActualBallots.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxStoreActualBallots.
+             * @implements ITxStoreActualBallots
+             * @constructor
+             * @param {actual_ballots_service.ITxStoreActualBallots=} [properties] Properties to set
+             */
+            function TxStoreActualBallots(properties) {
+                this.actual_ballots = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxStoreActualBallots voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @instance
+             */
+            TxStoreActualBallots.prototype.voting_id = "";
+    
+            /**
+             * TxStoreActualBallots actual_ballots.
+             * @member {Array.<actual_ballots_service.ITxActualBallot>} actual_ballots
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @instance
+             */
+            TxStoreActualBallots.prototype.actual_ballots = $util.emptyArray;
+    
+            /**
+             * Creates a new TxStoreActualBallots instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {actual_ballots_service.ITxStoreActualBallots=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxStoreActualBallots} TxStoreActualBallots instance
+             */
+            TxStoreActualBallots.create = function create(properties) {
+                return new TxStoreActualBallots(properties);
+            };
+    
+            /**
+             * Encodes the specified TxStoreActualBallots message. Does not implicitly {@link actual_ballots_service.TxStoreActualBallots.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {actual_ballots_service.ITxStoreActualBallots} message TxStoreActualBallots message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreActualBallots.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.actual_ballots != null && message.actual_ballots.length)
+                    for (var i = 0; i < message.actual_ballots.length; ++i)
+                        $root.actual_ballots_service.TxActualBallot.encode(message.actual_ballots[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxStoreActualBallots message, length delimited. Does not implicitly {@link actual_ballots_service.TxStoreActualBallots.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {actual_ballots_service.ITxStoreActualBallots} message TxStoreActualBallots message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxStoreActualBallots.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxStoreActualBallots message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxStoreActualBallots} TxStoreActualBallots
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreActualBallots.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxStoreActualBallots();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        if (!(message.actual_ballots && message.actual_ballots.length))
+                            message.actual_ballots = [];
+                        message.actual_ballots.push($root.actual_ballots_service.TxActualBallot.decode(reader, reader.uint32()));
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxStoreActualBallots message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxStoreActualBallots} TxStoreActualBallots
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxStoreActualBallots.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxStoreActualBallots message.
+             * @function verify
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxStoreActualBallots.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.actual_ballots != null && message.hasOwnProperty("actual_ballots")) {
+                    if (!Array.isArray(message.actual_ballots))
+                        return "actual_ballots: array expected";
+                    for (var i = 0; i < message.actual_ballots.length; ++i) {
+                        var error = $root.actual_ballots_service.TxActualBallot.verify(message.actual_ballots[i]);
+                        if (error)
+                            return "actual_ballots." + error;
+                    }
+                }
+                return null;
+            };
+    
+            /**
+             * Creates a TxStoreActualBallots message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxStoreActualBallots} TxStoreActualBallots
+             */
+            TxStoreActualBallots.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxStoreActualBallots)
+                    return object;
+                var message = new $root.actual_ballots_service.TxStoreActualBallots();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.actual_ballots) {
+                    if (!Array.isArray(object.actual_ballots))
+                        throw TypeError(".actual_ballots_service.TxStoreActualBallots.actual_ballots: array expected");
+                    message.actual_ballots = [];
+                    for (var i = 0; i < object.actual_ballots.length; ++i) {
+                        if (typeof object.actual_ballots[i] !== "object")
+                            throw TypeError(".actual_ballots_service.TxStoreActualBallots.actual_ballots: object expected");
+                        message.actual_ballots[i] = $root.actual_ballots_service.TxActualBallot.fromObject(object.actual_ballots[i]);
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxStoreActualBallots message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @static
+             * @param {actual_ballots_service.TxStoreActualBallots} message TxStoreActualBallots
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxStoreActualBallots.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.actual_ballots = [];
+                if (options.defaults)
+                    object.voting_id = "";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                if (message.actual_ballots && message.actual_ballots.length) {
+                    object.actual_ballots = [];
+                    for (var j = 0; j < message.actual_ballots.length; ++j)
+                        object.actual_ballots[j] = $root.actual_ballots_service.TxActualBallot.toObject(message.actual_ballots[j], options);
+                }
+                return object;
+            };
+    
+            /**
+             * Converts this TxStoreActualBallots to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxStoreActualBallots
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxStoreActualBallots.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxStoreActualBallots;
+        })();
+    
+        actual_ballots_service.TxTallyResults = (function() {
+    
+            /**
+             * Properties of a TxTallyResults.
+             * @memberof actual_ballots_service
+             * @interface ITxTallyResults
+             * @property {string|null} [voting_id] TxTallyResults voting_id
+             * @property {number|Long|null} [seed] TxTallyResults seed
+             */
+    
+            /**
+             * Constructs a new TxTallyResults.
+             * @memberof actual_ballots_service
+             * @classdesc Represents a TxTallyResults.
+             * @implements ITxTallyResults
+             * @constructor
+             * @param {actual_ballots_service.ITxTallyResults=} [properties] Properties to set
+             */
+            function TxTallyResults(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+    
+            /**
+             * TxTallyResults voting_id.
+             * @member {string} voting_id
+             * @memberof actual_ballots_service.TxTallyResults
+             * @instance
+             */
+            TxTallyResults.prototype.voting_id = "";
+    
+            /**
+             * TxTallyResults seed.
+             * @member {number|Long} seed
+             * @memberof actual_ballots_service.TxTallyResults
+             * @instance
+             */
+            TxTallyResults.prototype.seed = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+            /**
+             * Creates a new TxTallyResults instance using the specified properties.
+             * @function create
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {actual_ballots_service.ITxTallyResults=} [properties] Properties to set
+             * @returns {actual_ballots_service.TxTallyResults} TxTallyResults instance
+             */
+            TxTallyResults.create = function create(properties) {
+                return new TxTallyResults(properties);
+            };
+    
+            /**
+             * Encodes the specified TxTallyResults message. Does not implicitly {@link actual_ballots_service.TxTallyResults.verify|verify} messages.
+             * @function encode
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {actual_ballots_service.ITxTallyResults} message TxTallyResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxTallyResults.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.voting_id);
+                if (message.seed != null && message.hasOwnProperty("seed"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.seed);
+                return writer;
+            };
+    
+            /**
+             * Encodes the specified TxTallyResults message, length delimited. Does not implicitly {@link actual_ballots_service.TxTallyResults.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {actual_ballots_service.ITxTallyResults} message TxTallyResults message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TxTallyResults.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+    
+            /**
+             * Decodes a TxTallyResults message from the specified reader or buffer.
+             * @function decode
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {actual_ballots_service.TxTallyResults} TxTallyResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxTallyResults.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.actual_ballots_service.TxTallyResults();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.voting_id = reader.string();
+                        break;
+                    case 2:
+                        message.seed = reader.uint64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+    
+            /**
+             * Decodes a TxTallyResults message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {actual_ballots_service.TxTallyResults} TxTallyResults
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TxTallyResults.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+    
+            /**
+             * Verifies a TxTallyResults message.
+             * @function verify
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TxTallyResults.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    if (!$util.isString(message.voting_id))
+                        return "voting_id: string expected";
+                if (message.seed != null && message.hasOwnProperty("seed"))
+                    if (!$util.isInteger(message.seed) && !(message.seed && $util.isInteger(message.seed.low) && $util.isInteger(message.seed.high)))
+                        return "seed: integer|Long expected";
+                return null;
+            };
+    
+            /**
+             * Creates a TxTallyResults message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {actual_ballots_service.TxTallyResults} TxTallyResults
+             */
+            TxTallyResults.fromObject = function fromObject(object) {
+                if (object instanceof $root.actual_ballots_service.TxTallyResults)
+                    return object;
+                var message = new $root.actual_ballots_service.TxTallyResults();
+                if (object.voting_id != null)
+                    message.voting_id = String(object.voting_id);
+                if (object.seed != null)
+                    if ($util.Long)
+                        (message.seed = $util.Long.fromValue(object.seed)).unsigned = true;
+                    else if (typeof object.seed === "string")
+                        message.seed = parseInt(object.seed, 10);
+                    else if (typeof object.seed === "number")
+                        message.seed = object.seed;
+                    else if (typeof object.seed === "object")
+                        message.seed = new $util.LongBits(object.seed.low >>> 0, object.seed.high >>> 0).toNumber(true);
+                return message;
+            };
+    
+            /**
+             * Creates a plain object from a TxTallyResults message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof actual_ballots_service.TxTallyResults
+             * @static
+             * @param {actual_ballots_service.TxTallyResults} message TxTallyResults
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TxTallyResults.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.voting_id = "";
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.seed = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.seed = options.longs === String ? "0" : 0;
+                }
+                if (message.voting_id != null && message.hasOwnProperty("voting_id"))
+                    object.voting_id = message.voting_id;
+                if (message.seed != null && message.hasOwnProperty("seed"))
+                    if (typeof message.seed === "number")
+                        object.seed = options.longs === String ? String(message.seed) : message.seed;
+                    else
+                        object.seed = options.longs === String ? $util.Long.prototype.toString.call(message.seed) : options.longs === Number ? new $util.LongBits(message.seed.low >>> 0, message.seed.high >>> 0).toNumber(true) : message.seed;
+                return object;
+            };
+    
+            /**
+             * Converts this TxTallyResults to JSON.
+             * @function toJSON
+             * @memberof actual_ballots_service.TxTallyResults
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TxTallyResults.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+    
+            return TxTallyResults;
+        })();
+    
+        return actual_ballots_service;
     })();
 
     return $root;

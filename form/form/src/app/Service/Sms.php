@@ -19,6 +19,7 @@ class Sms {
     }
 
     private function _send($phone, string $body, ?string $trackingId) {
+        app()['log']->channel('stderr')->info("Sending SMS", ["body" => $body]);
         $params = $this->_params($phone, $body, $trackingId);
         $durationCounter = DurationCounter::start();
         try {

@@ -1,4 +1,4 @@
-{extends file="/app/resources/views/base/error.tpl"}
+{extends file="./error.tpl"}
 {block name="error_code"}
 {if $error_code} {$error_code}  {else} 500 {/if}
 {/block}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package votings_service;
+
+import "custom_types.proto";
+import "transactions.proto";
+
+message Config {
+  repeated string api_public_keys = 1;
+}
+
+message TxStoreBallotCopy {
+  string voting_id = 1;
+  uint32 district_id = 2;
+  votings_service.TxEncryptedChoice encrypted_choice = 3;
+}
