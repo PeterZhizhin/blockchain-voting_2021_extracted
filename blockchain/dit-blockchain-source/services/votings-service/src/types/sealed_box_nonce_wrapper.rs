@@ -30,7 +30,7 @@ impl exonum_proto::ProtobufConvert for SealedBoxNonceWrapper {
   }
 
   fn from_pb(pb: proto::SealedBoxNonce) -> Result<Self, Error> {
-    let data = pb.get_data();
+    let data = pb.data();
     let nonce = Nonce::from_slice(data)
       .ok_or_else(|| Error::msg("Invalid nonce value"))?;
 

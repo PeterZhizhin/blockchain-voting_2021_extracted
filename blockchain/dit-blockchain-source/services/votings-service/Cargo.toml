@@ -15,12 +15,12 @@ exonum-merkledb = "1.0.0"
 exonum-proto = "1.0.0"
 exonum-rust-runtime = "1.0.0"
 exonum-supervisor = "1.0.0"
-exonum_sodiumoxide = "0.0.23"
+exonum_sodiumoxide = "0.0.24"
 
 hex = "0.3.2"
 num-bigint = { version = "0.2", features = ["rand", "serde"] }
 num-traits = "0.2"
-protobuf = "=2.14.0"
+protobuf = "=3.3.0"
 serde = "1.0.10"
 serde_derive = "1.0.10"
 serde_json = "1.0.2"
@@ -33,3 +33,13 @@ exonum-build = "1.0.0"
 [features]
 default = ["with-serde"]
 with-serde = []
+
+[patch.crates-io]
+exonum = { path = "/home/peter/projects/exonum/exonum" }
+exonum-cli = { path = "/home/peter/projects/exonum/cli" }
+exonum-crypto = { path = "/home/peter/projects/exonum/components/crypto" }
+exonum-derive = { path = "/home/peter/projects/exonum/components/derive" }
+exonum-merkledb = { path = "/home/peter/projects/exonum/components/merkledb" }
+exonum-proto = { path = "/home/peter/projects/exonum/components/proto" }
+exonum-rust-runtime = { path = "/home/peter/projects/exonum/runtimes/rust" }
+exonum-supervisor = { path = "/home/peter/projects/exonum/services/supervisor" }

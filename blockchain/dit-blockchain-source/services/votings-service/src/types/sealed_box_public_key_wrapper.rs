@@ -30,7 +30,7 @@ impl exonum_proto::ProtobufConvert for SealedBoxPublicKeyWrapper {
   }
 
   fn from_pb(pb: proto::SealedBoxPublicKey) -> Result<Self, Error> {
-    let data = pb.get_data();
+    let data = pb.data();
     let pk = PublicKey::from_slice(data)
       .ok_or_else(|| Error::msg("Invalid public key"))?;
   

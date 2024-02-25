@@ -16,17 +16,30 @@ exonum-merkledb = "1.0.0"
 exonum-proto = "1.0.0"
 exonum-rust-runtime = "1.0.0"
 exonum-supervisor = "1.0.0"
-exonum_sodiumoxide = "0.0.23"
+exonum_sodiumoxide = "0.0.24"
+
+chrono = { version = "= 0.4.29" }
 
 hex = "0.3.2"
 
-protobuf = "=2.14.0"
+protobuf = "=3.3.0"
 
 dit-actual-ballots-service = { path = "./services/actual-ballots-service" }
 
 [dependencies.tokio] 
-version = "0.2.13" 
-features = ["blocking", "dns", "io-util", "macros", "rt-threaded", "tcp", "time"]
+version = "1"
+features = ["io-util", "macros", "rt-multi-thread", "signal", "net", "time"]
 
 [profile.release]
 lto = true
+
+[patch.crates-io]
+exonum = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-cli = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-crypto = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-derive = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-merkledb = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-proto = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-rust-runtime = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-supervisor = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
+exonum-build = { git = "https://github.com/PeterZhizhin/exonum", branch = "fix_build" }
