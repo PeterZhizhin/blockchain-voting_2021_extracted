@@ -39,7 +39,7 @@ impl ProtobufConvert for BallotStatus {
         } else if pb.has_valid() {
             Self::Valid
         } else if pb.has_invalid() {
-            let reason = InvalidReason::from_pb(pb.get_invalid())?;
+            let reason = InvalidReason::from_pb(pb.invalid())?;
             Self::Invalid(reason)
         } else {
             anyhow::bail!("Incorrect protobuf representation of BallotStatus")

@@ -30,7 +30,7 @@ impl exonum_proto::ProtobufConvert for BigUintWrapper {
   }
 
   fn from_pb(pb: proto::BigUint) -> Result<Self, Error> {
-    let data = pb.get_data();
+    let data = pb.data();
     let biguint = BigUint::from_bytes_be(data);
     Ok(Self::from(biguint))
   }

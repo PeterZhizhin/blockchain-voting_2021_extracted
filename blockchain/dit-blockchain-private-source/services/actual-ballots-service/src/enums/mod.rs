@@ -1,5 +1,5 @@
 use anyhow::Error;
-use protobuf::ProtobufEnum;
+use protobuf::Enum;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
 use crate::proto;

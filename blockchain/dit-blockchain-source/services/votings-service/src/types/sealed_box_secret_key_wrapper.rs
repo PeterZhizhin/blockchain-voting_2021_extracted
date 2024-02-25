@@ -30,7 +30,7 @@ impl exonum_proto::ProtobufConvert for SealedBoxSecretKeyWrapper {
   }
 
   fn from_pb(pb: proto::SealedBoxSecretKey) -> Result<Self, Error> {
-    let data = pb.get_data();
+    let data = pb.data();
     let sk = SecretKey::from_slice(data)
       .ok_or_else(|| Error::msg("Invalid secret key"))?;
 
