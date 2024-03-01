@@ -436,11 +436,13 @@ where
             .ok_or_else(|| Error::VoterIsNotInAcl)?;
 
         if voter_has_voted {
+            println!("Voter {} has already voted", voter.to_string());
             Err(Error::VoterHasAlreadyVoted)?;
         }
 
         let sid_already_present = self.ballot_by_sid_index.get(sid).is_some();
         if sid_already_present {
+            println!("SID {} is already in blockchain", sid);
             Err(Error::TxSidAlreadyPresent)?
         }
 
