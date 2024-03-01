@@ -1,7 +1,6 @@
-
-use std::convert::{From, Into};
 use anyhow::Error;
-use num_bigint::{BigUint};
+use num_bigint::BigUint;
+use std::convert::{From, Into};
 
 use crate::proto;
 
@@ -9,29 +8,29 @@ use crate::proto;
 pub struct BigUintWrapper(BigUint);
 
 impl From<BigUint> for BigUintWrapper {
-  fn from(num: BigUint) -> Self {
-    Self(num)
-  }
+    fn from(num: BigUint) -> Self {
+        Self(num)
+    }
 }
 
 impl Into<BigUint> for BigUintWrapper {
-  fn into(self) -> BigUint {
-    self.0
-  }
+    fn into(self) -> BigUint {
+        self.0
+    }
 }
 
 impl exonum_proto::ProtobufConvert for BigUintWrapper {
-  type ProtoStruct = proto::BigUint;
+    type ProtoStruct = proto::BigUint;
 
-  fn to_pb(&self) -> proto::BigUint {
-      let mut biguint = proto::BigUint::new();
-      biguint.set_data(self.0.to_bytes_be());
-      biguint
-  }
+    fn to_pb(&self) -> proto::BigUint {
+        let mut biguint = proto::BigUint::new();
+        biguint.set_data(self.0.to_bytes_be());
+        biguint
+    }
 
-  fn from_pb(pb: proto::BigUint) -> Result<Self, Error> {
-    let data = pb.data();
-    let biguint = BigUint::from_bytes_be(data);
-    Ok(Self::from(biguint))
-  }
+    fn from_pb(pb: proto::BigUint) -> Result<Self, Error> {
+        let data = pb.data();
+        let biguint = BigUint::from_bytes_be(data);
+        Ok(Self::from(biguint))
+    }
 }

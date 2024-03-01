@@ -1,5 +1,5 @@
-use exonum_cli::{NodeBuilder, Spec};
 use dit_actual_ballots_service;
+use exonum_cli::{NodeBuilder, Spec};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

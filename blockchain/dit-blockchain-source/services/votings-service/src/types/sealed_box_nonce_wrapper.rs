@@ -1,7 +1,6 @@
-
-use std::convert::{From, Into};
 use anyhow::Error;
 use exonum_sodiumoxide::crypto::box_::curve25519xsalsa20poly1305::Nonce;
+use std::convert::{From, Into};
 
 use crate::proto;
 
@@ -9,31 +8,30 @@ use crate::proto;
 pub struct SealedBoxNonceWrapper(Nonce);
 
 impl From<Nonce> for SealedBoxNonceWrapper {
-  fn from(nonce: Nonce) -> Self {
-    Self(nonce)
-  }
+    fn from(nonce: Nonce) -> Self {
+        Self(nonce)
+    }
 }
 
 impl Into<Nonce> for SealedBoxNonceWrapper {
-  fn into(self) -> Nonce {
-    self.0
-  }
+    fn into(self) -> Nonce {
+        self.0
+    }
 }
 
 impl exonum_proto::ProtobufConvert for SealedBoxNonceWrapper {
-  type ProtoStruct = proto::SealedBoxNonce;
+    type ProtoStruct = proto::SealedBoxNonce;
 
-  fn to_pb(&self) -> proto::SealedBoxNonce {
-      let mut nonce = proto::SealedBoxNonce::new();
-      nonce.set_data((self.0).0.to_vec());
-      nonce
-  }
+    fn to_pb(&self) -> proto::SealedBoxNonce {
+        let mut nonce = proto::SealedBoxNonce::new();
+        nonce.set_data((self.0).0.to_vec());
+        nonce
+    }
 
-  fn from_pb(pb: proto::SealedBoxNonce) -> Result<Self, Error> {
-    let data = pb.data();
-    let nonce = Nonce::from_slice(data)
-      .ok_or_else(|| Error::msg("Invalid nonce value"))?;
+    fn from_pb(pb: proto::SealedBoxNonce) -> Result<Self, Error> {
+        let data = pb.data();
+        let nonce = Nonce::from_slice(data).ok_or_else(|| Error::msg("Invalid nonce value"))?;
 
-    Ok(Self::from(nonce))
-  }
+        Ok(Self::from(nonce))
+    }
 }
