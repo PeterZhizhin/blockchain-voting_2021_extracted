@@ -3,31 +3,31 @@ use exonum_derive::{exonum_interface, interface_method};
 
 use crate::service::VotingsService;
 
-mod create_voting;
-mod register_voters;
-mod stop_registration;
-mod revoke_voter_participation;
-mod issue_ballot;
 mod add_voter_key;
-mod store_ballot;
-mod stop_voting;
-mod publish_decryption_key;
+mod create_voting;
 mod decrypt_ballot;
 mod finalize_voting;
 mod finalize_voting_with_results;
+mod issue_ballot;
+mod publish_decryption_key;
+mod register_voters;
+mod revoke_voter_participation;
+mod stop_registration;
+mod stop_voting;
+mod store_ballot;
 
-use create_voting::TxCreateVoting;
-use register_voters::TxRegisterVoters;
-use stop_registration::TxStopRegistration;
-use revoke_voter_participation::TxRevokeVoterParticipation;
-use issue_ballot::TxIssueBallot;
 use add_voter_key::TxAddVoterKey;
-use store_ballot::TxStoreBallot;
-use stop_voting::TxStopVoting;
-use publish_decryption_key::TxPublishDecryptionKey;
+use create_voting::TxCreateVoting;
 use decrypt_ballot::TxDecryptBallot;
 use finalize_voting::TxFinalizeVoting;
 use finalize_voting_with_results::TxFinalizeVotingWithResults;
+use issue_ballot::TxIssueBallot;
+use publish_decryption_key::TxPublishDecryptionKey;
+use register_voters::TxRegisterVoters;
+use revoke_voter_participation::TxRevokeVoterParticipation;
+use stop_registration::TxStopRegistration;
+use stop_voting::TxStopVoting;
+use store_ballot::TxStoreBallot;
 
 #[exonum_interface]
 pub trait VotingsServiceInterface<Ctx> {
@@ -67,25 +67,41 @@ pub trait VotingsServiceInterface<Ctx> {
     fn finalize_voting(&self, ctx: Ctx, tx_args: TxFinalizeVoting) -> Self::Output;
 
     #[interface_method(id = 11)]
-    fn finalize_voting_with_results(&self, ctx: Ctx, tx_args: TxFinalizeVotingWithResults) -> Self::Output;
+    fn finalize_voting_with_results(
+        &self,
+        ctx: Ctx,
+        tx_args: TxFinalizeVotingWithResults,
+    ) -> Self::Output;
 }
 
-impl VotingsServiceInterface<ExecutionContext<'_>>  for VotingsService {
+impl VotingsServiceInterface<ExecutionContext<'_>> for VotingsService {
     type Output = Result<(), ExecutionError>;
 
     fn create_voting(&self, ctx: ExecutionContext<'_>, tx_args: TxCreateVoting) -> Self::Output {
         TxCreateVoting::execute(&self, ctx, tx_args)
     }
 
-    fn register_voters(&self, ctx: ExecutionContext<'_>, tx_args: TxRegisterVoters) -> Self::Output {
+    fn register_voters(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxRegisterVoters,
+    ) -> Self::Output {
         TxRegisterVoters::execute(&self, ctx, tx_args)
     }
 
-    fn stop_registration(&self, ctx: ExecutionContext<'_>, tx_args: TxStopRegistration) -> Self::Output {
+    fn stop_registration(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxStopRegistration,
+    ) -> Self::Output {
         TxStopRegistration::execute(&self, ctx, tx_args)
     }
 
-    fn revoke_participation(&self, ctx: ExecutionContext<'_>, tx_args: TxRevokeVoterParticipation) -> Self::Output {
+    fn revoke_participation(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxRevokeVoterParticipation,
+    ) -> Self::Output {
         TxRevokeVoterParticipation::execute(&self, ctx, tx_args)
     }
 
@@ -105,7 +121,11 @@ impl VotingsServiceInterface<ExecutionContext<'_>>  for VotingsService {
         TxStopVoting::execute(&self, ctx, tx_args)
     }
 
-    fn publish_decryption_key(&self, ctx: ExecutionContext<'_>, tx_args: TxPublishDecryptionKey) -> Self::Output {
+    fn publish_decryption_key(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxPublishDecryptionKey,
+    ) -> Self::Output {
         TxPublishDecryptionKey::execute(&self, ctx, tx_args)
     }
 
@@ -113,11 +133,19 @@ impl VotingsServiceInterface<ExecutionContext<'_>>  for VotingsService {
         TxDecryptBallot::execute(&self, ctx, tx_args)
     }
 
-    fn finalize_voting(&self, ctx: ExecutionContext<'_>, tx_args: TxFinalizeVoting) -> Self::Output {
+    fn finalize_voting(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxFinalizeVoting,
+    ) -> Self::Output {
         TxFinalizeVoting::execute(&self, ctx, tx_args)
     }
 
-    fn finalize_voting_with_results(&self, ctx: ExecutionContext<'_>, tx_args: TxFinalizeVotingWithResults) -> Self::Output {
+    fn finalize_voting_with_results(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxFinalizeVotingWithResults,
+    ) -> Self::Output {
         TxFinalizeVotingWithResults::execute(&self, ctx, tx_args)
     }
 }

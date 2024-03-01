@@ -5,47 +5,47 @@ use exonum_rust_runtime::{api::ServiceApiBuilder, DefaultInstance, Service};
 use exonum_supervisor::Configure;
 
 use crate::{
-  api::{PublicApi, PrivateApi},
-  proto,
-  schema::{ServiceConfig, ServiceConfigSchema},
-  transactions::ActualBallotsServiceInterface,
+    api::{PrivateApi, PublicApi},
+    proto,
+    schema::{ServiceConfig, ServiceConfigSchema},
+    transactions::ActualBallotsServiceInterface,
 };
 
 #[derive(Debug, ServiceDispatcher, ServiceFactory)]
 #[service_dispatcher(implements(
-  "ActualBallotsServiceInterface",
-  raw = "Configure<Params = ServiceConfigSchema>"
+    "ActualBallotsServiceInterface",
+    raw = "Configure<Params = ServiceConfigSchema>"
 ))]
 #[service_factory(artifact_name = "dit-actual-ballots-service", proto_sources = "proto")]
 pub struct ActualBallotsService;
 
 fn verify_config(
-  _context: &ExecutionContext<'_>,
-  _config: &ServiceConfigSchema,
+    _context: &ExecutionContext<'_>,
+    _config: &ServiceConfigSchema,
 ) -> Result<(), ExecutionError> {
-  // TODO: verify configuration
-  Ok(())
+    // TODO: verify configuration
+    Ok(())
 }
 
 impl Service for ActualBallotsService {
-  fn initialize(
-    &self,
-    context: ExecutionContext<'_>,
-    params: Vec<u8>,
-  ) -> Result<(), ExecutionError> {
-    let config = ServiceConfigSchema::from_bytes(params.into())
-      .map_err(CommonError::malformed_arguments)?;
+    fn initialize(
+        &self,
+        context: ExecutionContext<'_>,
+        params: Vec<u8>,
+    ) -> Result<(), ExecutionError> {
+        let config = ServiceConfigSchema::from_bytes(params.into())
+            .map_err(CommonError::malformed_arguments)?;
 
-    ServiceConfig::instantiate(context.service_data())
-      .config
-      .set(config);
-    Ok(())
-  }
+        ServiceConfig::instantiate(context.service_data())
+            .config
+            .set(config);
+        Ok(())
+    }
 
-  fn wire_api(&self, builder: &mut ServiceApiBuilder) {
-    PublicApi::wire(builder);
-    PrivateApi::wire(builder);
-  }
+    fn wire_api(&self, builder: &mut ServiceApiBuilder) {
+        PublicApi::wire(builder);
+        PrivateApi::wire(builder);
+    }
 }
 
 impl DefaultInstance for ActualBallotsService {
