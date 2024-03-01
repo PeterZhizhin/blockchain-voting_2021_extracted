@@ -70,6 +70,7 @@ struct BallotSchema {
     pub store_tx_hash: Hash,
     pub decrypt_tx_hash: Hash, // should be zeroed by default
     pub status: BallotStatus,
+    pub sid: String,
 }
 
 #[derive(Clone, Debug)]
@@ -82,6 +83,7 @@ pub struct Ballot {
     pub store_tx_hash: Hash,
     pub decrypt_tx_hash: Option<Hash>,
     pub status: BallotStatus,
+    pub sid: String,
 }
 
 impl From<BallotSchema> for Ballot {
@@ -101,6 +103,7 @@ impl From<BallotSchema> for Ballot {
                 false => Some(ballot.decrypt_tx_hash),
             },
             status: ballot.status,
+            sid: ballot.sid,
         }
     }
 }
@@ -122,6 +125,7 @@ impl Into<BallotSchema> for Ballot {
                 None => Hash::zero(),
             },
             status: self.status,
+            sid: self.sid,
         }
     }
 }
@@ -165,6 +169,7 @@ pub struct BallotsStorage<T: Access> {
     storage: Entry<T::Base, BallotsStorageSchema>,
     ballots: ListIndex<T::Base, BallotSchema>,
     ballot_by_store_tx_index: MapIndex<T::Base, Hash, u64>,
+    ballot_by_sid_index: MapIndex<T::Base, String, u64>,
     invalid_ballots: ListIndex<T::Base, Hash>,
     voters_list: MapIndex<T::Base, PublicKey, bool>,
     voting_id: String,
@@ -181,6 +186,7 @@ impl<T: Access> BallotsStorage<T> {
         let ballots = Self::get_ballots(access.clone(), &voting_id).unwrap();
         let ballot_by_store_tx_index =
             Self::get_ballot_by_store_tx_index(access.clone(), &voting_id).unwrap();
+        let ballot_by_sid_index = Self::get_ballot_by_sid_index(access.clone(), voting_id).unwrap();
         let invalid_ballots =
             Self::get_invalid_ballots_storage(access.clone(), &voting_id).unwrap();
         let voters_list = Self::get_voters_list(access.clone(), &voting_id).unwrap();
@@ -190,6 +196,7 @@ impl<T: Access> BallotsStorage<T> {
             storage,
             ballots,
             ballot_by_store_tx_index,
+            ballot_by_sid_index,
             invalid_ballots,
             voters_list,
             voting_id: storage_data.voting_id.clone(),
@@ -205,6 +212,13 @@ impl<T: Access> BallotsStorage<T> {
 
     pub fn get_ballot_by_store_tx_hash(&self, store_tx_hash: Hash) -> Option<Ballot> {
         match self.ballot_by_store_tx_index.get(&store_tx_hash) {
+            None => None,
+            Some(ballot_index) => self.get_ballot_by_index(ballot_index as u32),
+        }
+    }
+
+    pub fn get_ballot_by_sid(&self, sid: String) -> Option<Ballot> {
+        match self.ballot_by_sid_index.get(&sid) {
             None => None,
             Some(ballot_index) => self.get_ballot_by_index(ballot_index as u32),
         }
@@ -299,6 +313,21 @@ impl<T: Access> BallotsStorage<T> {
         Ok(ballot_by_store_tx_index.get(&voting_id))
     }
 
+    fn get_ballot_by_sid_index(
+        access: T,
+        voting_id: &String,
+    ) -> Result<MapIndex<T::Base, String, u64>, AccessError> {
+        let ballot_by_store_tx_index: Group<T, String, MapIndex<T::Base, String, u64>> =
+            Group::from_access(
+                access.clone(),
+                IndexAddress::from_root("votings_registry")
+                    .append_name("ballots_storage")
+                    .append_name("ballot_by_sid_index"),
+            )?;
+
+        Ok(ballot_by_store_tx_index.get(&voting_id))
+    }
+
     fn get_invalid_ballots_storage(
         access: T,
         voting_id: &String,
@@ -352,6 +381,7 @@ where
         let ballots = Self::get_ballots(access.clone(), &voting_id).unwrap();
         let ballot_by_store_tx_index =
             Self::get_ballot_by_store_tx_index(access.clone(), &voting_id).unwrap();
+        let ballot_by_sid_index = Self::get_ballot_by_sid_index(access.clone(), voting_id).unwrap();
         let invalid_ballots =
             Self::get_invalid_ballots_storage(access.clone(), &voting_id).unwrap();
         let voters_list = Self::get_voters_list(access.clone(), &voting_id).unwrap();
@@ -364,6 +394,7 @@ where
             storage,
             ballots,
             ballot_by_store_tx_index,
+            ballot_by_sid_index,
             invalid_ballots,
             voters_list,
             voting_id: voting_id.clone(),
@@ -396,6 +427,7 @@ where
         district_id: u32,
         encrypted_choice: EncryptedChoice,
         store_tx_hash: Hash,
+        sid: &String,
         status: BallotStatus,
     ) -> Result<(), Error> {
         let voter_has_voted = self
@@ -405,6 +437,11 @@ where
 
         if voter_has_voted {
             Err(Error::VoterHasAlreadyVoted)?;
+        }
+
+        let sid_already_present = self.ballot_by_sid_index.get(sid).is_some();
+        if sid_already_present {
+            Err(Error::TxSidAlreadyPresent)?
         }
 
         self.voters_list.put(&voter, true);
@@ -420,10 +457,13 @@ where
             store_tx_hash,
             decrypt_tx_hash: None,
             status: status.clone(),
+            sid: sid.into(),
         };
 
         self.ballot_by_store_tx_index
             .put(&ballot.store_tx_hash, (ballot.index as u32).into());
+        self.ballot_by_sid_index
+            .put(&ballot.sid, (ballot.index as u32).into());
         self.ballots.push(ballot.into());
 
         if status == BallotStatus::Unknown {

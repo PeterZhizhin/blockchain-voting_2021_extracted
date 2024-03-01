@@ -60,6 +60,7 @@ message Ballot {
   exonum.crypto.Hash store_tx_hash = 6;
   exonum.crypto.Hash decrypt_tx_hash = 7;
   votings_service.BallotStatus status = 8;
+  string sid = 9;
 }
 
 message DecryptionStatistics {

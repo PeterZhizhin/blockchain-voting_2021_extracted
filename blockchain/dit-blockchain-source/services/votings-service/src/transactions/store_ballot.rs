@@ -39,6 +39,7 @@ pub struct TxStoreBallot {
     pub voting_id: String,
     pub district_id: u32,
     pub encrypted_choice: TxEncryptedChoice,
+    pub sid: String,
 }
 
 impl TxStoreBallot {
@@ -57,6 +58,10 @@ impl TxStoreBallot {
 
         if voting.get_state() != VotingState::InProcess {
             Err(Error::ForbiddenForThisVotingState)?
+        }
+
+        if tx_args.sid.is_empty() {
+            Err(Error::MissingTxSid)?
         }
 
         let ballot_status = match voting
@@ -80,13 +85,14 @@ impl TxStoreBallot {
                 tx_args.district_id.clone(),
                 tx_args.encrypted_choice.clone().into(),
                 store_tx_hash,
+                &tx_args.sid,
                 ballot_status,
             )
             .or_else(|_| Err(Error::BallotCannotBeStored))?;
 
         println!(
-            "Ballot stored for voting {}, district {}",
-            tx_args.voting_id, tx_args.district_id
+            "Ballot stored for voting {}, district {} sid {}",
+            tx_args.voting_id, tx_args.district_id, tx_args.sid,
         );
         Ok(())
     }
