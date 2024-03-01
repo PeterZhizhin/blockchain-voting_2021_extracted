@@ -20,6 +20,13 @@ class Redis extends Base {
     }
 
     public function retrieve(): ?array {
-        return Cache::get($this->_cacheKey);
+        $result = Cache::get($this->_cacheKey);
+	// Cache may return a string if the result is empty. Convert this to a
+	// JSON value instead.
+	if (is_string($result)) {
+	    $result = json_decode($result, true);
+	    return $result;
+	}
+	return $result;
     }
 }
