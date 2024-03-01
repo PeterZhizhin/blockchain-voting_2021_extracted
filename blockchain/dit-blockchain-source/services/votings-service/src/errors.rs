@@ -56,6 +56,10 @@ pub enum Error {
     ParticipationForVoterWasRevoked = 23,
     /// District ID cannot be zero
     DistrictIDCannotBeZero = 24,
+    /// A transaction is missing SID
+    MissingTxSid = 25,
+    /// Transaction SID already present in the blockchain
+    TxSidAlreadyPresent = 26,
 }
 
 impl From<Error> for api::Error {

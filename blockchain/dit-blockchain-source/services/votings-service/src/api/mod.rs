@@ -1,6 +1,7 @@
 use exonum_rust_runtime::api::ServiceApiBuilder;
 
 mod ballot_by_index;
+mod ballot_by_sid;
 mod ballot_by_store_tx_hash;
 mod ballots_by_store_tx_hashes;
 mod ballots_config;
@@ -17,6 +18,7 @@ mod voting_results;
 mod voting_state;
 
 use ballot_by_index::get_ballot_by_index;
+use ballot_by_sid::get_ballot_by_sid;
 use ballot_by_store_tx_hash::get_ballot_by_store_tx_hash;
 use ballots_by_store_tx_hashes::get_ballots_by_store_tx_hashes;
 use ballots_config::get_ballots_config;
@@ -54,6 +56,7 @@ impl PublicApi {
                 get_stored_ballots_amount_by_district,
             )
             .endpoint("v1/ballot-by-store-tx-hash", get_ballot_by_store_tx_hash)
+            .endpoint("v1/ballot-by-sid", get_ballot_by_sid)
             .endpoint("v1/ballot-by-index", get_ballot_by_index)
             .endpoint_mut(
                 "v1/ballots-by-store-tx-hashes",

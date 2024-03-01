@@ -75,6 +75,7 @@ message TxStoreBallot {
   string voting_id = 1;
   uint32 district_id = 2;
   TxEncryptedChoice encrypted_choice = 3;
+  string sid = 4;
 }
 
 message TxStopVoting {

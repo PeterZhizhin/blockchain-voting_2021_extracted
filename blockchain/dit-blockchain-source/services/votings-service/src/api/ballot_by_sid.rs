@@ -11,9 +11,9 @@ use crate::{
 };
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct BallotsQuery {
+pub struct BallotBySidQuery {
     pub voting_id: String,
-    pub store_tx_hashes: Vec<Hash>,
+    pub sid: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -34,7 +34,7 @@ impl From<EncryptedChoice> for EncryptedChoiceView {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct BallotView {
+pub struct BallotBySidView {
     pub index: u32,
     pub voter: PublicKey,
     pub district_id: u32,
@@ -46,7 +46,7 @@ pub struct BallotView {
     pub sid: String,
 }
 
-impl From<Ballot> for BallotView {
+impl From<Ballot> for BallotBySidView {
     fn from(ballot: Ballot) -> Self {
         Self {
             index: ballot.index,
@@ -62,15 +62,10 @@ impl From<Ballot> for BallotView {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct BallotsView {
-    ballots: Vec<Option<BallotView>>,
-}
-
-pub async fn get_ballots_by_store_tx_hashes(
+pub async fn get_ballot_by_sid(
     state: ServiceApiState,
-    query: BallotsQuery,
-) -> api::Result<BallotsView> {
+    query: BallotBySidQuery,
+) -> api::Result<BallotBySidView> {
     let voting = Voting::get(state.service_data(), &query.voting_id)
         .ok_or_else(|| Error::VotingDoesNotExist)?;
 
@@ -81,12 +76,10 @@ pub async fn get_ballots_by_store_tx_hashes(
     let ballots_storage = BallotsStorage::get(state.service_data(), &query.voting_id)
         .ok_or_else(|| Error::VotingDoesNotExist)?;
 
-    let ballots = ballots_storage
-        .get_ballots_by_store_tx_hashes(query.store_tx_hashes)
-        .iter()
-        .cloned()
-        .map(|maybe_ballot| maybe_ballot.map(|v| v.into()))
-        .collect();
+    let ballot = ballots_storage
+        .get_ballot_by_sid(query.sid)
+        .map(|v| v.into())
+        .ok_or_else(|| Error::BallotDoesNotExist)?;
 
-    Ok(BallotsView { ballots })
+    Ok(ballot)
 }

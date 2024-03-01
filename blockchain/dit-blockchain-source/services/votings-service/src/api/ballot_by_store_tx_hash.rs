@@ -43,6 +43,7 @@ pub struct BallotByStoreTxHashView {
     pub store_tx_hash: Hash,
     pub decrypt_tx_hash: Option<Hash>,
     pub status: BallotStatus,
+    pub sid: String,
 }
 
 impl From<Ballot> for BallotByStoreTxHashView {
@@ -56,6 +57,7 @@ impl From<Ballot> for BallotByStoreTxHashView {
             store_tx_hash: ballot.store_tx_hash,
             decrypt_tx_hash: ballot.decrypt_tx_hash,
             status: ballot.status,
+            sid: ballot.sid,
         }
     }
 }
