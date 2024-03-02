@@ -55,6 +55,30 @@ class Mgd2021 implements TaskPlugin
         $this->sendLog('Удачная отправка', $log_data);
     }
 
+    private function _getPool($votingId) {
+      $poolComponent = app()->get('connection_pool');
+      $poolName = "mgik-{$votingId}";
+      app()['log']->info('Getting pool for voting id', ['voting_id' => $votingId, 'pool_name' => $poolName]);
+      try {
+        $pool = $poolComponent->getPool($poolName);
+        app()['log']->info('Pool found, do not create', ['pool_nane' => $poolName]);
+        return $pool;
+      } catch (\Throwable $t) {
+          $isTransactional = (bool)env('MDM_AMQP_TRANSACTIONAL', 0);
+          $amqpConfig = PoolConfig::me()->get('Mgik')->get('amqp');
+          app()['log']->info('Haven not found the pool, creating one', ['pool_name' => $poolName, 'exception_class' => get_class($t), 'exception_message' => $t->getMessage(), 'exception_trace' => Utils::cutTrace($t)]);
+          $configWithQueue = $amqpConfig;
+          $configWithQueue['queue'] = "{$amqpConfig['queue']}-{$votingId}";
+          $configWithQueue['exchange'] = "{$amqpConfig['queue']}-exchange-{$votingId}";
+
+          $mgikPool = $isTransactional ? $poolComponent->buildAmqpPublisher($configWithQueue) : $poolComponent->buildAmqpPublisherWithConfirms($configWithQueue);
+
+          $mgikPool->init();
+          $poolComponent->addPool($poolName, $mgikPool);
+          return $poolComponent->getPool($poolName);
+      }
+    }
+
     private function _send($data) {
         if (!Service\Utils::isCoroutineEnabled()) {
             $config = Service\Config\PoolConfig::me()->conf('Mgik')->get('amqp');
@@ -64,7 +88,7 @@ class Mgd2021 implements TaskPlugin
         }
         $retryCount = env('ARM_RABBIT_RETRY_COUNT', 1);
         $poolComponent = app()->get('connection_pool');
-        $pool = $poolComponent->getPool("mgik-{$data['vote_id']}");
+        $pool = $this->_getPool($data['vote_id']);
         return $this->_utils->retry(function () use ($pool, $data) {
                 $broker = $pool->borrow();
                 try {
