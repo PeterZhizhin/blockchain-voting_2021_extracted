@@ -18,7 +18,6 @@ class Facade {
     }
 
     public function vote(string $guid, $voteId, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash, string $showSid) {
-        app()['log']->info("Getting ballot in facade");
         return CSL::keeper()->vote($guid, $voteId, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash, $showSid);
     }
 
