@@ -219,18 +219,23 @@ class Ballot extends Controller {
         $rawTxHash           = $this->_request->post('rawTxHash') ?? null;
         $accountAddressBlock = $this->_request->post('accountAddressBlock') ?? null;
         $keyVerificationHash = $this->_request->post('keyVerificationHash') ?? null;
+        // TODO: Read this field from request
+        $showSid = true;
 
         if (!($accountAddressBlock && $keyVerificationHash && $rawStoreBallotTx && $rawTxHash)) {
             return $this->_jsonStatusErrorResponse(['code' => 1]);
         }
+        app()['log']->info("Getting ballot");
+        $ballot = $this->_electionComponent->vote($guid, $voteId, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash, $showSid);
         try {
-            $ballot = $this->_electionComponent->vote($guid, $voteId, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash);
         } catch (Component\Election\Exception\VotingIsOver $exception) {
             return $this->_jsonStatusErrorResponse(['error' => 'Голосование уже закончилось', 'code' => 2]);
         } catch (Component\Election\Exception\VotingHasNotStarted $exception) {
             return $this->_jsonStatusErrorResponse(['error' => 'Голосование еще не началось', 'code' => 2]);
         } catch (Component\Election\Exception\BallotDoesNotExist $exception) {
             return $this->_jsonStatusErrorResponse(['error' => 'Вы не имеете доступа к голосованию']);
+        } catch (\Throwable $t) {
+          app()['log']->info("Got unexpected error", ['exception_class' => get_class($t), 'exception_message' => $t->getMessage(), 'exception_trace' => Utils::cutTrace($t)]);
         }
         if ($ballot === null) {
             return $this->_jsonStatusErrorResponse(['error' => 'Вы не имеете доступа к голосованию']);

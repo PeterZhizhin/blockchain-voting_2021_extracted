@@ -8,6 +8,30 @@ use App\Service\Locator;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Facades\Http;
+
+
+class ReEncryptionResponse {
+  private string $_rawStoreBallotTx;
+  private string $_accountAddressBlock;
+
+  public function __construct(
+    string $rawStoreBallotTx,
+    string $accountAddressBlock
+  ) {
+    $this->_rawStoreBallotTx = $rawStoreBallotTx;
+    $this->_accountAddressBlock = $accountAddressBlock;
+  }
+
+  public function getRawStoreBallotTx(): string {
+    return $this->_rawStoreBallotTx;
+  }
+
+  public function getAccountAddressBlock(): string {
+    return $this->_accountAddressBlock;
+  }
+
+}
 
 class Keeper {
 
@@ -104,7 +128,42 @@ class Keeper {
         return $this->_buildBallot($settings, $guid, $guidsCount);
     }
 
-    public function vote(string $guid, $voteId, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash) {
+    private function _generateSid(bool $isCheckingSid, string $guid): string {
+        while (true) {
+            $sid = Service\Utils::create_guid();
+            $cacheKey = "sid|{$sid}";
+            if (!Service\Cache::exists($cacheKey)) {
+              Service\Cache::forever($cacheKey, ["sid" => $sid, "isChecking" => $isCheckingSid, "guid" => $guid]);
+              return $sid;
+            }
+        }
+    }
+
+    private function _reEncryptBallot(string $rawStoreBallotTx, string $sid, int $districtId, string $votingId): ReEncryptionResponse {
+      $requestData = [
+        "tx" => $rawStoreBallotTx,
+        "sid" => $sid,
+        "voting_id" => $votingId,
+        "district_id" => $districtId,
+      ];
+      $requestDataString = json_encode($requestData);
+      
+      $reEncryptUrl = env('RE_ENCRYPT_URL');
+      if (empty($reEncryptUrl)) {
+        app()['log']->emergency('Unable to get re-encryption URL from env variable', ["requestData" => $requestData]);
+      }
+
+      $reEncryptionResponse = Http::withBody(
+        $requestDataString, 'application/json'
+      )->post($reEncryptUrl)->throw()->json();
+
+      return new ReEncryptionResponse(
+        $reEncryptionResponse['tx'],
+        $reEncryptionResponse['voter_address']
+      );
+    }
+
+    public function vote(string $guid, $voteId, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash, string $showSid) {
         // Устанавливаем атомарный замок на отправку голоса, исключает возможность одновременной отправки голоса по одному бюллетеню
         $lock = Cache::lock($guid, 20);
         try {
@@ -112,7 +171,26 @@ class Keeper {
             $ballot = $this->getBallot($guid, $voteId);
             if ($ballot === null) throw new Exception\BallotDoesNotExist();
             $guid = $ballot->getGuid();
-            $this->_persistBallot($guid, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash);
+
+            $sid = $this->_generateSid($showSid, $guid->getId());
+            if ($showSid) {
+              $ballot->setSid($sid);
+            }
+
+            app()['log']->info("Сгенерировали SID для бюллетеня", ["guid" => $guid->getId(), "sid" => $sid]);
+            $reEncryptionResult = $this->_reEncryptBallot($rawStoreBallotTx, $sid, $guid->getDistrictId(), $ballot->getSettings()->getExtId());
+
+            $originalAccountAddressBlock = $accountAddressBlock;
+            $originalRawStoreBallotTx = $rawStoreBallotTx;
+
+            $accountAddressBlock = $reEncryptionResult->getAccountAddressBlock();
+            $rawStoreBallotTx = $reEncryptionResult->getRawStoreBallotTx();
+            $this->_persistBallot(
+              $guid,
+              $accountAddressBlock, $keyVerificationHash,
+              $rawStoreBallotTx, $rawTxHash,
+              $originalAccountAddressBlock, $originalRawStoreBallotTx,
+              $sid, $showSid);
             // Генерируем, кодируем и шифруем данные голоса
             $ballotData = $this->_buildGuidData($guid, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx);
             $dataToEncrypt = json_encode($ballotData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -125,6 +203,9 @@ class Keeper {
             app()['log']->emergency('Was unable to aquire guid lock for 20 seconds', ['exception_message' => $e->getMessage()]);
         } finally {
             optional($lock)->release();
+            if ($showSid && empty($ballot->getSid())) {
+              return null;
+            }
             return $ballot ?? null;
         }
     }
@@ -174,8 +255,26 @@ class Keeper {
         return hash('sha256', "{$timestamp}|{$random}|{$secret}");
     }
 
-    private function _persistBallot(Guid\Entity\Guid $guid, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash) {
-        $this->_databaseService->execute(function (ConnectionInterface $connection) use ($guid, $rawStoreBallotTx, $keyVerificationHash, $accountAddressBlock, $rawTxHash) {
+    private function _persistBallot(
+      Guid\Entity\Guid $guid,
+      string $accountAddressBlock,
+      string $keyVerificationHash,
+      string $rawStoreBallotTx,
+      string $rawTxHash,
+      string $originalAccountAddressBlock,
+      string $originalRawStoreBallotTx,
+      string $sid,
+      bool $showSid) {
+      $this->_databaseService->execute(function (ConnectionInterface $connection) use (
+        $guid, 
+        $rawStoreBallotTx, 
+        $keyVerificationHash, 
+        $accountAddressBlock, 
+        $rawTxHash, 
+        $originalAccountAddressBlock, 
+        $originalRawStoreBallotTx, 
+        $sid,
+        $showSid) {
             $connection->table('p_ballot')->insert([
                 'rawStoreBallotTx'    => $rawStoreBallotTx,
                 'guid'                => $guid->getId(),
@@ -185,6 +284,10 @@ class Keeper {
                 'accountAddressBlock' => $accountAddressBlock,
                 'keyVerificationHash' => $keyVerificationHash,
                 'rawTxHash'           => $rawTxHash,
+                'originalRawStoreBallotTx' => $originalRawStoreBallotTx,
+                'originalAccountAddressBlock' => $originalAccountAddressBlock,
+                'sid' => $sid,
+                'showingSid' => $showSid,
             ]);
         });
     }

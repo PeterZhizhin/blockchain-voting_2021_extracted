@@ -17,8 +17,9 @@ class Facade {
         return CSL::keeper()->getBallots($guid);
     }
 
-    public function vote(string $guid, $voteId, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash) {
-        return CSL::keeper()->vote($guid, $voteId, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash);
+    public function vote(string $guid, $voteId, string $accountAddressBlock, string $keyVerificationHash, string $rawStoreBallotTx, string $rawTxHash, string $showSid) {
+        app()['log']->info("Getting ballot in facade");
+        return CSL::keeper()->vote($guid, $voteId, $accountAddressBlock, $keyVerificationHash, $rawStoreBallotTx, $rawTxHash, $showSid);
     }
 
     public function skip(Entity\Ballot $ballot) {

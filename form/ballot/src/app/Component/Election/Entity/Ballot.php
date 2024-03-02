@@ -10,11 +10,21 @@ class Ballot {
     private Setting\Entity\Setting $_settings;
     private Guid\Entity\Guid $_guid;
     private int $_guidsCount;
+    private string $sid;
 
     public function __construct(Setting\Entity\Setting $settings, Guid\Entity\Guid $guid, int $guidsCount) {
         $this->_settings = $settings;
         $this->_guid = $guid;
         $this->_guidsCount = $guidsCount;
+        $this->_sid = "";
+    }
+
+    public function getSid(): string {
+      return $this->_sid;
+    }
+
+    public function setSid(string $sid) {
+      $this->_sid = $sid;
     }
 
     public function getSettings(): Setting\Entity\Setting {
