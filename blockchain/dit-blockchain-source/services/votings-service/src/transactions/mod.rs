@@ -5,7 +5,7 @@ use crate::service::VotingsService;
 
 mod add_voter_key;
 mod create_voting;
-mod decrypt_ballot;
+// mod decrypt_ballot;
 mod finalize_voting;
 mod finalize_voting_with_results;
 mod issue_ballot;
@@ -19,7 +19,7 @@ mod store_ballot;
 
 use add_voter_key::TxAddVoterKey;
 use create_voting::TxCreateVoting;
-use decrypt_ballot::TxDecryptBallot;
+// use decrypt_ballot::TxDecryptBallot;
 use finalize_voting::TxFinalizeVoting;
 use finalize_voting_with_results::TxFinalizeVotingWithResults;
 use issue_ballot::TxIssueBallot;
@@ -62,8 +62,8 @@ pub trait VotingsServiceInterface<Ctx> {
     #[interface_method(id = 8)]
     fn publish_decryption_key(&self, ctx: Ctx, tx_args: TxPublishDecryptionKey) -> Self::Output;
 
-    #[interface_method(id = 9)]
-    fn decrypt_ballot(&self, ctx: Ctx, tx_args: TxDecryptBallot) -> Self::Output;
+    // #[interface_method(id = 9)]
+    // fn decrypt_ballot(&self, ctx: Ctx, tx_args: TxDecryptBallot) -> Self::Output;
 
     #[interface_method(id = 10)]
     fn finalize_voting(&self, ctx: Ctx, tx_args: TxFinalizeVoting) -> Self::Output;
@@ -135,9 +135,9 @@ impl VotingsServiceInterface<ExecutionContext<'_>> for VotingsService {
         TxPublishDecryptionKey::execute(&self, ctx, tx_args)
     }
 
-    fn decrypt_ballot(&self, ctx: ExecutionContext<'_>, tx_args: TxDecryptBallot) -> Self::Output {
-        TxDecryptBallot::execute(&self, ctx, tx_args)
-    }
+    // fn decrypt_ballot(&self, ctx: ExecutionContext<'_>, tx_args: TxDecryptBallot) -> Self::Output {
+    // TxDecryptBallot::execute(&self, ctx, tx_args)
+    // }
 
     fn finalize_voting(
         &self,
