@@ -219,8 +219,10 @@ class Ballot extends Controller {
         $rawTxHash           = $this->_request->post('rawTxHash') ?? null;
         $accountAddressBlock = $this->_request->post('accountAddressBlock') ?? null;
         $keyVerificationHash = $this->_request->post('keyVerificationHash') ?? null;
-        // TODO: Read this field from request
-        $showSid = true;
+        $showSid             = $this->_request->post('showSid') ?? "false";
+
+        // Cast to bool
+        $showSid = $showSid == "true";
 
         if (!($accountAddressBlock && $keyVerificationHash && $rawStoreBallotTx && $rawTxHash)) {
             return $this->_jsonStatusErrorResponse(['code' => 1]);
@@ -241,7 +243,7 @@ class Ballot extends Controller {
         if ($ballot->getGuidsCount() > 1 && $returnUrl) {
             return $this->_jsonSuccessResponse(['url' => route('ballot_show', ['guid' => $ballot->getGuid()->getId()])]);
         }
-        return $this->_jsonStatusResponse('success');
+        return $this->_jsonStatusResponse('success', ["sid" => $ballot->getSid()]);
     }
 
     // Метод пропуска бюллетеня
@@ -267,7 +269,8 @@ class Ballot extends Controller {
     }
 
     public function success() {
-        return $this->_renderTemplate('success');
+        $sid = $this->_request->get('sid') ?? null;
+        return $this->_renderTemplate('success', ["sid" => $sid]);
     }
 
     public function error() {
