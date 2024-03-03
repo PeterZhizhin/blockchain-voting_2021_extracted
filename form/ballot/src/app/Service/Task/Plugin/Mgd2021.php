@@ -61,12 +61,12 @@ class Mgd2021 implements TaskPlugin
       app()['log']->info('Getting pool for voting id', ['voting_id' => $votingId, 'pool_name' => $poolName]);
       try {
         $pool = $poolComponent->getPool($poolName);
-        app()['log']->info('Pool found, do not create', ['pool_nane' => $poolName]);
+        app()['log']->info('Pool found, do not create', ['pool_name' => $poolName]);
         return $pool;
       } catch (\Throwable $t) {
-          $isTransactional = (bool)env('MDM_AMQP_TRANSACTIONAL', 0);
-          $amqpConfig = PoolConfig::me()->get('Mgik')->get('amqp');
           app()['log']->info('Haven not found the pool, creating one', ['pool_name' => $poolName, 'exception_class' => get_class($t), 'exception_message' => $t->getMessage(), 'exception_trace' => Utils::cutTrace($t)]);
+          $isTransactional = (bool)env('MDM_AMQP_TRANSACTIONAL', 0);
+          $amqpConfig = Service\Config\PoolConfig::me()->get('Mgik')->get('amqp');
           $configWithQueue = $amqpConfig;
           $configWithQueue['queue'] = "{$amqpConfig['queue']}-{$votingId}";
           $configWithQueue['exchange'] = "{$amqpConfig['queue']}-exchange-{$votingId}";

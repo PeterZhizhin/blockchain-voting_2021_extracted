@@ -128,6 +128,11 @@
             <input id="district" type="hidden" name="guid" value="{$district}" />
         </div>
 
+        <div>
+          <label style="padding-right: 0.5em;" for="showSidCheckbox">Хочу получить адрес зашифрованной транзакции</label>
+          <input type="checkbox" id="showSidCheckbox" aria-label="Получить адрес зашифрованной транзакции">
+        </div>
+
     </div>
 
     <div class="bulletin__result">

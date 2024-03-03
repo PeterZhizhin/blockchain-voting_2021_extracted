@@ -295,7 +295,7 @@ $(function () {
     };
 
     $.validator.addMethod("useMoreCheckbox", function(value, element) {
-        var count = $('input[type=checkbox]:checked').length,
+        var count = $('input[type=checkbox]:checked:not(#showSidCheckbox)').length,
             min = ditVotingParams.minChoices,
             max = ditVotingParams.maxChoices,
             message;
@@ -317,7 +317,7 @@ $(function () {
     });
 
     $.validator.addMethod("minMaxValidation", function(value, element) {
-        var count = $('input[type=checkbox]:checked').length,
+        var count = $('input[type=checkbox]:checked:not(#showSidCheckbox)').length,
             min = ditVotingParams.minChoices,
             max = ditVotingParams.maxChoices,
             message;
@@ -366,7 +366,7 @@ $(function () {
         unhighlight: function (element, errorClass, validClass) {
             var $currentElement = $('[name='+(element.name).replace('[','\\\[').replace(']','\\\]')+']');
             $currentElement.next(".bulletin__check").next('label.'+errorClass).remove();
-            if($('input[type=checkbox]:checked').length <= ditVotingParams.maxChoices && $('input[type=checkbox]:checked').length >= ditVotingParams.minChoices) {
+            if($('input[type=checkbox]:checked:not(#showSidCheckbox)').length <= ditVotingParams.maxChoices && $('input[type=checkbox]:checked:not(#showSidCheckbox)').length >= ditVotingParams.minChoices) {
                 $('label.'+errorClass).remove();
                 $('.button-send').removeAttr("disabled");
             }
@@ -386,7 +386,7 @@ $(function () {
         if (!$this.is(':checked')) {
             $this.removeAttr('checked');
 
-            if (ditVotingParams.maxChoices>=1 && $('input[type=checkbox]:checked').length < ditVotingParams.minChoices) {
+            if (ditVotingParams.maxChoices>=1 && $('input[type=checkbox]:checked:not(#showSidCheckbox)').length < ditVotingParams.minChoices) {
                 // $button.hide()
                 $buttonSend.hide();
                 $nextButton.show();
@@ -402,7 +402,7 @@ $(function () {
                         {'marginBottom': ''},
                         'fast',
                         function () {
-                            if ($('input[type=checkbox]:checked').length <= ditVotingParams.maxChoices) {
+                            if ($('input[type=checkbox]:checked:not(#showSidCheckbox)').length <= ditVotingParams.maxChoices) {
                                 if ($buttonSend.is(":hidden")) {
                                     $buttonSend.fadeIn('fast');
                                 }
@@ -410,15 +410,15 @@ $(function () {
                         }
                     );
                 } else {
-                    if ($('input[type=checkbox]:checked').length <= ditVotingParams.maxChoices) {
+                    if ($('input[type=checkbox]:checked:not(#showSidCheckbox)').length <= ditVotingParams.maxChoices) {
                         if ($buttonSend.is(":hidden")) {
                             $buttonSend.fadeIn('fast');
                         }
                     }
                 }
             } else {
-                if ($('input[type=checkbox]:checked').length <= ditVotingParams.maxChoices) {
-                    if ($('input[type=checkbox]:checked').length == 0) {
+                if ($('input[type=checkbox]:checked:not(#showSidCheckbox)').length <= ditVotingParams.maxChoices) {
+                    if ($('input[type=checkbox]:checked:not(#showSidCheckbox)').length == 0) {
                         // $button.hide();
                         $buttonSend.hide();
                         $nextButton.show();
@@ -476,7 +476,7 @@ $(function () {
             var minChoices = window.ditVotingParams.minChoices;
             var maxChoices = window.ditVotingParams.maxChoices;
             //выбранный вариант
-            var choice = $('input:checkbox:checked').map(function () {
+            var choice = $('input:checkbox:checked:not(#showSidCheckbox)').map(function () {
                 console.log('Голосуем за ' + parseInt(this.value));
                 return parseInt(this.value);
             }).get();
@@ -500,6 +500,9 @@ $(function () {
                 });
 
                 sendHit('Удачно зашифровалось', 'successCrypt');
+
+                var showSid = $('#showSidCheckbox').is(":checked");
+
                 $.ajax({
                     url: getRouteByKey('vote'),
                     type: 'post',
@@ -512,6 +515,7 @@ $(function () {
                         accountAddressBlock: ballot.voterAddress,
                         keyVerificationHash: ballot.keyVerificationHash,
                         rawTxHash: ballot.txHash,
+                        showSid: showSid,
                     }),
                     success: function (data) {
                         if (data.status === 'error') {
@@ -525,7 +529,14 @@ $(function () {
                             return true;
                         }
                         sendHit('Удачно отправилось', 'successSend');
-                        redirectToUrl(getRouteByKey('success'));
+                        var successRedirectUrl = getRouteByKey('success');
+                        var redirectUrl = new URL(successRedirectUrl);
+                        var sid = data['sid'];
+                        if (sid) {
+                            redirectUrl.searchParams.append('sid', sid);
+                        }
+                        var redirectUrlString = redirectUrl.toString();
+                        redirectToUrl(redirectUrlString);
                         return true;
                     },
                     error: function (data) {
