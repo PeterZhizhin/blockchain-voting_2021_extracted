@@ -95,6 +95,14 @@ message TxDecryptBallot {
   uint64 seed = 3;
 }
 
+message TxPublishDecryptedBallot {
+  string voting_id = 1;
+  uint32 ballot_index = 2;
+  bool is_invalid = 3;
+  repeated uint32 decrypted_choices = 4;
+  uint64 seed = 5;
+}
+
 message TxFinalizeVoting {
   string voting_id = 1;
   uint64 seed = 2;

@@ -60,6 +60,8 @@ pub enum Error {
     MissingTxSid = 25,
     /// Transaction SID already present in the blockchain
     TxSidAlreadyPresent = 26,
+    /// Ballot decryption result cannot be published
+    BallotDecryptionResultCannotBePublished = 27,
 }
 
 impl From<Error> for api::Error {

@@ -561,6 +561,60 @@ where
         Ok(())
     }
 
+    pub fn publish_decrypted_ballot(
+        &mut self,
+        ballot_index: u32,
+        decrypted_choices: &Vec<u32>,
+        is_invalid: bool,
+        decrypt_tx_hash: Hash,
+        options: &Vec<u32>,
+        min_choices: u32,
+        max_choices: u32,
+    ) -> Result<(), Error> {
+        let ballot_schema = self
+            .ballots
+            .get(ballot_index as u64)
+            .ok_or_else(|| Error::BallotDoesNotExist)?;
+
+        let mut ballot: Ballot = ballot_schema.into();
+
+        ballot.decrypt_tx_hash = Some(decrypt_tx_hash);
+
+        if ballot.status == BallotStatus::Unknown {
+            let decrypted_choices_option = match is_invalid {
+                true => None,
+                false => match validate_decrypted_choices(
+                    &decrypted_choices,
+                    &options,
+                    min_choices,
+                    max_choices,
+                ) {
+                    Ok(()) => Some(decrypted_choices),
+                    _ => None,
+                },
+            };
+
+            match decrypted_choices_option {
+                Some(decrypted_choices_valid) => {
+                    ballot.status = BallotStatus::Valid;
+                    ballot.decrypted_choices = Some(decrypted_choices_valid.clone());
+                    self.decrypted_ballots_counter.decrypted_ballots_amount += 1;
+                }
+                None => {
+                    ballot.status = BallotStatus::Invalid(InvalidReason::DecryptionError);
+                    self.decrypted_ballots_counter.invalid_ballots_amount += 1;
+                    self.invalid_ballots.push(ballot.store_tx_hash);
+                }
+            }
+        }
+
+        self.ballots.set(ballot_index as u64, ballot.into());
+
+        self.update_storage();
+
+        Ok(())
+    }
+
     pub fn tally_results(&mut self) {
         let mut invalid_ballots_amount: u32 = 0;
         let mut unique_valid_ballots_amount: u32 = 0;

@@ -13,9 +13,9 @@ pub use self::schema::{
 };
 
 pub use self::transactions::{
-    TxAddVoterKey, TxBallotConfig, TxCreateVoting, TxCryptoSystemSettings, TxDecryptBallot,
-    TxDistrictResults, TxEncryptedChoice, TxFinalizeVoting, TxFinalizeVotingWithResults,
-    TxIssueBallot, TxPublishDecryptionKey, TxRegisterVoters, TxRevokeVoterParticipation,
+    TxAddVoterKey, TxBallotConfig, TxCreateVoting, TxCryptoSystemSettings, TxDistrictResults,
+    TxEncryptedChoice, TxFinalizeVoting, TxFinalizeVotingWithResults, TxIssueBallot,
+    TxPublishDecryptedBallot, TxPublishDecryptionKey, TxRegisterVoters, TxRevokeVoterParticipation,
     TxStopRegistration, TxStopVoting, TxStoreBallot, TxVotingResults,
 };
 
