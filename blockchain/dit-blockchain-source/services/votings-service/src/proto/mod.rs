@@ -15,8 +15,8 @@ pub use self::schema::{
 pub use self::transactions::{
     TxAddVoterKey, TxBallotConfig, TxCreateVoting, TxCryptoSystemSettings, TxDecryptBallot,
     TxDistrictResults, TxEncryptedChoice, TxFinalizeVoting, TxFinalizeVotingWithResults,
-    TxIssueBallot, TxPublishDecryptionKey, TxRegisterVoters, TxRevokeVoterParticipation,
-    TxStopRegistration, TxStopVoting, TxStoreBallot, TxVotingResults,
+    TxIssueBallot, TxPublishDecryptedBallot, TxPublishDecryptionKey, TxRegisterVoters,
+    TxRevokeVoterParticipation, TxStopRegistration, TxStopVoting, TxStoreBallot, TxVotingResults,
 };
 
 pub use self::ballot_status::BallotStatus;

@@ -9,6 +9,7 @@ mod decrypt_ballot;
 mod finalize_voting;
 mod finalize_voting_with_results;
 mod issue_ballot;
+mod publish_decrypted_ballot;
 mod publish_decryption_key;
 mod register_voters;
 mod revoke_voter_participation;
@@ -22,6 +23,7 @@ use decrypt_ballot::TxDecryptBallot;
 use finalize_voting::TxFinalizeVoting;
 use finalize_voting_with_results::TxFinalizeVotingWithResults;
 use issue_ballot::TxIssueBallot;
+use publish_decrypted_ballot::TxPublishDecryptedBallot;
 use publish_decryption_key::TxPublishDecryptionKey;
 use register_voters::TxRegisterVoters;
 use revoke_voter_participation::TxRevokeVoterParticipation;
@@ -72,6 +74,10 @@ pub trait VotingsServiceInterface<Ctx> {
         ctx: Ctx,
         tx_args: TxFinalizeVotingWithResults,
     ) -> Self::Output;
+
+    #[interface_method(id = 12)]
+    fn publish_decrypted_ballot(&self, ctx: Ctx, tx_args: TxPublishDecryptedBallot)
+        -> Self::Output;
 }
 
 impl VotingsServiceInterface<ExecutionContext<'_>> for VotingsService {
@@ -147,5 +153,13 @@ impl VotingsServiceInterface<ExecutionContext<'_>> for VotingsService {
         tx_args: TxFinalizeVotingWithResults,
     ) -> Self::Output {
         TxFinalizeVotingWithResults::execute(&self, ctx, tx_args)
+    }
+
+    fn publish_decrypted_ballot(
+        &self,
+        ctx: ExecutionContext<'_>,
+        tx_args: TxPublishDecryptedBallot,
+    ) -> Self::Output {
+        TxPublishDecryptedBallot::execute(&self, ctx, tx_args)
     }
 }
